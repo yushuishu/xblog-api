@@ -1,0 +1,14 @@
+server:
+  tomcat:
+    uri-encoding: utf-8
+    threads:
+      max: 300  # tomcat最大线程数，默认为200
+      min-spare: 30  # tomcat启动初始化的线程数，默认25
+  servlet:
+    context-path: /api/shuishu/blog
+  port: 8081
+
+spring:
+  profiles:
+    active: @profiles.active@
+

@@ -1,0 +1,114 @@
+shuishu:
+  # 登录策略（默认ONE：com.shuishu.demo.security.common.config.security.LoginPolicyConfig.getLoginPolicy）
+  # ONE: 达到最大客户端登录人数，将最早登录的客户端给踢掉
+  # TWO: 达到最大客户端登录人数，不允许登录
+  login-policy: TWO
+  token:
+    secret: spring_security_examples
+    # 登录授权token名称，请求头名称
+    auth-token: AuthToken
+    # 记住我功能的token名称，请求头名称
+    remember-me-token: RememberMeToken
+    # auth-token 有效时间（秒） 1小时 = 1 * 60 * 60
+    expire-time: 3600
+    # refresh-token 有效时间（秒）： 30天 = 1 * 60 * 60 * 24 * 30
+    remember-me-token-expire-time: 2592000
+    # auth-token 距离过期时间 expire-time 还有多少秒，重新设置有效时间为 expire-time：5分钟 = 1 * 60 * 5
+    surplus-refresh-time: 300
+  start-init:
+      admin:
+        username: admin
+        password: 123
+
+
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+  # 数据库
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5432/shuishu_blog?useUnicode=true&characterEncoding=utf8
+    username: postgres
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-timeout: 60000
+      idle-timeout: 500000
+      max-lifetime: 540000
+      maximum-pool-size: 20
+      minimum-idle: 10
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+        hbm2ddl:
+          auto: update
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        temp:
+          use_jdbc_metadata_defaults: true
+    show-sql: true
+  data:
+    #  redis
+    redis:
+      host: 127.0.0.1
+      password: 123456
+      port: 6379
+      database: 0
+      connect-timeout: 3000
+  #      lettuce:
+  #        pool:
+  #          enabled: true
+  #          max-active: 8
+  #          max-wait: -1
+  #          max-idle: 8
+  #          min-idle: 0
+  #        shutdown-timeout: 3000
+  # 邮件发送配置
+  mail:
+    default-encoding: utf-8
+    host: smtp.qq.com
+    username: 2124929779@qq.com
+    password:
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: xxx
+            client-secret: xxx
+            redirect-uri: http://localhost:8081/oauth2/code/github
+
+
+
+
+# springdoc-openapi项目配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.xiaominfo.knife4j.demo.web
+# knife4j的增强配置，不需要增强可以不配
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
