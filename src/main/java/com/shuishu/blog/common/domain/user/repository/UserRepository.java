@@ -22,4 +22,13 @@ public interface UserRepository extends BaseRepository<User, Long> {
      * @return 用户信息
      */
     User findByUserId(Long userId);
+
+    /**
+     * 用户信息
+     *
+     * @param nickname 昵称
+     * @return 用户信息
+     */
+    User findByNickname(String nickname);
+
 }

@@ -15,10 +15,12 @@ shuishu:
     remember-me-token-expire-time: 2592000
     # auth-token 距离过期时间 expire-time 还有多少秒，重新设置有效时间为 expire-time：5分钟 = 1 * 60 * 5
     surplus-refresh-time: 300
-  start-init:
-      admin:
-        username: admin
-        password: 123
+  init:
+      user:
+        nickname: Long
+        user-auth-identifier: admin
+        user-auth-credential: 123
+        industry: 互联网/软件开发/java开发
 
 
 

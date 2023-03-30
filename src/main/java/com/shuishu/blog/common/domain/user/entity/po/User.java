@@ -54,8 +54,8 @@ public class User extends BasePO {
     @Comment("地址")
     private String userAddress;
 
-    @Comment("职业")
-    private String userJob;
+    @Comment("行业id")
+    private Long industryId;
 
     @Comment("用户过期true：没有过期  false：过期")
     @Column(nullable = false)

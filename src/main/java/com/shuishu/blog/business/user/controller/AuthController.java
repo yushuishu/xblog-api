@@ -3,7 +3,6 @@ package com.shuishu.blog.business.user.controller;
 
 import com.shuishu.blog.business.user.service.AuthService;
 import com.shuishu.blog.common.config.base.ApiResponse;
-import com.shuishu.blog.common.config.security.SpringSecurityUtils;
 import com.shuishu.blog.common.domain.user.entity.dto.UserLoginDto;
 import com.shuishu.blog.common.domain.user.entity.vo.UserInfoVo;
 import com.shuishu.blog.common.enums.UserEnum;
@@ -54,7 +53,6 @@ public class AuthController {
     @PostMapping("phone")
     public ApiResponse<UserInfoVo> phone(@RequestBody UserLoginDto userLoginDTO, HttpServletResponse response) {
         System.out.println("登录----------- phone");
-        SpringSecurityUtils.login(userLoginDTO.getUsername(), userLoginDTO.getPassword(), UserEnum.AuthType.LOCAL);
         return ApiResponse.of(authService.login(userLoginDTO.getUsername(), userLoginDTO.getPassword(), UserEnum.AuthType.PHONE, userLoginDTO.getIsRememberMe(), response));
     }
 

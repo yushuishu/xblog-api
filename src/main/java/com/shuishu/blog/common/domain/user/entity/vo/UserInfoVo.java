@@ -50,9 +50,9 @@ public class UserInfoVo implements UserDetails {
      */
     private String userAddress;
     /**
-     * 职业
+     * 行业
      */
-    private String userJob;
+    private String industryName;
     /**
      * 用户过期true：没有过期  false：过期
      */

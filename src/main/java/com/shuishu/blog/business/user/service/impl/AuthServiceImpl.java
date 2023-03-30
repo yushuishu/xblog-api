@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author ：谁书-ss
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
  * @description ：
  */
 @Service
+@Transactional(rollbackFor = RuntimeException.class)
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;

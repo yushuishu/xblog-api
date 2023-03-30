@@ -3,6 +3,7 @@ package com.shuishu.blog.common.domain.user.dsl;
 
 import com.querydsl.core.types.Projections;
 import com.shuishu.blog.common.config.jdbc.BaseDsl;
+import com.shuishu.blog.common.domain.industry.entity.po.QIndustry;
 import com.shuishu.blog.common.domain.user.entity.po.QUser;
 import com.shuishu.blog.common.domain.user.entity.po.QUserAuth;
 import com.shuishu.blog.common.domain.user.entity.vo.UserInfoVo;
@@ -21,6 +22,7 @@ import org.springframework.util.StringUtils;
 public class UserAuthDsl extends BaseDsl {
     private final QUserAuth qUserAuth = QUserAuth.userAuth;
     private final QUser qUser = QUser.user;
+    private final QIndustry qIndustry = QIndustry.industry;
 
     public UserInfoVo findByUserAuthIdentifier(String userAuthIdentifier, String userAuthType) {
         if (!StringUtils.hasText(userAuthIdentifier) || !StringUtils.hasText(userAuthType)) {
@@ -32,7 +34,7 @@ public class UserAuthDsl extends BaseDsl {
                         qUser.userAbout,
                         qUser.userPhoto,
                         qUser.userAddress,
-                        qUser.userJob,
+                        qUser.industryId,
                         qUser.userIsAccountNonExpired,
                         qUser.userIsAccountNonLocked,
                         qUser.userLastLoginDate,
@@ -43,10 +45,12 @@ public class UserAuthDsl extends BaseDsl {
                         qUserAuth.userAuthCredential,
                         qUserAuth.userAuthRefreshToken,
                         qUserAuth.userAuthNickname,
-                        qUserAuth.userAuthPhoto
+                        qUserAuth.userAuthPhoto,
+                        qIndustry.industryName
                 ))
                 .from(qUserAuth)
                 .leftJoin(qUser).on(qUserAuth.userId.eq(qUser.userId))
+                .leftJoin(qIndustry).on(qUser.industryId.eq(qIndustry.industryId))
                 .where(qUserAuth.userAuthIdentifier.eq(userAuthIdentifier).and(qUserAuth.userAuthType.eq(userAuthType)))
                 .fetchOne();
     }

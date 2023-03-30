@@ -1,19 +1,9 @@
 package com.shuishu.blog.common.config.security;
 
 
-import com.shuishu.blog.common.config.exception.BusinessException;
-import com.shuishu.blog.common.config.security.token.EmailAuthenticationToken;
-import com.shuishu.blog.common.config.security.token.LocalAuthenticationToken;
-import com.shuishu.blog.common.config.security.token.PhoneAuthenticationToken;
 import com.shuishu.blog.common.enums.UserEnum;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.List;
 
@@ -58,7 +48,7 @@ public class SpringSecurityUtils {
                 "/v3/api-docs/**",
                 "/auth/**",
                 //加前缀，是为了过滤器判断使用
-                "/api/shuishu/demo/auth/**"
+                "/api/shuishu/blog/auth/**"
         };
     }
 
@@ -82,25 +72,5 @@ public class SpringSecurityUtils {
         return false;
     }
 
-    /**
-     * 登录
-     *
-     * @param username 用户名
-     * @param password 密码
-     */
-    public static void login(String username, String password, UserEnum.AuthType authType) {
-        HttpServletRequest request = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest();
-        Authentication authentication = null;
-        if (UserEnum.AuthType.LOCAL.equals(authType)) {
-            SecurityContextHolder.getContext().setAuthentication(new LocalAuthenticationToken(username, password));
-        } else if (UserEnum.AuthType.EMAIL.equals(authType)) {
-            SecurityContextHolder.getContext().setAuthentication(new EmailAuthenticationToken(username, password));
-        } else if (UserEnum.AuthType.PHONE.equals(authType)) {
-            SecurityContextHolder.getContext().setAuthentication(new PhoneAuthenticationToken(username, password));
-        } else {
-            throw new BusinessException("不支持的登录方式");
-        }
-        request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-    }
 
 }
