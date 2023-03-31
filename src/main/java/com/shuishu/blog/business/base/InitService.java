@@ -1,6 +1,7 @@
 package com.shuishu.blog.business.base;
 
 
+import com.shuishu.blog.common.constant.UserConstant;
 import com.shuishu.blog.common.domain.industry.entity.po.Industry;
 import com.shuishu.blog.common.domain.industry.repository.IndustryRepository;
 import com.shuishu.blog.common.domain.user.entity.po.User;
@@ -39,6 +40,8 @@ public class InitService {
     private String userAuthCredential;
     @Value("${shuishu.init.user.industry}")
     private String industryName;
+    @Value("${shuishu.init.user.user-photo}")
+    private String userPhoto;
 
     private final UserAuthRepository userAuthRepository;
     private final UserRepository userRepository;
@@ -68,12 +71,12 @@ public class InitService {
                 if (user == null) {
                     user = new User();
                     user.setNickname(nickname);
-                    user.setUserAbout("");
-                    user.setUserPhoto("");
-                    user.setUserAddress("");
+                    user.setUserAbout(UserConstant.USER_ABOUT);
+                    user.setUserPhoto(StringUtils.hasText(userPhoto) ? userPhoto : "");
                     user.setIndustryId(industry.getIndustryId());
                     user.setUserIsAccountNonExpired(true);
                     user.setUserIsAccountNonLocked(true);
+                    user.setUserMaxLoginClientNumber(UserConstant.USER_MAX_LOGIN_CLIENT_NUMBER);
                     userRepository.saveAndFlush(user);
                 }
 
