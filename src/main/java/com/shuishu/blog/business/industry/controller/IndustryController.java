@@ -22,5 +22,4 @@ public class IndustryController {
     private final IndustryService industryService;
 
 
-
 }

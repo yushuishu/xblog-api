@@ -28,10 +28,10 @@
         <hibernate-validator.version>8.0.0.Final</hibernate-validator.version>
         <jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
         <joda-time.version>2.12.2</joda-time.version>
-        <hutool-all.version>5.8.15</hutool-all.version>
+        <hutool-all.version>5.8.16</hutool-all.version>
         <fastjson.version>2.0.25</fastjson.version>
         <google.guava.version>31.1-jre</google.guava.version>
-        <easy-captcha.version>1.6.2</easy-captcha.version>
+        <captcha.version>1.3.0</captcha.version>
         <JustAuth.version>1.16.5</JustAuth.version>
         <knife4j.version>4.1.0</knife4j.version>
     </properties>
@@ -174,11 +174,12 @@
 
         <!-- 验证码生成插件 -->
         <dependency>
-            <groupId>com.github.whvcse</groupId>
-            <artifactId>easy-captcha</artifactId>
-            <version>${easy-captcha.version}</version>
+            <groupId>com.anji-plus</groupId>
+            <artifactId>spring-boot-starter-captcha</artifactId>
+            <version>${captcha.version}</version>
         </dependency>
 
+        <!-- 第三方登录 -->
         <dependency>
             <groupId>me.zhyd.oauth</groupId>
             <artifactId>JustAuth</artifactId>
