@@ -2,10 +2,14 @@ package com.shuishu.blog.business.label.service.impl;
 
 
 import com.shuishu.blog.business.label.service.LabelService;
+import com.shuishu.blog.common.config.base.PageDTO;
 import com.shuishu.blog.common.domain.label.dsl.LabelDsl;
+import com.shuishu.blog.common.domain.label.entity.dto.LabelDTO;
+import com.shuishu.blog.common.domain.label.entity.vo.LabelVO;
 import com.shuishu.blog.common.domain.label.repository.LabelRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,5 +29,25 @@ import org.springframework.transaction.annotation.Transactional;
 public class LabelServiceImpl implements LabelService {
     private final LabelRepository labelRepository;
     private final LabelDsl labelDsl;
+
+    @Override
+    public void addLabel(LabelDTO labelDTO) {
+
+    }
+
+    @Override
+    public Page<LabelVO> findLabelPage(LabelDTO labelDTO, PageDTO pageDTO) {
+        return null;
+    }
+
+    @Override
+    public LabelVO findLabelDetails(Long labelId) {
+        return null;
+    }
+
+    @Override
+    public void updateLabel(LabelDTO labelDTO) {
+
+    }
 
 }
