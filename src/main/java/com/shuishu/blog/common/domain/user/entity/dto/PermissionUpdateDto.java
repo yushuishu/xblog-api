@@ -2,6 +2,8 @@ package com.shuishu.blog.common.domain.user.entity.dto;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -20,18 +22,23 @@ import lombok.ToString;
 @Getter
 @ToString
 public class PermissionUpdateDto {
+    @NotNull(message = "权限id不能为空")
     @Schema(description = "权限id")
     private Long permissionId;
 
+    @NotBlank(message = "权限code不能为空")
     @Schema(description = "权限code")
     private String permissionCode;
 
+    @NotBlank(message = "权限url不能为空")
     @Schema(description = "权限url")
     private String permissionUrl;
 
+    @NotBlank(message = "权限描述不能为空")
     @Schema(description = "权限描述")
     private String permissionDescription;
 
+    @NotNull(message = "权限是否需要授权不能为空")
     @Schema(description = "权限是否需要授权：true：授权 false：开放")
     private Boolean isNeedAuthorization;
 

@@ -3,12 +3,12 @@ package com.shuishu.blog.business.user.service;
 
 
 import com.shuishu.blog.common.config.base.PageDTO;
+import com.shuishu.blog.common.config.base.PageVO;
 import com.shuishu.blog.common.domain.user.entity.dto.PermissionAddDto;
 import com.shuishu.blog.common.domain.user.entity.dto.PermissionCacheDto;
 import com.shuishu.blog.common.domain.user.entity.dto.PermissionQueryDto;
 import com.shuishu.blog.common.domain.user.entity.dto.PermissionUpdateDto;
 import com.shuishu.blog.common.domain.user.entity.vo.PermissionVo;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -58,5 +58,5 @@ public interface ResourceService {
      * @param pageDTO 分页参数
      * @return 分页数据
      */
-    Page<PermissionVo> findPermissionPage(PermissionQueryDto permissionQueryDto, PageDTO pageDTO);
+    PageVO<PermissionVo> findPermissionPage(PermissionQueryDto permissionQueryDto, PageDTO pageDTO);
 }

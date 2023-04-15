@@ -98,7 +98,7 @@ public class LoginPolicyFilter extends OncePerRequestFilter {
                             } else if (UserEnum.LoginPolicy.TWO.name().equals(loginPolicy)) {
                                 log.info("用户【{}】登录，执行策略：达到最大客户端登录人数，不允许登录", userInfoVo.getNickname());
                                 // 达到最大客户端登录人数，不允许登录
-                                ResponseUtils.responseJson(response, new ApiResponse<>(401, "登录失败，当前用户【" + userInfoVo.getNickname() + "】登录客户端的个数限制，最多为【" + userMaxLoginClientNumber + "】个"));
+                                ResponseUtils.responseJson(response, new ApiResponse<>(401, "登录失败，当前用户【" + userInfoVo.getNickname() + "】登录客户端的数量最多为【" + userMaxLoginClientNumber + "】个"));
                                 return;
                             }
                         }

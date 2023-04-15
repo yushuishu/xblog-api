@@ -3,19 +3,23 @@ package com.shuishu.blog.business.user.service.impl;
 
 import com.shuishu.blog.business.user.service.ResourceService;
 import com.shuishu.blog.common.config.base.PageDTO;
+import com.shuishu.blog.common.config.base.PageVO;
+import com.shuishu.blog.common.config.exception.BusinessException;
+import com.shuishu.blog.common.config.security.SpringSecurityUtils;
 import com.shuishu.blog.common.domain.user.dsl.PermissionDsl;
 import com.shuishu.blog.common.domain.user.dsl.RoleDsl;
 import com.shuishu.blog.common.domain.user.entity.dto.PermissionAddDto;
 import com.shuishu.blog.common.domain.user.entity.dto.PermissionCacheDto;
 import com.shuishu.blog.common.domain.user.entity.dto.PermissionQueryDto;
 import com.shuishu.blog.common.domain.user.entity.dto.PermissionUpdateDto;
+import com.shuishu.blog.common.domain.user.entity.po.Permission;
 import com.shuishu.blog.common.domain.user.entity.vo.PermissionVo;
+import com.shuishu.blog.common.domain.user.entity.vo.UserInfoVo;
 import com.shuishu.blog.common.domain.user.repository.PermissionRepository;
 import com.shuishu.blog.common.domain.user.repository.RoleRepository;
 import com.shuishu.blog.common.enums.RedisKeyEnum;
 import com.shuishu.blog.common.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,7 +67,15 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public void addPermission(PermissionAddDto permissionAddDto) {
-
+        UserInfoVo userInfoVo = SpringSecurityUtils.getUserInfoVo();
+        Permission tempPermission = permissionDsl.findByCodeOrUrl(permissionAddDto.getPermissionCode(), permissionAddDto.getPermissionUrl());
+        if (tempPermission != null) {
+            throw new BusinessException("权限code或url已存在");
+        }
+        Permission newPermission = permissionAddDto.toPo(Permission.class);
+        newPermission.setCreateUserId(userInfoVo.getUserId());
+        newPermission.setUpdateUserId(userInfoVo.getUserId());
+        permissionRepository.save(newPermission);
     }
 
     @Override
@@ -73,11 +85,12 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public PermissionVo findPermissionDetails(Long permissionId) {
-        return null;
+        return permissionDsl.findPermissionDetails(permissionId);
     }
 
     @Override
-    public Page<PermissionVo> findPermissionPage(PermissionQueryDto permissionQueryDto, PageDTO pageDTO) {
+    public PageVO<PermissionVo> findPermissionPage(PermissionQueryDto permissionQueryDto, PageDTO pageDTO) {
+
         return null;
     }
 

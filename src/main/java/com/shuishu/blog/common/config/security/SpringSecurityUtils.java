@@ -2,7 +2,12 @@ package com.shuishu.blog.common.config.security;
 
 
 import com.google.common.collect.Lists;
+import com.shuishu.blog.common.config.exception.BusinessException;
+import com.shuishu.blog.common.domain.user.entity.vo.UserInfoVo;
 import com.shuishu.blog.common.enums.UserEnum;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
@@ -92,5 +97,14 @@ public class SpringSecurityUtils {
         return false;
     }
 
+
+    public static UserInfoVo getUserInfoVo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            Object principal = authentication.getPrincipal();
+            return (UserInfoVo) principal;
+        }
+        throw new BusinessException("用户不存在");
+    }
 
 }

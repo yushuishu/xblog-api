@@ -1,16 +1,20 @@
 package com.shuishu.blog.common.domain.user.dsl;
 
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
 import com.shuishu.blog.common.config.jdbc.BaseDsl;
 import com.shuishu.blog.common.domain.user.entity.dto.PermissionCacheDto;
 import com.shuishu.blog.common.domain.user.entity.dto.RoleCacheDto;
+import com.shuishu.blog.common.domain.user.entity.po.Permission;
 import com.shuishu.blog.common.domain.user.entity.po.QPermission;
 import com.shuishu.blog.common.domain.user.entity.po.QRole;
 import com.shuishu.blog.common.domain.user.entity.po.QRolePermission;
 import com.shuishu.blog.common.domain.user.entity.vo.PermissionInfoVo;
+import com.shuishu.blog.common.domain.user.entity.vo.PermissionVo;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -65,5 +69,29 @@ public class PermissionDsl extends BaseDsl {
                                 )).as("roleCacheDtoList"))
                         )
                 ));
+    }
+
+    public Permission findByCodeOrUrl(String permissionCode, String permissionUrl) {
+        BooleanBuilder builder = new BooleanBuilder();
+        if (StringUtils.hasText(permissionCode)) {
+            builder.and(qPermission.permissionCode.eq(permissionCode));
+        }
+        if (StringUtils.hasText(permissionUrl)) {
+            builder.and(qPermission.permissionUrl.eq(permissionUrl));
+        }
+        return jpaQueryFactory.selectFrom(qPermission).where(builder).fetchFirst();
+    }
+
+    public PermissionVo findPermissionDetails(Long permissionId) {
+        if (permissionId == null) {
+            return null;
+        }
+        return jpaQueryFactory.select(Projections.fields(
+                PermissionVo.class,
+                qPermission.permissionId
+        ))
+                .from(qPermission)
+                .where(qPermission.permissionId.eq(permissionId))
+                .fetchOne();
     }
 }

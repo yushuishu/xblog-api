@@ -49,30 +49,36 @@ public class EmailLoginFilter extends OncePerRequestFilter {
         log.info("【EmailLoginFilter 过滤器】执行doFilterInternal()方法");
         // 获取URI
         String requestUri = request.getRequestURI();
-        if (SpringSecurityUtils.LOGIN_URL_LOCAL.contains(requestUri) && !HttpMethod.POST.matches(request.getMethod())) {
-            ResponseUtils.responseJson(response, new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(), "不支持的请求方式"));
-            return;
-        }
         // 获取用户信息
         UserInfoVo userInfoVo = tokenUtils.getUserInfoVo(request, response);
-        // 忽略URL
-        if (SpringSecurityUtils.existsInIgnoreUrlArray(requestUri)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-        // 需要认证的URL，token过期无效
-        if (userInfoVo == null) {
-            ResponseUtils.responseJson(response, new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(), "请先登录，再访问资源"));
-            return;
-        }
-        // 用户信息放到上下文
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
-            EmailAuthenticationToken emailAuthenticationToken = new EmailAuthenticationToken(userInfoVo.getUserAuthIdentifier(), userInfoVo.getAuthorities());
-            emailAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(emailAuthenticationToken);
-        }
-        filterChain.doFilter(request, response);
-    }
 
+        if (SpringSecurityUtils.LOGIN_URL_LOCAL.contains(requestUri)) {
+            if (!HttpMethod.POST.matches(request.getMethod())) {
+                ResponseUtils.responseJson(response, new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(), "不支持的请求方式"));
+                return;
+            }
+            // 登录
+            filterChain.doFilter(request, response);
+        }else {
+            // 忽略URL
+            if (SpringSecurityUtils.existsInIgnoreUrlArray(requestUri)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+            // 需要认证的URL，token过期无效
+            if (userInfoVo == null) {
+                ResponseUtils.responseJson(response, new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(), "请先登录，再访问资源"));
+                return;
+            }
+            // 用户信息放到上下文
+            if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                EmailAuthenticationToken emailAuthenticationToken = new EmailAuthenticationToken(userInfoVo, userInfoVo.getAuthorities());
+                emailAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(emailAuthenticationToken);
+            }
+            filterChain.doFilter(request, response);
+
+        }
+    }
 
 }

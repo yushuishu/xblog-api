@@ -27,6 +27,7 @@ knife4j:
   #documents: classpath:swagger/markdown/**
 # springdoc-openapi项目配置
 springdoc:
+  default-flat-param-object: true
   swagger-ui:
     path: /swagger-ui.html
     tags-sorter: alpha
