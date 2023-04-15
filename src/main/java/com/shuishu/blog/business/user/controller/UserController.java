@@ -4,8 +4,10 @@ package com.shuishu.blog.business.user.controller;
 import com.shuishu.blog.business.user.service.UserService;
 import com.shuishu.blog.common.config.base.ApiResponse;
 import com.shuishu.blog.common.domain.user.entity.dto.UserAddDto;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,8 +29,30 @@ public class UserController {
     private final UserService userService;
 
 
+    @Operation(summary = "添加", description = "添加用户")
     @PostMapping("add")
     public ApiResponse<String> addUser(UserAddDto userAddDTO) {
+        //userService.addUser(userAddDTO);
+        return ApiResponse.success();
+    }
+
+    @Operation(summary = "更新", description = "更新用户")
+    @PostMapping("update")
+    public ApiResponse<String> updateUser(UserAddDto userAddDTO) {
+        //userService.addUser(userAddDTO);
+        return ApiResponse.success();
+    }
+
+    @Operation(summary = "详情", description = "查询用户详情")
+    @GetMapping("details")
+    public ApiResponse<String> findUserDetails(UserAddDto userAddDTO) {
+        //userService.addUser(userAddDTO);
+        return ApiResponse.success();
+    }
+
+    @Operation(summary = "page", description = "查询用户page")
+    @GetMapping("page")
+    public ApiResponse<String> findUserPage(UserAddDto userAddDTO) {
         //userService.addUser(userAddDTO);
         return ApiResponse.success();
     }

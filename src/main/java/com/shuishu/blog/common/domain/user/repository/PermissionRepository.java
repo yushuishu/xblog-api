@@ -43,4 +43,12 @@ public interface PermissionRepository extends BaseRepository<Permission, Long> {
      */
     Permission findFirstByPermissionId(Long permissionId);
 
+    /**
+     * 查询权限集合
+     *
+     * @param permissionCodeList 权限code 集合
+     * @return 权限集合
+     */
+    List<Permission> findAllByPermissionCodeIn(List<String> permissionCodeList);
+
 }

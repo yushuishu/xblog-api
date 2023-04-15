@@ -1,7 +1,6 @@
 package com.shuishu.blog.common.config.exception;
 
 
-
 import com.shuishu.blog.common.config.base.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -53,28 +52,6 @@ public class GlobalExceptionHandler {
         return ApiResponse.of(ApiResponse.Type.ERROR.value(), e.getParameterName());
     }
 
-    private void printParameterMap() {
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (attributes != null) {
-            HttpServletRequest request = attributes.getRequest();
-            Map<String, String[]> paramMap = request.getParameterMap();
-            Map<String, String> newParamMap = convertRequestParamMap(paramMap);
-            log.info(String.format("请求地址：%s", request.getRequestURL()));
-            log.info(String.format("请求参数：%s", newParamMap));
-        }
-    }
-
-    public static String errorMessage(BindingResult bindingResult) {
-        StringBuilder errorMessage = new StringBuilder();
-        if (bindingResult.hasErrors()) {
-            List<FieldError> list = bindingResult.getFieldErrors();
-            for (FieldError error : list) {
-                errorMessage.append(",").append(error.getField()).append(" : ").append(error.getDefaultMessage());
-            }
-        }
-        return errorMessage.toString().replaceFirst(",", "");
-    }
-
     @ResponseBody
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ApiResponse<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
@@ -89,6 +66,29 @@ public class GlobalExceptionHandler {
         return ApiResponse.of(ApiResponse.Type.ERROR.value(), errorMessage(e.getBindingResult()));
     }
 
+
+    public static String errorMessage(BindingResult bindingResult) {
+        StringBuilder errorMessage = new StringBuilder();
+        if (bindingResult.hasErrors()) {
+            List<FieldError> list = bindingResult.getFieldErrors();
+            for (FieldError error : list) {
+                errorMessage.append(",").append(error.getField()).append(" : ").append(error.getDefaultMessage());
+            }
+        }
+        return errorMessage.toString().replaceFirst(",", "");
+    }
+
+    private void printParameterMap() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
+            Map<String, String[]> paramMap = request.getParameterMap();
+            Map<String, String> newParamMap = convertRequestParamMap(paramMap);
+            log.info(String.format("请求地址：%s", request.getRequestURL()));
+            log.info(String.format("请求参数：%s", newParamMap));
+        }
+    }
+
     public static Map<String, String> convertRequestParamMap(Map<String, String[]> paramMap) {
         Map<String, String> newParamMap = new HashMap<>(10);
         if (paramMap != null) {
@@ -100,4 +100,5 @@ public class GlobalExceptionHandler {
         }
         return newParamMap;
     }
+
 }

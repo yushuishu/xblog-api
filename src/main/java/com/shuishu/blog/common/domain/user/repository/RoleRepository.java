@@ -25,4 +25,13 @@ public interface RoleRepository extends BaseRepository<Role, Long> {
      * @return 角色集合
      */
     List<Role> findAllByRoleIdIn(List<Long> roleIdList);
+
+    /**
+     * 查询角色
+     *
+     * @param roleCode 角色code
+     * @return 角色信息
+     */
+    Role findRoleByRoleCode(String roleCode);
+
 }

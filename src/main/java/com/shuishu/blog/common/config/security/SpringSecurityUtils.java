@@ -1,11 +1,14 @@
 package com.shuishu.blog.common.config.security;
 
 
+import com.google.common.collect.Lists;
 import com.shuishu.blog.common.enums.UserEnum;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ：谁书-ss
@@ -27,6 +30,23 @@ public class SpringSecurityUtils {
     public static final String LOGIN_PASSWORD_FRONT_KEY = "password";
     public static final String LOGIN_CAPTCHA = "captcha";
 
+    /**
+     * 系统初始化 角色code
+     */
+    public static final String DEFAULT_ROLE_CODE = "system-super-role";
+
+    /**
+     * 系统初始化 权限code 和 权限url
+     * @return 初始化权信息
+     */
+    public static Map<String, String> getInitPermission() {
+        Map<String, String> map = new HashMap<>(4);
+        map.put("permission:add", "/api/shuishu/blog/resource/permission/add/**");
+        map.put("permission:update", "/api/shuishu/blog/resource/permission/update/**");
+        map.put("permission:details", "/api/shuishu/blog/resource/permission/details/**");
+        map.put("permission:page", "/api/shuishu/blog/resource/permission/page/**");
+        return map;
+    }
 
     public static String getAuthType(String uri) {
         if (StringUtils.hasText(uri)) {

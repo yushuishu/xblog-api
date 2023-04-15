@@ -45,4 +45,10 @@ public class Role extends BasePO {
     @Column(nullable = false, unique = true)
     private String roleCode;
 
+    @Comment("角色描述")
+    private String roleDescription;
+
+    @Comment("操作编辑删除权限：true可以；false不可以")
+    private Boolean roleOperatePower;
+
 }

@@ -15,4 +15,12 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserRoleRepository extends BaseRepository<UserRole, Long> {
+    /**
+     * 查询用户关联的某个角色信息
+     *
+     * @param userId 用户id
+     * @param roleId 角色id
+     * @return 用户角色关联信息
+     */
+    UserRole findUserRoleByUserIdAndRoleId(Long userId, Long roleId);
 }

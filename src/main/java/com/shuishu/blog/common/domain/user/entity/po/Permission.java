@@ -53,6 +53,9 @@ public class Permission extends BasePO {
     @Column(nullable = false)
     private Boolean isNeedAuthorization;
 
+    @Comment("操作编辑删除权限：true可以；false不可以")
+    private Boolean permissionOperatePower;
+
     @Comment("父级权限id（权限分类）")
     private Long permissionParentId;
 
