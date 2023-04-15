@@ -1,4 +1,5 @@
 shuishu:
+  file-path: D:/itlike/workSpace/Java/blog/files
   # 登录策略（默认ONE：com.shuishu.demo.security.common.config.security.LoginPolicyConfig.getLoginPolicy）
   # ONE: 达到最大客户端登录人数，将最早登录的客户端给踢掉
   # TWO: 达到最大客户端登录人数，不允许登录
@@ -24,6 +25,8 @@ shuishu:
         user-photo: https://github.com/yushuishu/images/blob/master/blog/666666.png?raw=true
 
 
+server:
+  port: 8081
 
 spring:
   main:
@@ -63,6 +66,7 @@ spring:
       host: 127.0.0.1
       password: 123456
       port: 6379
+      # Redis数据库索引（默认为 0）
       database: 0
       connect-timeout: 3000
   # 邮件发送配置
@@ -118,22 +122,4 @@ aj:
     # verify接口一分钟内请求数限制
     req-verify-minute-limit: 60
 
-
-# springdoc-openapi项目配置
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
-    tags-sorter: alpha
-    operations-sorter: alpha
-  api-docs:
-    path: /v3/api-docs
-  group-configs:
-    - group: 'default'
-      paths-to-match: '/**'
-      packages-to-scan: com.xiaominfo.knife4j.demo.web
-# knife4j的增强配置，不需要增强可以不配
-knife4j:
-  enable: true
-  setting:
-    language: zh_cn
 

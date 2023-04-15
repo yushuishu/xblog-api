@@ -1,68 +1,64 @@
 package com.shuishu.blog.common.domain.user.entity.vo;
 
 
-import com.shuishu.blog.common.config.base.BaseVO;
-import com.shuishu.blog.common.domain.user.entity.po.Permission;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.io.Serial;
+import java.util.Date;
 
 /**
  * @author ：谁书-ss
- * @date ：2023-01-02 14:09
+ * @date ：2023-04-15 9:21
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
  * @description ：权限信息vo
+ * <p></p>
  */
 @Schema(description = "权限信息vo")
 @Setter
 @Getter
 @ToString
-public class PermissionInfoVo extends BaseVO<Permission> {
-    @Serial
-    private static final long serialVersionUID = 6581320655357167673L;
-    /**
-     * 权限id
-     */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class PermissionVo {
+
     @Schema(description = "权限id")
     private Long permissionId;
-    /**
-     * 权限code
-     */
+
     @Schema(description = "权限code")
     private String permissionCode;
-    /**
-     * 权限url
-     */
+
     @Schema(description = "权限url")
     private String permissionUrl;
-    /**
-     * 权限描述
-     */
+
     @Schema(description = "权限描述")
     private String permissionDescription;
-    /**
-     * 权限是否需要授权：true：授权 false：开放
-     */
+
     @Schema(description = "权限是否需要授权：true：授权 false：开放")
     private Boolean isNeedAuthorization;
-    /**
-     * 父级权限id（权限分类）
-     */
+
     @Schema(description = "父级权限id（权限分类）")
     private Long permissionParentId;
-    /**
-     * 角色权限关联id
-     */
-    @Schema(description = "角色权限关联id")
-    private Long rolePermissionId;
-    /**
-     * 角色id
-     */
-    @Schema(description = "角色id")
-    private Long roleId;
+
+    @Schema(description = "创建时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createDate;
+
+    @Schema(description = "修改时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date updateDate;
+
+    @Schema(description = "创建人昵称")
+    private String createNickname;
+
+    @Schema(description = "更新人昵称")
+    private String updateNickname;
+
 }

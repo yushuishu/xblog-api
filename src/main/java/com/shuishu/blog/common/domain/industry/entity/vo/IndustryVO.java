@@ -28,6 +28,8 @@ public class IndustryVO extends BaseVO<Industry> {
 
     private Long industryName;
 
+    private Integer industrySort;
+
     private Date createDate;
 
     private Date updateDate;

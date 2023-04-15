@@ -37,7 +37,34 @@ public class Article extends BasePO {
     @Column(nullable = false, unique = true)
     private String articleTitle;
 
+    @Comment("文章Markdown")
+    private String articleMarkdown;
 
+    @Comment("文章HTML")
+    private String articleHtml;
 
+    @Comment("文章字数（减少查询）")
+    private Long articleWordCount;
+
+    @Comment("文章简要说明")
+    private String articleBriefDescription;
+
+    @Comment("文章浏览量")
+    private Integer articleBrowseCount;
+
+    @Comment("文章赞点量")
+    private Integer articleUpvote;
+
+    @Comment("文章分享量（公开的文章被分享次数）")
+    private Integer articleShareCount;
+
+    @Comment("文章封面图")
+    private String articleCoverImg;
+
+    @Comment("阅读时长（分钟）")
+    private Integer articleBrowseTime;
+
+    @Comment("文章动态权重值（定时任务更新权重值）")
+    private Integer articleVariableWeightValue;
 
 }

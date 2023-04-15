@@ -38,4 +38,7 @@ public class Industry extends BasePO {
     @Column(nullable = false, unique = true)
     private String industryName;
 
+    @Comment(value = "行业排序")
+    private Integer industrySort;
+
 }

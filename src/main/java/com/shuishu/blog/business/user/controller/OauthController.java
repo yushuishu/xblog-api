@@ -1,6 +1,7 @@
 package com.shuishu.blog.business.user.controller;
 
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @description ：Oauth2认证/授权
  * <p></p>
  */
+@Tag(name = "oauth认证授权")
 @RestController
 @RequestMapping("oauth2")
 @RequiredArgsConstructor

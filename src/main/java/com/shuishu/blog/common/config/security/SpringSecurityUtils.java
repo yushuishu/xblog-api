@@ -16,10 +16,10 @@ import java.util.List;
  * @description ：Spring Security 工具类
  */
 public class SpringSecurityUtils {
-    public static final String LOGOUT_URL = "/api/shuishu/demo/auth/logout";
-    public static final String LOGIN_URL_LOCAL = "/api/shuishu/demo/auth/local";
-    public static final String LOGIN_URL_EMAIL = "/api/shuishu/demo/auth/email";
-    public static final String LOGIN_URL_PHONE = "/api/shuishu/demo/auth/phone";
+    public static final String LOGOUT_URL = "/api/shuishu/blog/auth/logout";
+    public static final String LOGIN_URL_LOCAL = "/api/shuishu/blog/auth/local";
+    public static final String LOGIN_URL_EMAIL = "/api/shuishu/blog/auth/email";
+    public static final String LOGIN_URL_PHONE = "/api/shuishu/blog/auth/phone";
 
     public static final String LOGIN_USERNAME_KEY = "userAuthIdentifier";
     public static final String LOGIN_USERNAME_FRONT_KEY = "username";

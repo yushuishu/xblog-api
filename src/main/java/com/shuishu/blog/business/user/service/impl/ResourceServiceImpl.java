@@ -2,14 +2,20 @@ package com.shuishu.blog.business.user.service.impl;
 
 
 import com.shuishu.blog.business.user.service.ResourceService;
+import com.shuishu.blog.common.config.base.PageDTO;
 import com.shuishu.blog.common.domain.user.dsl.PermissionDsl;
 import com.shuishu.blog.common.domain.user.dsl.RoleDsl;
+import com.shuishu.blog.common.domain.user.entity.dto.PermissionAddDto;
 import com.shuishu.blog.common.domain.user.entity.dto.PermissionCacheDto;
+import com.shuishu.blog.common.domain.user.entity.dto.PermissionQueryDto;
+import com.shuishu.blog.common.domain.user.entity.dto.PermissionUpdateDto;
+import com.shuishu.blog.common.domain.user.entity.vo.PermissionVo;
 import com.shuishu.blog.common.domain.user.repository.PermissionRepository;
 import com.shuishu.blog.common.domain.user.repository.RoleRepository;
 import com.shuishu.blog.common.enums.RedisKeyEnum;
 import com.shuishu.blog.common.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +41,7 @@ public class ResourceServiceImpl implements ResourceService {
     private final PermissionDsl permissionDsl;
     private final RedisUtils redisUtils;
 
+
     @Override
     public List<PermissionCacheDto> findCachePermissionList() {
         Object object = redisUtils.strGet(RedisKeyEnum.KEY_PERMISSION_URL_LIST.getKey());
@@ -52,6 +59,26 @@ public class ResourceServiceImpl implements ResourceService {
             }
         }
         return result;
+    }
+
+    @Override
+    public void addPermission(PermissionAddDto permissionAddDto) {
+
+    }
+
+    @Override
+    public void updatePermission(PermissionUpdateDto permissionUpdateDto) {
+
+    }
+
+    @Override
+    public PermissionVo findPermissionDetails(Long permissionId) {
+        return null;
+    }
+
+    @Override
+    public Page<PermissionVo> findPermissionPage(PermissionQueryDto permissionQueryDto, PageDTO pageDTO) {
+        return null;
     }
 
 }

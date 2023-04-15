@@ -2,6 +2,7 @@ package com.shuishu.blog.business.monitor.controller;
 
 
 import com.shuishu.blog.business.monitor.service.MonitorService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @description ：监控
  * <p></p>
  */
+@Tag(name = "监控")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("monitor")

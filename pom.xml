@@ -276,6 +276,7 @@
                     <include>application-${profiles.active}.yml</include>
                     <include>*.xml</include>
                     <include>templates/**/*.html</include>
+                    <include>**/banner.txt</include>
                 </includes>
             </resource>
             <!-- <resource> -->

@@ -7,6 +7,7 @@ import com.shuishu.blog.common.domain.user.entity.dto.UserLoginDto;
 import com.shuishu.blog.common.domain.user.entity.vo.UserInfoVo;
 import com.shuishu.blog.common.enums.UserEnum;
 import com.shuishu.blog.common.utils.TokenUtils;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  * <p></p>
  * @description ：认证/授权
  */
+@Tag(name = "认证授权")
 @RestController
 @RequestMapping("auth")
 @RequiredArgsConstructor

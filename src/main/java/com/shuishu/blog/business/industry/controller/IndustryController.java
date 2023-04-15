@@ -6,8 +6,7 @@ import com.shuishu.blog.common.config.base.ApiResponse;
 import com.shuishu.blog.common.config.base.PageDTO;
 import com.shuishu.blog.common.domain.industry.entity.dto.IndustryDTO;
 import com.shuishu.blog.common.domain.industry.entity.vo.IndustryVO;
-import com.shuishu.blog.common.domain.label.entity.dto.LabelDTO;
-import com.shuishu.blog.common.domain.label.entity.vo.LabelVO;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
  * @description ：行业
  * <p></p>
  */
+@Tag(name = "行业")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("industry")

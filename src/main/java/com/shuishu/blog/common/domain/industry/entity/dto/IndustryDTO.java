@@ -23,4 +23,6 @@ public class IndustryDTO extends BaseDTO<Industry> {
     private Long industryId;
 
     private Long industryName;
+
+    private Integer industrySort;
 }

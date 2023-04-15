@@ -1,4 +1,4 @@
-package com.shuishu.blog.business.docking.controller;
+package com.shuishu.blog.business.task.controller;
 
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：第三方接口管理
+ * @description ：定时任务
  * <p></p>
  */
-@Tag(name = "第三方接口管理")
+@Tag(name = "定时任务")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("interface/manage")
-public class ApiManageController {
+@RequestMapping("task")
+public class TaskController {
 
 }

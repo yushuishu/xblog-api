@@ -19,7 +19,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class UserAddDTO extends BaseDTO<User> {
+public class UserAddDto extends BaseDTO<User> {
     private String nickname;
 
     private String userAbout;
