@@ -61,4 +61,7 @@ public class PermissionVo {
     @Schema(description = "更新人昵称")
     private String updateNickname;
 
+    @Schema(description = "父级权限描述")
+    private String parentPermissionDescription;
+
 }

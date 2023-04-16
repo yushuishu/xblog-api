@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -80,7 +81,20 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public void updatePermission(PermissionUpdateDto permissionUpdateDto) {
-
+        UserInfoVo userInfoVo = SpringSecurityUtils.getUserInfoVo();
+        Permission tempPermission = permissionDsl.findByCodeOrUrlAndNeId(permissionUpdateDto.getPermissionCode(), permissionUpdateDto.getPermissionUrl(), permissionUpdateDto.getPermissionId());
+        if (tempPermission != null) {
+            if (tempPermission.getPermissionCode().equals(permissionUpdateDto.getPermissionCode())) {
+                throw new BusinessException("code已存在");
+            }
+            if (tempPermission.getPermissionUrl().equals(permissionUpdateDto.getPermissionUrl())) {
+                throw new BusinessException("url已存在");
+            }
+        }
+        Permission updatePermission = permissionUpdateDto.toPo(Permission.class);
+        updatePermission.setUpdateUserId(userInfoVo.getUserId());
+        updatePermission.setUpdateDate(new Date());
+        permissionRepository.saveAndFlush(updatePermission);
     }
 
     @Override
@@ -90,8 +104,7 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public PageVO<PermissionVo> findPermissionPage(PermissionQueryDto permissionQueryDto, PageDTO pageDTO) {
-
-        return null;
+        return permissionDsl.findPermissionPage(permissionQueryDto, pageDTO);
     }
 
 }

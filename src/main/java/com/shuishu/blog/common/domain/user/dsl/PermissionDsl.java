@@ -4,16 +4,17 @@ package com.shuishu.blog.common.domain.user.dsl;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
+import com.shuishu.blog.common.config.base.PageDTO;
+import com.shuishu.blog.common.config.base.PageVO;
 import com.shuishu.blog.common.config.jdbc.BaseDsl;
 import com.shuishu.blog.common.domain.user.entity.dto.PermissionCacheDto;
+import com.shuishu.blog.common.domain.user.entity.dto.PermissionQueryDto;
 import com.shuishu.blog.common.domain.user.entity.dto.RoleCacheDto;
-import com.shuishu.blog.common.domain.user.entity.po.Permission;
-import com.shuishu.blog.common.domain.user.entity.po.QPermission;
-import com.shuishu.blog.common.domain.user.entity.po.QRole;
-import com.shuishu.blog.common.domain.user.entity.po.QRolePermission;
+import com.shuishu.blog.common.domain.user.entity.po.*;
 import com.shuishu.blog.common.domain.user.entity.vo.PermissionInfoVo;
 import com.shuishu.blog.common.domain.user.entity.vo.PermissionVo;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -31,6 +32,9 @@ public class PermissionDsl extends BaseDsl {
     final QPermission qPermission = QPermission.permission;
     final QRolePermission qRolePermission = QRolePermission.rolePermission;
     final QRole qRole = QRole.role;
+    final QPermission qPermissionParent = new QPermission("qPermissionParent");
+    final QUser qUser = QUser.user;
+    final QUser qUserUpdate = new QUser("qUserUpdate");
 
     public List<PermissionInfoVo> findPermissionInfoByRoleIdList(List<Long> roleIdList) {
         return jpaQueryFactory.select(Projections.fields(PermissionInfoVo.class,
@@ -88,10 +92,82 @@ public class PermissionDsl extends BaseDsl {
         }
         return jpaQueryFactory.select(Projections.fields(
                 PermissionVo.class,
-                qPermission.permissionId
+                qPermission.permissionId,
+                qPermission.permissionCode,
+                qPermission.permissionDescription,
+                qPermission.isNeedAuthorization,
+                qPermission.permissionId,
+                qPermission.createDate,
+                qPermission.updateDate,
+                qPermissionParent.permissionDescription.as("parentPermissionDescription"),
+                qUser.nickname.as("createNickname"),
+                qUserUpdate.nickname.as("updateNickname")
         ))
                 .from(qPermission)
+                .leftJoin(qPermissionParent).on(qPermission.permissionParentId.eq(qPermissionParent.permissionId))
+                .leftJoin(qUser).on(qPermission.createUserId.eq(qUser.createUserId))
+                .leftJoin(qUserUpdate).on(qPermission.updateUserId.eq(qUserUpdate.userId))
                 .where(qPermission.permissionId.eq(permissionId))
                 .fetchOne();
+    }
+
+    public Permission findByCodeOrUrlAndNeId(String permissionCode, String permissionUrl, Long permissionId) {
+        if (StringUtils.hasText(permissionCode) && StringUtils.hasText(permissionUrl) && permissionId != null) {
+            return jpaQueryFactory.selectFrom(qPermission)
+                    .where(qPermission.permissionCode.eq(permissionCode).or(qPermission.permissionUrl.eq(permissionUrl)).and(qPermission.permissionId.ne(permissionId)))
+                    .fetchFirst();
+        }
+        return null;
+    }
+
+    public PageVO<PermissionVo> findPermissionPage(PermissionQueryDto permissionQueryDto, PageDTO pageDTO) {
+        PageVO<PermissionVo> page = pageDTO.toPageVO(PermissionVo.class);
+        BooleanBuilder builder = new BooleanBuilder();
+        if (StringUtils.hasText(permissionQueryDto.getPermissionCode())) {
+            builder.and(qPermission.permissionCode.like("%" + permissionQueryDto.getPermissionCode() + "%"));
+        }
+        if (StringUtils.hasText(permissionQueryDto.getPermissionUrl())) {
+            builder.and(qPermission.permissionUrl.like("%" + permissionQueryDto.getPermissionUrl() + "%"));
+        }
+        if (StringUtils.hasText(permissionQueryDto.getPermissionDescription())) {
+            builder.and(qPermission.permissionDescription.like("%" + permissionQueryDto.getPermissionDescription() + "%"));
+        }
+        if (permissionQueryDto.getIsNeedAuthorization() != null) {
+            builder.and(qPermission.isNeedAuthorization.eq(permissionQueryDto.getIsNeedAuthorization()));
+        }
+
+        List<Long> idList = jpaQueryFactory.select(qPermission.permissionId)
+                .from(qPermission)
+                .where(builder).fetch();
+        if (!ObjectUtils.isEmpty(idList)) {
+            page.setTotalElements(idList.size());
+        }else {
+            page.setTotalElements(0);
+        }
+
+        List<PermissionVo> fetch = jpaQueryFactory.select(Projections.fields(
+                        PermissionVo.class,
+                        qPermission.permissionId,
+                        qPermission.permissionCode,
+                        qPermission.permissionDescription,
+                        qPermission.isNeedAuthorization,
+                        qPermission.permissionId,
+                        qPermission.createDate,
+                        qPermission.updateDate,
+                        qPermissionParent.permissionDescription.as("parentPermissionDescription"),
+                        qUser.nickname.as("createNickname"),
+                        qUserUpdate.nickname.as("updateNickname")
+                ))
+                .from(qPermission)
+                .leftJoin(qPermissionParent).on(qPermission.permissionParentId.eq(qPermissionParent.permissionId))
+                .leftJoin(qUser).on(qPermission.createUserId.eq(qUser.createUserId))
+                .leftJoin(qUserUpdate).on(qPermission.updateUserId.eq(qUserUpdate.userId))
+                .where(builder)
+                .offset(page.getOffset()).limit(page.getPageSize())
+                .fetch();
+
+        page.setDataList(fetch);
+
+        return page;
     }
 }

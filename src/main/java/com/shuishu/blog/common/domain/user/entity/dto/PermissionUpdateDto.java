@@ -1,6 +1,8 @@
 package com.shuishu.blog.common.domain.user.entity.dto;
 
 
+import com.shuishu.blog.common.config.base.BaseDTO;
+import com.shuishu.blog.common.domain.user.entity.po.Permission;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,7 +23,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class PermissionUpdateDto {
+public class PermissionUpdateDto extends BaseDTO<Permission> {
     @NotNull(message = "权限id不能为空")
     @Schema(description = "权限id")
     private Long permissionId;
