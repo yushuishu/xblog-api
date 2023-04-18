@@ -8,20 +8,23 @@ import com.shuishu.blog.common.config.exception.BusinessException;
 import com.shuishu.blog.common.config.security.SpringSecurityUtils;
 import com.shuishu.blog.common.domain.user.dsl.PermissionDsl;
 import com.shuishu.blog.common.domain.user.dsl.RoleDsl;
-import com.shuishu.blog.common.domain.user.entity.dto.PermissionAddDto;
-import com.shuishu.blog.common.domain.user.entity.dto.PermissionCacheDto;
-import com.shuishu.blog.common.domain.user.entity.dto.PermissionQueryDto;
-import com.shuishu.blog.common.domain.user.entity.dto.PermissionUpdateDto;
+import com.shuishu.blog.common.domain.user.entity.dto.*;
 import com.shuishu.blog.common.domain.user.entity.po.Permission;
+import com.shuishu.blog.common.domain.user.entity.po.Role;
+import com.shuishu.blog.common.domain.user.entity.po.RolePermission;
 import com.shuishu.blog.common.domain.user.entity.vo.PermissionVo;
+import com.shuishu.blog.common.domain.user.entity.vo.RoleVo;
 import com.shuishu.blog.common.domain.user.entity.vo.UserInfoVo;
 import com.shuishu.blog.common.domain.user.repository.PermissionRepository;
+import com.shuishu.blog.common.domain.user.repository.RolePermissionRepository;
 import com.shuishu.blog.common.domain.user.repository.RoleRepository;
+import com.shuishu.blog.common.domain.user.repository.UserRoleRepository;
 import com.shuishu.blog.common.enums.RedisKeyEnum;
 import com.shuishu.blog.common.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,6 +47,9 @@ public class ResourceServiceImpl implements ResourceService {
     private final RoleDsl roleDsl;
     private final PermissionRepository permissionRepository;
     private final PermissionDsl permissionDsl;
+    private final RolePermissionRepository rolePermissionRepository;
+    private final UserRoleRepository userRoleRepository;
+
     private final RedisUtils redisUtils;
 
 
@@ -69,9 +75,9 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public void addPermission(PermissionAddDto permissionAddDto) {
         UserInfoVo userInfoVo = SpringSecurityUtils.getUserInfoVo();
-        Permission tempPermission = permissionDsl.findByCodeOrUrl(permissionAddDto.getPermissionCode(), permissionAddDto.getPermissionUrl());
+        Permission tempPermission = permissionDsl.findByNameOrCodeOrUrl(permissionAddDto.getPermissionName(), permissionAddDto.getPermissionCode(), permissionAddDto.getPermissionUrl());
         if (tempPermission != null) {
-            throw new BusinessException("权限code或url已存在");
+            throw new BusinessException("权限名、权限code或url已存在");
         }
         Permission newPermission = permissionAddDto.toPo(Permission.class);
         newPermission.setCreateUserId(userInfoVo.getUserId());
@@ -82,13 +88,16 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public void updatePermission(PermissionUpdateDto permissionUpdateDto) {
         UserInfoVo userInfoVo = SpringSecurityUtils.getUserInfoVo();
-        Permission tempPermission = permissionDsl.findByCodeOrUrlAndNeId(permissionUpdateDto.getPermissionCode(), permissionUpdateDto.getPermissionUrl(), permissionUpdateDto.getPermissionId());
+        Permission tempPermission = permissionDsl.findByNameOrCodeOrUrlAndNeId(permissionUpdateDto.getPermissionName(), permissionUpdateDto.getPermissionCode(), permissionUpdateDto.getPermissionUrl(), permissionUpdateDto.getPermissionId());
         if (tempPermission != null) {
+            if (tempPermission.getPermissionName().equals(permissionUpdateDto.getPermissionName())) {
+                throw new BusinessException("权限名称已存在");
+            }
             if (tempPermission.getPermissionCode().equals(permissionUpdateDto.getPermissionCode())) {
-                throw new BusinessException("code已存在");
+                throw new BusinessException("权限code已存在");
             }
             if (tempPermission.getPermissionUrl().equals(permissionUpdateDto.getPermissionUrl())) {
-                throw new BusinessException("url已存在");
+                throw new BusinessException("权限url已存在");
             }
         }
         Permission updatePermission = permissionUpdateDto.toPo(Permission.class);
@@ -105,6 +114,62 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public PageVO<PermissionVo> findPermissionPage(PermissionQueryDto permissionQueryDto, PageDTO pageDTO) {
         return permissionDsl.findPermissionPage(permissionQueryDto, pageDTO);
+    }
+
+    @Override
+    public void deletePermission(Long permissionId) {
+        // 查询此权限关联了的角色
+        List<RolePermission> rolePermissionList = rolePermissionRepository.findAllByPermissionId(permissionId);
+        if (!ObjectUtils.isEmpty(rolePermissionList)) {
+            throw new BusinessException("当前权限有角色关联，请先解除角色关联");
+        }
+        permissionRepository.deleteById(permissionId);
+    }
+
+    @Override
+    public void addRole(RoleAddDto roleAddDto) {
+        UserInfoVo userInfoVo = SpringSecurityUtils.getUserInfoVo();
+        Role tempRole = roleDsl.findNameOrCode(roleAddDto.getRoleName(), roleAddDto.getRoleCode());
+        if (tempRole != null) {
+            throw new BusinessException("角色名或code已存在");
+        }
+        Role newRole = roleAddDto.toPo(Role.class);
+        newRole.setCreateUserId(userInfoVo.getUserId());
+        newRole.setUpdateUserId(userInfoVo.getUserId());
+        roleRepository.saveAndFlush(newRole);
+    }
+
+    @Override
+    public void updateRole(RoleUpdateDto roleUpdateDto) {
+        UserInfoVo userInfoVo = SpringSecurityUtils.getUserInfoVo();
+        Role tempRole = roleDsl.findNameOrCodeAndNeId(roleUpdateDto.getRoleName(), roleUpdateDto.getRoleCode(), roleUpdateDto.getRoleId());
+        if (tempRole != null) {
+            if (tempRole.getRoleName().equals(roleUpdateDto.getRoleName())) {
+                throw new BusinessException("角色名称已存在");
+            }
+            if (tempRole.getRoleCode().equals(roleUpdateDto.getRoleCode())) {
+                throw new BusinessException("角色code已存在");
+            }
+        }
+        Role updateRole = roleUpdateDto.toPo(Role.class);
+        updateRole.setUpdateUserId(userInfoVo.getUserId());
+        updateRole.setUpdateDate(new Date());
+        roleRepository.saveAndFlush(updateRole);
+    }
+
+    @Override
+    public RoleVo findRoleDetails(Long roleId) {
+        return roleDsl.findRoleDetails(roleId);
+    }
+
+    @Override
+    public PageVO<RoleVo> findRolePage(RoleQueryDto roleQueryDto, PageDTO pageDTO) {
+        return null;
+    }
+
+    @Override
+    public void deleteRole(Long roleId) {
+
     }
 
 }

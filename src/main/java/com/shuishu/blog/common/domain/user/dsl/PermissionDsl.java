@@ -13,6 +13,8 @@ import com.shuishu.blog.common.domain.user.entity.dto.RoleCacheDto;
 import com.shuishu.blog.common.domain.user.entity.po.*;
 import com.shuishu.blog.common.domain.user.entity.vo.PermissionInfoVo;
 import com.shuishu.blog.common.domain.user.entity.vo.PermissionVo;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -38,14 +40,14 @@ public class PermissionDsl extends BaseDsl {
 
     public List<PermissionInfoVo> findPermissionInfoByRoleIdList(List<Long> roleIdList) {
         return jpaQueryFactory.select(Projections.fields(PermissionInfoVo.class,
-                qPermission.permissionId,
-                qPermission.permissionCode,
-                qPermission.permissionDescription,
-                qPermission.permissionUrl,
-                qPermission.permissionParentId,
-                qRolePermission.roleId,
-                qRolePermission.rolePermissionId
-        ))
+                        qPermission.permissionId,
+                        qPermission.permissionCode,
+                        qPermission.permissionDescription,
+                        qPermission.permissionUrl,
+                        qPermission.permissionParentId,
+                        qRolePermission.roleId,
+                        qRolePermission.rolePermissionId
+                ))
                 .from(qRolePermission)
                 .leftJoin(qPermission).on(qRolePermission.permissionId.eq(qPermission.permissionId))
                 .where(qRolePermission.roleId.in(roleIdList))
@@ -55,33 +57,36 @@ public class PermissionDsl extends BaseDsl {
 
     public List<PermissionCacheDto> findCachePermissionList() {
         return jpaQueryFactory.select(Projections.fields(PermissionCacheDto.class,
-                qRole.roleCode,
-                qPermission.permissionCode,
-                qPermission.permissionUrl,
-                qPermission.isNeedAuthorization
-        ))
+                        qRole.roleCode,
+                        qPermission.permissionCode,
+                        qPermission.permissionUrl,
+                        qPermission.isNeedAuthorization
+                ))
                 .from(qPermission)
                 .leftJoin(qRolePermission).on(qPermission.permissionId.eq(qRolePermission.permissionId))
                 .leftJoin(qRole).on(qRole.roleId.eq(qRolePermission.roleId))
                 .transform(GroupBy.groupBy(qPermission).list((
-                        Projections.fields(PermissionCacheDto.class,
-                                qPermission.permissionUrl,
-                                qPermission.permissionCode,
-                                qPermission.isNeedAuthorization,
-                                GroupBy.list(Projections.fields(RoleCacheDto.class,
-                                        qRole.roleCode
-                                )).as("roleCacheDtoList"))
+                                Projections.fields(PermissionCacheDto.class,
+                                        qPermission.permissionUrl,
+                                        qPermission.permissionCode,
+                                        qPermission.isNeedAuthorization,
+                                        GroupBy.list(Projections.fields(RoleCacheDto.class,
+                                                qRole.roleCode
+                                        )).as("roleCacheDtoList"))
                         )
                 ));
     }
 
-    public Permission findByCodeOrUrl(String permissionCode, String permissionUrl) {
+    public Permission findByNameOrCodeOrUrl(String permissionName, String permissionCode, String permissionUrl) {
         BooleanBuilder builder = new BooleanBuilder();
+        if (StringUtils.hasText(permissionName)) {
+            builder.or(qPermission.permissionName.eq(permissionName));
+        }
         if (StringUtils.hasText(permissionCode)) {
-            builder.and(qPermission.permissionCode.eq(permissionCode));
+            builder.or(qPermission.permissionCode.eq(permissionCode));
         }
         if (StringUtils.hasText(permissionUrl)) {
-            builder.and(qPermission.permissionUrl.eq(permissionUrl));
+            builder.or(qPermission.permissionUrl.eq(permissionUrl));
         }
         return jpaQueryFactory.selectFrom(qPermission).where(builder).fetchFirst();
     }
@@ -91,18 +96,19 @@ public class PermissionDsl extends BaseDsl {
             return null;
         }
         return jpaQueryFactory.select(Projections.fields(
-                PermissionVo.class,
-                qPermission.permissionId,
-                qPermission.permissionCode,
-                qPermission.permissionDescription,
-                qPermission.isNeedAuthorization,
-                qPermission.permissionId,
-                qPermission.createDate,
-                qPermission.updateDate,
-                qPermissionParent.permissionDescription.as("parentPermissionDescription"),
-                qUser.nickname.as("createNickname"),
-                qUserUpdate.nickname.as("updateNickname")
-        ))
+                        PermissionVo.class,
+                        qPermission.permissionId,
+                        qPermission.permissionName,
+                        qPermission.permissionCode,
+                        qPermission.permissionDescription,
+                        qPermission.isNeedAuthorization,
+                        qPermission.permissionId,
+                        qPermission.createDate,
+                        qPermission.updateDate,
+                        qPermissionParent.permissionDescription.as("parentPermissionDescription"),
+                        qUser.nickname.as("createNickname"),
+                        qUserUpdate.nickname.as("updateNickname")
+                ))
                 .from(qPermission)
                 .leftJoin(qPermissionParent).on(qPermission.permissionParentId.eq(qPermissionParent.permissionId))
                 .leftJoin(qUser).on(qPermission.createUserId.eq(qUser.createUserId))
@@ -111,13 +117,16 @@ public class PermissionDsl extends BaseDsl {
                 .fetchOne();
     }
 
-    public Permission findByCodeOrUrlAndNeId(String permissionCode, String permissionUrl, Long permissionId) {
-        if (StringUtils.hasText(permissionCode) && StringUtils.hasText(permissionUrl) && permissionId != null) {
-            return jpaQueryFactory.selectFrom(qPermission)
-                    .where(qPermission.permissionCode.eq(permissionCode).or(qPermission.permissionUrl.eq(permissionUrl)).and(qPermission.permissionId.ne(permissionId)))
-                    .fetchFirst();
-        }
-        return null;
+    public Permission findByNameOrCodeOrUrlAndNeId(@NotBlank(message = "权限名不能为空") String permissionName,
+                                                   @NotBlank(message = "权限code不能为空") String permissionCode,
+                                                   @NotBlank(message = "权限url不能为空") String permissionUrl,
+                                                   @NotNull(message = "权限id不能为空") Long permissionId) {
+        return jpaQueryFactory.selectFrom(qPermission)
+                .where(qPermission.permissionName.eq(permissionName)
+                        .or(qPermission.permissionCode.eq(permissionCode)
+                                .or(qPermission.permissionUrl.eq(permissionUrl)))
+                        .and(qPermission.permissionId.ne(permissionId)))
+                .fetchFirst();
     }
 
     public PageVO<PermissionVo> findPermissionPage(PermissionQueryDto permissionQueryDto, PageDTO pageDTO) {
@@ -141,13 +150,14 @@ public class PermissionDsl extends BaseDsl {
                 .where(builder).fetch();
         if (!ObjectUtils.isEmpty(idList)) {
             page.setTotalElements(idList.size());
-        }else {
+        } else {
             page.setTotalElements(0);
         }
 
         List<PermissionVo> fetch = jpaQueryFactory.select(Projections.fields(
                         PermissionVo.class,
                         qPermission.permissionId,
+                        qPermission.permissionName,
                         qPermission.permissionCode,
                         qPermission.permissionDescription,
                         qPermission.isNeedAuthorization,

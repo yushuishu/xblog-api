@@ -24,6 +24,9 @@ import lombok.ToString;
 @Getter
 @ToString
 public class PermissionAddDto extends BaseDTO<Permission> {
+    @NotBlank(message = "权限名称不能为空")
+    @Schema(description = "权限名称")
+    private String permissionName;
 
     @NotBlank(message = "权限code不能为空")
     @Schema(description = "权限code")

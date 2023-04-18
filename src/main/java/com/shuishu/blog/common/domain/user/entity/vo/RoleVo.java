@@ -3,6 +3,8 @@ package com.shuishu.blog.common.domain.user.entity.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.shuishu.blog.common.config.base.BaseVO;
+import com.shuishu.blog.common.domain.user.entity.po.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,40 +15,33 @@ import java.util.Date;
 
 /**
  * @author ：谁书-ss
- * @date ：2023-04-15 9:21
+ * @date ：2023-04-18 12:55
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：权限信息vo
+ * @description ：角色信息vo
  * <p></p>
  */
-@Schema(description = "权限信息vo")
+@Schema(description = "角色信息vo")
 @Setter
 @Getter
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PermissionVo {
+public class RoleVo extends BaseVO<Role> {
+    @Schema(description = "角色id")
+    private Long roleId;
 
-    @Schema(description = "权限id")
-    private Long permissionId;
+    @Schema(description = "角色名称")
+    private String roleName;
 
-    @Schema(description = "权限名称")
-    private String permissionName;
+    @Schema(description = "角色code")
+    private String roleCode;
 
-    @Schema(description = "权限code")
-    private String permissionCode;
+    @Schema(description = "角色描述")
+    private String roleDescription;
 
-    @Schema(description = "权限url")
-    private String permissionUrl;
-
-    @Schema(description = "权限描述")
-    private String permissionDescription;
-
-    @Schema(description = "权限是否需要授权：true：授权 false：开放")
-    private Boolean isNeedAuthorization;
-
-    @Schema(description = "父级权限id（权限分类）")
-    private Long permissionParentId;
+    @Schema(description = "操作编辑删除权限：true可以；false不可以")
+    private Boolean roleOperatePower;
 
     @Schema(description = "创建时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -63,8 +58,5 @@ public class PermissionVo {
 
     @Schema(description = "更新人昵称")
     private String updateNickname;
-
-    @Schema(description = "父级权限描述")
-    private String parentPermissionDescription;
 
 }

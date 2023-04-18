@@ -37,6 +37,10 @@ public class Permission extends BasePO {
     @Comment("权限id")
     private Long permissionId;
 
+    @Comment("权限描述")
+    @Column(nullable = false)
+    private String permissionName;
+
     @Comment("权限code")
     @Column(nullable = false, unique = true)
     private String permissionCode;

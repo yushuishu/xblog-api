@@ -4,6 +4,7 @@ package com.shuishu.blog.common.domain.user.entity.vo;
 import com.shuishu.blog.common.config.base.BaseVO;
 import com.shuishu.blog.common.domain.user.entity.po.Permission;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -30,6 +31,9 @@ public class PermissionInfoVo extends BaseVO<Permission> {
      */
     @Schema(description = "权限id")
     private Long permissionId;
+
+    @Schema(description = "权限名称")
+    private String permissionName;
     /**
      * 权限code
      */

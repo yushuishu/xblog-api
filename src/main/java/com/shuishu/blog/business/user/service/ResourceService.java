@@ -4,11 +4,9 @@ package com.shuishu.blog.business.user.service;
 
 import com.shuishu.blog.common.config.base.PageDTO;
 import com.shuishu.blog.common.config.base.PageVO;
-import com.shuishu.blog.common.domain.user.entity.dto.PermissionAddDto;
-import com.shuishu.blog.common.domain.user.entity.dto.PermissionCacheDto;
-import com.shuishu.blog.common.domain.user.entity.dto.PermissionQueryDto;
-import com.shuishu.blog.common.domain.user.entity.dto.PermissionUpdateDto;
+import com.shuishu.blog.common.domain.user.entity.dto.*;
 import com.shuishu.blog.common.domain.user.entity.vo.PermissionVo;
+import com.shuishu.blog.common.domain.user.entity.vo.RoleVo;
 
 import java.util.List;
 
@@ -59,4 +57,49 @@ public interface ResourceService {
      * @return 分页数据
      */
     PageVO<PermissionVo> findPermissionPage(PermissionQueryDto permissionQueryDto, PageDTO pageDTO);
+
+    /**
+     * 删除权限
+     *
+     * @param permissionId 权限id
+     */
+    void deletePermission(Long permissionId);
+
+    /**
+     * 添加角色
+     *
+     * @param roleAddDto 添加角色信息
+     */
+    void addRole(RoleAddDto roleAddDto);
+
+    /**
+     * 更新角色
+     *
+     * @param roleUpdateDto 更新角色信息
+     */
+    void updateRole(RoleUpdateDto roleUpdateDto);
+
+    /**
+     * 查询角色详情
+     *
+     * @param roleId 角色id
+     * @return 角色详情
+     */
+    RoleVo findRoleDetails(Long roleId);
+
+    /**
+     * 查询角色page
+     *
+     * @param roleQueryDto 查询条件
+     * @param pageDTO 分页数据
+     * @return 角色信息
+     */
+    PageVO<RoleVo> findRolePage(RoleQueryDto roleQueryDto, PageDTO pageDTO);
+
+    /**
+     * 删除角色
+     *
+     * @param roleId 角色id
+     */
+    void deleteRole(Long roleId);
 }
