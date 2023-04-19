@@ -164,12 +164,21 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public PageVO<RoleVo> findRolePage(RoleQueryDto roleQueryDto, PageDTO pageDTO) {
-        return null;
+        return roleDsl.findRolePage(roleQueryDto, pageDTO);
     }
 
     @Override
-    public void deleteRole(Long roleId) {
-
+    public void deleteRole(Long roleId, Boolean ackDelete) {
+        long relUserCount = userRoleRepository.countByRoleId(roleId);
+        if (Boolean.TRUE.equals(ackDelete)) {
+            userRoleRepository.deleteByRoleId(roleId);
+        }else {
+            if (relUserCount > 0) {
+                throw new BusinessException("当前角色已被【"+ relUserCount +"】位用户关联使用，请再次确认是否删除此角色，并解除用户所属角色");
+            }
+        }
+        rolePermissionRepository.deleteByRoleId(roleId);
+        roleRepository.deleteById(roleId);
     }
 
 }

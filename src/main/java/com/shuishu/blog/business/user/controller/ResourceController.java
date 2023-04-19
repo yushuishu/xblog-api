@@ -92,8 +92,8 @@ public class ResourceController {
 
     @Operation(summary = "删除角色", description = "删除角色")
     @PostMapping("role/delete")
-    public ApiResponse<String> deleteRole(@RequestParam("roleId") Long roleId) {
-        resourceService.deleteRole(roleId);
+    public ApiResponse<String> deleteRole(@RequestParam("roleId") Long roleId, @RequestParam(value = "ackDelete", required = false) Boolean ackDelete) {
+        resourceService.deleteRole(roleId, ackDelete);
         return ApiResponse.success();
     }
 

@@ -1,8 +1,12 @@
 package com.shuishu.blog.common.domain.user.dsl;
 
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.shuishu.blog.common.config.base.PageDTO;
+import com.shuishu.blog.common.config.base.PageVO;
 import com.shuishu.blog.common.config.jdbc.BaseDsl;
+import com.shuishu.blog.common.domain.user.entity.dto.RoleQueryDto;
 import com.shuishu.blog.common.domain.user.entity.po.QRole;
 import com.shuishu.blog.common.domain.user.entity.po.QUser;
 import com.shuishu.blog.common.domain.user.entity.po.QUserRole;
@@ -12,6 +16,8 @@ import com.shuishu.blog.common.domain.user.entity.vo.RoleVo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -66,5 +72,45 @@ public class RoleDsl extends BaseDsl {
                 .leftJoin(qUser).on(qRole.createUserId.eq(qUser.userId))
                 .leftJoin(qUserUpdate).on(qRole.createUserId.eq(qUserUpdate.userId))
                 .where(qRole.roleId.eq(roleId)).fetchOne();
+    }
+
+    public PageVO<RoleVo> findRolePage(RoleQueryDto roleQueryDto, PageDTO pageDTO) {
+        PageVO<RoleVo> page = pageDTO.toPageVO(RoleVo.class);
+        BooleanBuilder builder = new BooleanBuilder();
+        if (roleQueryDto.getRoleOperatePower() != null) {
+            builder.and(qRole.roleOperatePower.eq(roleQueryDto.getRoleOperatePower()));
+        }
+        if (StringUtils.hasText(roleQueryDto.getKeyword())) {
+            builder.and(qRole.roleName.like("%" + roleQueryDto.getKeyword() + "%")
+                    .or(qRole.roleCode.like("%" + roleQueryDto.getKeyword() + "%"))
+                    .or(qRole.roleDescription.like("%" + roleQueryDto.getKeyword() + "%"))
+            );
+        }
+
+        List<Long> idList = jpaQueryFactory.select(qRole.roleId).from(qRole).where(builder).fetch();
+        if (ObjectUtils.isEmpty(idList)) {
+            page.setTotalElements(0);
+        }else {
+            page.setTotalElements(idList.size());
+        }
+
+        List<RoleVo> fetch = jpaQueryFactory.select(Projections.fields(RoleVo.class,
+                        qRole.roleId, qRole.roleName,
+                        qRole.roleCode, qRole.roleDescription,
+                        qRole.createDate, qRole.updateDate,
+                        qUser.nickname.as("createNickname"),
+                        qUserUpdate.nickname.as("updateNickname")
+                ))
+                .from(qRole)
+                .leftJoin(qUser).on(qRole.createUserId.eq(qUser.userId))
+                .leftJoin(qUserUpdate).on(qRole.createUserId.eq(qUserUpdate.userId))
+                .where(builder)
+                .orderBy(qRole.updateDate.desc())
+                .offset(page.getOffset()).limit(page.getPageSize())
+                .fetch();
+
+        page.setDataList(fetch);
+
+        return page;
     }
 }

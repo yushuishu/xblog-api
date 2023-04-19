@@ -145,13 +145,11 @@ public class PermissionDsl extends BaseDsl {
             builder.and(qPermission.isNeedAuthorization.eq(permissionQueryDto.getIsNeedAuthorization()));
         }
 
-        List<Long> idList = jpaQueryFactory.select(qPermission.permissionId)
-                .from(qPermission)
-                .where(builder).fetch();
-        if (!ObjectUtils.isEmpty(idList)) {
-            page.setTotalElements(idList.size());
-        } else {
+        List<Long> idList = jpaQueryFactory.select(qPermission.permissionId).from(qPermission).where(builder).fetch();
+        if (ObjectUtils.isEmpty(idList)) {
             page.setTotalElements(0);
+        } else {
+            page.setTotalElements(idList.size());
         }
 
         List<PermissionVo> fetch = jpaQueryFactory.select(Projections.fields(
@@ -173,6 +171,7 @@ public class PermissionDsl extends BaseDsl {
                 .leftJoin(qUser).on(qPermission.createUserId.eq(qUser.createUserId))
                 .leftJoin(qUserUpdate).on(qPermission.updateUserId.eq(qUserUpdate.userId))
                 .where(builder)
+                .orderBy(qPermission.updateDate.desc())
                 .offset(page.getOffset()).limit(page.getPageSize())
                 .fetch();
 

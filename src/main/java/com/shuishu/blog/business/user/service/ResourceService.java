@@ -100,6 +100,7 @@ public interface ResourceService {
      * 删除角色
      *
      * @param roleId 角色id
+     * @param ackDelete 确认删除
      */
-    void deleteRole(Long roleId);
+    void deleteRole(Long roleId,  Boolean ackDelete);
 }

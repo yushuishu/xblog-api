@@ -33,4 +33,11 @@ public interface RolePermissionRepository extends BaseRepository<RolePermission,
      */
     List<RolePermission> findAllByPermissionId(Long permissionId);
 
+    /**
+     * 删除角色权限关联信息
+     *
+     * @param roleId 角色id
+     */
+    void deleteByRoleId(Long roleId);
+
 }

@@ -20,14 +20,8 @@ import lombok.ToString;
 @Getter
 @ToString
 public class RoleQueryDto {
-    @Schema(description = "角色名称")
-    private String roleName;
-
-    @Schema(description = "角色code")
-    private String roleCode;
-
-    @Schema(description = "角色描述")
-    private String roleDescription;
+    @Schema(description = "名称/code/描述")
+    private String keyword;
 
     @Schema(description = "操作编辑删除权限：true可以；false不可以")
     private Boolean roleOperatePower;
