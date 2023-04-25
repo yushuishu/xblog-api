@@ -7,10 +7,8 @@ import com.shuishu.blog.common.domain.user.entity.dto.UserAddDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author ：谁书-ss
@@ -31,8 +29,8 @@ public class UserController {
 
     @Operation(summary = "添加", description = "添加用户")
     @PostMapping("add")
-    public ApiResponse<String> addUser(UserAddDto userAddDTO) {
-        //userService.addUser(userAddDTO);
+    public ApiResponse<String> addUser(@Validated @RequestParam("userAddDTO") UserAddDto userAddDTO) {
+        userService.addUser(userAddDTO);
         return ApiResponse.success();
     }
 

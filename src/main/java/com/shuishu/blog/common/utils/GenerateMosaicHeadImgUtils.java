@@ -80,6 +80,7 @@ public class GenerateMosaicHeadImgUtils {
         }
     }
 
+
     /**
      * 填充图形
      *
@@ -169,14 +170,6 @@ public class GenerateMosaicHeadImgUtils {
     /**
      * 封装了坐标的内部类
      */
-    private static class Point {
-        private int x;
-        private int y;
-
-        Point(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
+    private record Point(int x, int y) { }
 
 }

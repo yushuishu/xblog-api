@@ -1,6 +1,7 @@
 package com.shuishu.blog.business.user.service;
 
 
+import com.shuishu.blog.common.domain.user.entity.dto.UserAddDto;
 import com.shuishu.blog.common.domain.user.entity.vo.UserInfoVo;
 
 /**
@@ -21,4 +22,10 @@ public interface UserService {
      */
     UserInfoVo findByUserAuthIdentifier(String userAuthIdentifier, String authType);
 
+    /**
+     * 添加用户
+     *
+     * @param userAddDTO -
+     */
+    void addUser(UserAddDto userAddDTO);
 }

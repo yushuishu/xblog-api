@@ -23,4 +23,12 @@ public interface IndustryRepository extends BaseRepository<Industry, Long> {
      * @return 行业
      */
     Industry findByIndustryName(String industryName);
+
+    /**
+     * 通过id 查询行业
+     *
+     * @param industryId 行业id
+     * @return 行业
+     */
+    Industry findIndustryByIndustryId(Long industryId);
 }

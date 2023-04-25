@@ -181,4 +181,18 @@ public class ResourceServiceImpl implements ResourceService {
         roleRepository.deleteById(roleId);
     }
 
+    @Override
+    public RoleVo findDefaultRole() {
+        return roleDsl.findDefaultRole();
+    }
+
+    @Override
+    public void updateDefaultRole(Long roleId) {
+        Long defaultRoleId = roleDsl.findDefaultRoleId();
+        if (defaultRoleId != null) {
+            roleDsl.updateDefaultRole(defaultRoleId, false);
+        }
+        roleDsl.updateDefaultRole(roleId, true);
+    }
+
 }

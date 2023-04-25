@@ -97,4 +97,17 @@ public class ResourceController {
         return ApiResponse.success();
     }
 
+    @Operation(summary = "查询默认角色", description = "查询默认角色")
+    @GetMapping("role/default/find")
+    public ApiResponse<RoleVo> findDefaultRole() {
+        return ApiResponse.of(resourceService.findDefaultRole());
+    }
+
+    @Operation(summary = "更新默认角色", description = "更新默认角色")
+    @PostMapping("role/default/update")
+    public ApiResponse<String> updateDefaultRole(@RequestParam("roleId") Long roleId) {
+        resourceService.updateDefaultRole(roleId);
+        return ApiResponse.success();
+    }
+
 }

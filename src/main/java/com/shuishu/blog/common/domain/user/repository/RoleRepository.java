@@ -4,6 +4,7 @@ package com.shuishu.blog.common.domain.user.repository;
 
 import com.shuishu.blog.common.config.jdbc.BaseRepository;
 import com.shuishu.blog.common.domain.user.entity.po.Role;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -33,5 +34,13 @@ public interface RoleRepository extends BaseRepository<Role, Long> {
      * @return 角色信息
      */
     Role findRoleByRoleCode(String roleCode);
+
+    /**
+     * 获取默认角色
+     *
+     * @return 默认角色
+     */
+    @Query(value = "select * from ss_role where default_role=true", nativeQuery = true)
+    Role findRoleByDefaultRole();
 
 }

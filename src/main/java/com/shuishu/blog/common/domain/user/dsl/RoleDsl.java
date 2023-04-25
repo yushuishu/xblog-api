@@ -113,4 +113,28 @@ public class RoleDsl extends BaseDsl {
 
         return page;
     }
+
+    public RoleVo findDefaultRole() {
+        return jpaQueryFactory.select(Projections.fields(RoleVo.class,
+                        qRole.roleId, qRole.roleName,
+                        qRole.roleCode, qRole.roleDescription,
+                        qRole.createDate, qRole.updateDate,
+                        qUser.nickname.as("createNickname"),
+                        qUserUpdate.nickname.as("updateNickname")
+                ))
+                .from(qRole)
+                .leftJoin(qUser).on(qRole.createUserId.eq(qUser.userId))
+                .leftJoin(qUserUpdate).on(qRole.createUserId.eq(qUserUpdate.userId))
+                .where(qRole.defaultRole.isTrue()).fetchOne();
+    }
+
+    public Long findDefaultRoleId() {
+        return jpaQueryFactory.select(qRole.roleId).from(qRole).where(qRole.defaultRole.isTrue()).fetchOne();
+    }
+
+    public void updateDefaultRole(Long roleId, boolean defaultRole) {
+        if (roleId != null) {
+            jpaQueryFactory.update(qRole).set(qRole.defaultRole, defaultRole).where(qRole.roleId.eq(roleId)).execute();
+        }
+    }
 }

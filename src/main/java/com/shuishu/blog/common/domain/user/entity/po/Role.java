@@ -51,4 +51,6 @@ public class Role extends BasePO {
     @Comment("操作编辑删除权限：true可以；false不可以")
     private Boolean roleOperatePower;
 
+    @Comment("普通用户注册，默认角色")
+    private Boolean defaultRole;
 }
