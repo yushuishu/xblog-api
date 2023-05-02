@@ -5,7 +5,7 @@ import com.shuishu.blog.business.label.service.LabelService;
 import com.shuishu.blog.common.config.base.PageDTO;
 import com.shuishu.blog.common.domain.label.dsl.LabelDsl;
 import com.shuishu.blog.common.domain.label.entity.dto.LabelDTO;
-import com.shuishu.blog.common.domain.label.entity.vo.LabelVO;
+import com.shuishu.blog.common.domain.label.entity.vo.LabelVo;
 import com.shuishu.blog.common.domain.label.repository.LabelRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,12 +36,12 @@ public class LabelServiceImpl implements LabelService {
     }
 
     @Override
-    public Page<LabelVO> findLabelPage(LabelDTO labelDTO, PageDTO pageDTO) {
+    public Page<LabelVo> findLabelPage(LabelDTO labelDTO, PageDTO pageDTO) {
         return null;
     }
 
     @Override
-    public LabelVO findLabelDetails(Long labelId) {
+    public LabelVo findLabelDetails(Long labelId) {
         return null;
     }
 

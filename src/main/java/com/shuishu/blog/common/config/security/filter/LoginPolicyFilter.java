@@ -6,6 +6,7 @@ import com.shuishu.blog.business.user.service.UserService;
 import com.shuishu.blog.common.config.base.ApiResponse;
 import com.shuishu.blog.common.config.security.LoginPolicyConfig;
 import com.shuishu.blog.common.config.security.SpringSecurityUtils;
+import com.shuishu.blog.common.config.security.service.SecurityUserService;
 import com.shuishu.blog.common.domain.user.entity.dto.AuthTokenCacheDto;
 import com.shuishu.blog.common.domain.user.entity.vo.UserInfoVo;
 import com.shuishu.blog.common.enums.UserEnum;
@@ -46,7 +47,7 @@ import java.util.stream.Collectors;
 public class LoginPolicyFilter extends OncePerRequestFilter {
     private final LoginPolicyConfig loginPolicyConfig;
     private final TokenUtils tokenUtils;
-    private final UserService userService;
+    private final SecurityUserService securityUserService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -67,7 +68,7 @@ public class LoginPolicyFilter extends OncePerRequestFilter {
                     JSONObject jsonObject = JSONObject.parseObject(requestWrapper.getBody());
                     Object usernameObj = jsonObject.get(SpringSecurityUtils.LOGIN_USERNAME_FRONT_KEY);
                     String username = usernameObj == null ? null : String.valueOf(usernameObj);
-                    UserInfoVo userInfoVo = userService.findByUserAuthIdentifier(username, SpringSecurityUtils.getAuthType(requestUri));
+                    UserInfoVo userInfoVo = securityUserService.findByUserAuthIdentifier(username, SpringSecurityUtils.getAuthType(requestUri));
                     if (userInfoVo != null) {
                         // 当前用户最多登录的客户端人数
                         Integer userMaxLoginClientNumber = userInfoVo.getUserMaxLoginClientNumber();

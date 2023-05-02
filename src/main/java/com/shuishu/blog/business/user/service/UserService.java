@@ -20,15 +20,6 @@ import com.shuishu.blog.common.domain.user.entity.vo.UserInfoVo;
  */
 public interface UserService {
     /**
-     * 账号查询
-     *
-     * @param userAuthIdentifier 账号
-     * @param authType 账号类型
-     * @return 用户信息
-     */
-    UserInfoVo findByUserAuthIdentifier(String userAuthIdentifier, String authType);
-
-    /**
      * 添加用户
      *
      * @param userAddDTO -

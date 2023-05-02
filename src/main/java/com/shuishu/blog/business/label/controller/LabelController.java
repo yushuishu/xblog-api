@@ -5,7 +5,7 @@ import com.shuishu.blog.business.label.service.LabelService;
 import com.shuishu.blog.common.config.base.ApiResponse;
 import com.shuishu.blog.common.config.base.PageDTO;
 import com.shuishu.blog.common.domain.label.entity.dto.LabelDTO;
-import com.shuishu.blog.common.domain.label.entity.vo.LabelVO;
+import com.shuishu.blog.common.domain.label.entity.vo.LabelVo;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,12 +35,12 @@ public class LabelController {
     }
 
     @GetMapping("page")
-    public ApiResponse<Page<LabelVO>> findLabelPage(LabelDTO labelDTO, PageDTO pageDTO) {
+    public ApiResponse<Page<LabelVo>> findLabelPage(LabelDTO labelDTO, PageDTO pageDTO) {
         return ApiResponse.of(labelService.findLabelPage(labelDTO, pageDTO));
     }
 
     @GetMapping("details")
-    public ApiResponse<LabelVO> findLabelDetails(Long labelId) {
+    public ApiResponse<LabelVo> findLabelDetails(Long labelId) {
         return ApiResponse.of(labelService.findLabelDetails(labelId));
     }
 

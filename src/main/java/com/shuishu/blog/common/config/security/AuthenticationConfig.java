@@ -1,12 +1,12 @@
 package com.shuishu.blog.common.config.security;
 
 
+import com.shuishu.blog.common.config.security.service.SecurityUserService;
 import com.shuishu.blog.common.config.security.token.EmailAuthenticationToken;
 import com.shuishu.blog.common.config.security.token.LocalAuthenticationToken;
 import com.shuishu.blog.common.config.security.token.PhoneAuthenticationToken;
 import com.shuishu.blog.common.domain.user.entity.vo.UserInfoVo;
 import com.shuishu.blog.common.enums.UserEnum;
-import com.shuishu.blog.business.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -36,7 +36,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class AuthenticationConfig {
-    private final UserService userService;
+    private final SecurityUserService securityUserService;
 
 
     @Bean
@@ -142,7 +142,7 @@ public class AuthenticationConfig {
     public UserDetailsService localUserDetailsService() {
         return username -> {
             log.info("【LocalUserDetailsServiceImpl 认证】执行loadUserByUsername() 方法，获取账号：" + username);
-            UserInfoVo userInfoVO = userService.findByUserAuthIdentifier(username, UserEnum.AuthType.LOCAL.getType());
+            UserInfoVo userInfoVO = securityUserService.findByUserAuthIdentifier(username, UserEnum.AuthType.LOCAL.getType());
             if (userInfoVO == null) {
                 throw new UsernameNotFoundException("用户不存在");
             }
@@ -154,7 +154,7 @@ public class AuthenticationConfig {
     public UserDetailsService emailUserDetailsService() {
         return username -> {
             log.info("【EmailUserDetailsServiceImpl 认证】执行loadUserByUsername() 方法，获取账号：" + username);
-            UserInfoVo userInfoVO = userService.findByUserAuthIdentifier(username, UserEnum.AuthType.EMAIL.getType());
+            UserInfoVo userInfoVO = securityUserService.findByUserAuthIdentifier(username, UserEnum.AuthType.EMAIL.getType());
             if (userInfoVO == null) {
                 throw new UsernameNotFoundException("用户不存在");
             }
@@ -166,7 +166,7 @@ public class AuthenticationConfig {
     public UserDetailsService phoneUserDetailsService() {
         return username -> {
             log.info("【PhoneUserDetailsServiceImpl 认证】执行loadUserByUsername() 方法，获取账号：" + username);
-            UserInfoVo userInfoVO = userService.findByUserAuthIdentifier(username, UserEnum.AuthType.PHONE.getType());
+            UserInfoVo userInfoVO = securityUserService.findByUserAuthIdentifier(username, UserEnum.AuthType.PHONE.getType());
             if (userInfoVO == null) {
                 throw new UsernameNotFoundException("用户不存在");
             }

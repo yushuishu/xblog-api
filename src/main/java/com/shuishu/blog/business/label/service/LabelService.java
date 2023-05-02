@@ -3,7 +3,7 @@ package com.shuishu.blog.business.label.service;
 
 import com.shuishu.blog.common.config.base.PageDTO;
 import com.shuishu.blog.common.domain.label.entity.dto.LabelDTO;
-import com.shuishu.blog.common.domain.label.entity.vo.LabelVO;
+import com.shuishu.blog.common.domain.label.entity.vo.LabelVo;
 import org.springframework.data.domain.Page;
 
 /**
@@ -30,7 +30,7 @@ public interface LabelService {
      * @param pageDTO 分页信息
      * @return 分页数据
      */
-    Page<LabelVO> findLabelPage(LabelDTO labelDTO, PageDTO pageDTO);
+    Page<LabelVo> findLabelPage(LabelDTO labelDTO, PageDTO pageDTO);
 
     /**
      * 标签详情
@@ -38,7 +38,7 @@ public interface LabelService {
      * @param labelId 标签id
      * @return 标签信息
      */
-    LabelVO findLabelDetails(Long labelId);
+    LabelVo findLabelDetails(Long labelId);
 
     /**
      * 更新标签

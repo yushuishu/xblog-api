@@ -27,7 +27,7 @@ import java.util.Date;
 @Getter
 @ToString
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-public class LabelVO extends BaseVO<Label> {
+public class LabelVo extends BaseVO<Label> {
     @Schema(description = "标签id")
     private Long labelId;
 

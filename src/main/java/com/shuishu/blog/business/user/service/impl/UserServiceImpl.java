@@ -72,34 +72,6 @@ public class UserServiceImpl implements UserService {
 
     private final RedisUtils redisUtils;
 
-    @Override
-    public UserInfoVo findByUserAuthIdentifier(String userAuthIdentifier, String authType) {
-        UserAuth userAuth = userAuthRepository.findByUserAuthIdentifierAndAndUserAuthType(userAuthIdentifier, authType);
-        if (userAuth == null) {
-            return null;
-        }
-        User user = userRepository.findByUserId(userAuth.getUserId());
-        if (user == null) {
-            return null;
-        }
-
-        UserInfoVo userInfoVO = new UserInfoVo();
-        BeanUtils.copyProperties(userAuth, userInfoVO);
-        BeanUtils.copyProperties(user, userInfoVO);
-
-        // 角色
-        List<RoleInfoVo> roleInfoList = roleDsl.findRoleInfoByUserId(userInfoVO.getUserId());
-        if (!ObjectUtils.isEmpty(roleInfoList)) {
-            userInfoVO.setRoleInfoList(roleInfoList);
-            // 权限
-            List<PermissionInfoVo> permissionInfoList = permissionDsl.findPermissionInfoByRoleIdList(roleInfoList.stream().map(RoleInfoVo::getRoleId).collect(Collectors.toList()));
-            if (!ObjectUtils.isEmpty(permissionInfoList)) {
-                userInfoVO.setPermissionInfoList(permissionInfoList);
-            }
-        }
-
-        return userInfoVO;
-    }
 
     @Override
     public void addUser(UserAddDto userAddDTO) {
