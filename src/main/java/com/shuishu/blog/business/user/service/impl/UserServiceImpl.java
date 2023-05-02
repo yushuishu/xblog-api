@@ -1,20 +1,25 @@
 package com.shuishu.blog.business.user.service.impl;
 
 
+import com.shuishu.blog.common.config.base.PageDTO;
+import com.shuishu.blog.common.config.base.PageVO;
 import com.shuishu.blog.common.config.exception.BusinessException;
+import com.shuishu.blog.common.config.security.SpringSecurityUtils;
 import com.shuishu.blog.common.domain.industry.entity.po.Industry;
 import com.shuishu.blog.common.domain.industry.repository.IndustryRepository;
 import com.shuishu.blog.common.domain.user.dsl.PermissionDsl;
 import com.shuishu.blog.common.domain.user.dsl.RoleDsl;
 import com.shuishu.blog.common.domain.user.dsl.UserAuthDsl;
+import com.shuishu.blog.common.domain.user.dsl.UserDsl;
 import com.shuishu.blog.common.domain.user.entity.dto.UserAddDto;
+import com.shuishu.blog.common.domain.user.entity.dto.UserQueryDto;
+import com.shuishu.blog.common.domain.user.entity.dto.UserUpdateDto;
+import com.shuishu.blog.common.domain.user.entity.dto.UserUpdatePwdDto;
 import com.shuishu.blog.common.domain.user.entity.po.Role;
 import com.shuishu.blog.common.domain.user.entity.po.User;
 import com.shuishu.blog.common.domain.user.entity.po.UserAuth;
 import com.shuishu.blog.common.domain.user.entity.po.UserRole;
-import com.shuishu.blog.common.domain.user.entity.vo.PermissionInfoVo;
-import com.shuishu.blog.common.domain.user.entity.vo.RoleInfoVo;
-import com.shuishu.blog.common.domain.user.entity.vo.UserInfoVo;
+import com.shuishu.blog.common.domain.user.entity.vo.*;
 import com.shuishu.blog.common.domain.user.repository.RoleRepository;
 import com.shuishu.blog.common.domain.user.repository.UserAuthRepository;
 import com.shuishu.blog.common.domain.user.repository.UserRepository;
@@ -28,12 +33,17 @@ import com.shuishu.blog.common.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -49,14 +59,16 @@ import java.util.stream.Collectors;
 @Transactional(rollbackFor = RuntimeException.class)
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private final UserRepository userRepository;
+    private final UserDsl userDsl;
     private final UserAuthRepository userAuthRepository;
     private final UserAuthDsl userAuthDsl;
-    private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
     private final RoleRepository roleRepository;
     private final RoleDsl roleDsl;
     private final PermissionDsl permissionDsl;
     private final IndustryRepository industryRepository;
+    private final PasswordEncoder passwordEncoder;
 
     private final RedisUtils redisUtils;
 
@@ -119,7 +131,7 @@ public class UserServiceImpl implements UserService {
             }
 
             // 头像
-            String photoBase64 = CodingUtils.byteToBase64(GenerateMosaicHeadImgUtils.getGenerateMosaicHeadImg());
+            String photoBase64 = CodingUtils.convertByteToBase64(GenerateMosaicHeadImgUtils.getGenerateMosaicHeadImg());
 
             // 用户信息
             User user = new User();
@@ -152,6 +164,102 @@ public class UserServiceImpl implements UserService {
         }else if (UserEnum.AuthType.PHONE.getType().equals(userAddDTO.getUserAuthType())) {
             throw new BusinessException("手机号注册功能，正在开发中");
         }
+    }
+
+    @Override
+    public void updateUser(UserUpdateDto userUpdateDto) {
+        verifyUserInfo(userUpdateDto.getNickname());
+        User user = userRepository.findByUserId(userUpdateDto.getUserId());
+        Objects.requireNonNull(user, "用户不存在");
+        // 行业
+        if (userUpdateDto.getIndustryId() != null) {
+            Industry industry = industryRepository.findIndustryByIndustryId(userUpdateDto.getIndustryId());
+            if (industry == null) {
+                throw new BusinessException("所选行业不正确");
+            }
+        }
+        String userPhotoBase64 = null;
+        String userPhoto = userUpdateDto.getUserPhoto();
+        if (StringUtils.hasText(userPhoto)) {
+            File fileUserPhoto = new File(userPhoto);
+            if (fileUserPhoto.exists()) {
+                userPhotoBase64 = CodingUtils.convertFileToBase64(fileUserPhoto);
+            }
+        }
+        userPhotoBase64 = userPhotoBase64 == null ? user.getUserPhoto() : userPhotoBase64;
+
+        // 更新用户信息
+        user.setNickname(userUpdateDto.getNickname());
+        user.setUserAbout(userUpdateDto.getUserAbout());
+        user.setUserPhoto(userPhotoBase64);
+        user.setUserAddress(userUpdateDto.getUserAddress());
+        user.setIndustryId(userUpdateDto.getIndustryId());
+        user.setUpdateDate(new Date());
+        user.setUpdateUserId(SpringSecurityUtils.getUserInfoVo().getUserId());
+        userRepository.saveAndFlush(user);
+
+    }
+
+    @Override
+    public void updateUserPassword(UserUpdatePwdDto userUpdatePwdDto) {
+        UserInfoVo userInfoVo = SpringSecurityUtils.getUserInfoVo();
+        if (userUpdatePwdDto.getPassword().equals(userUpdatePwdDto.getAckPassword())) {
+            throw new BusinessException("确认密码不正确");
+        }
+        // 查找用户绑定的邮箱
+        UserAuth userAuth = userAuthRepository.findByUserAuthIdentifierAndAndUserAuthType(userUpdatePwdDto.getUserEmail(), UserEnum.AuthType.EMAIL.getType());
+        Objects.requireNonNull(userAuth, "邮箱不存在");
+        if (!userAuth.getUserId().equals(userInfoVo.getUserId())) {
+            throw new BusinessException("当前登录用户和修改的用户账号不一致");
+        }
+        User user = userRepository.findByUserId(userAuth.getUserId());
+        Objects.requireNonNull(user, "用户信息不存在");
+        // 邮箱验证码
+        Object codeObj = redisUtils.strGet(RedisKeyEnum.KEY_EMAIL_CODE.getKey() + userUpdatePwdDto.getUserEmail());
+        String emailCode = codeObj == null ? null : codeObj.toString();
+        if (!userUpdatePwdDto.getCaptcha().equals(emailCode)) {
+            throw new BusinessException("证码不正确");
+        }
+        redisUtils.del(RedisKeyEnum.KEY_EMAIL_CODE.getKey() + userUpdatePwdDto.getUserEmail());
+
+        UserAuth userAuthForLocal = userAuthRepository.findByUserIdAndUserAuthType(userAuth.getUserId(), UserEnum.AuthType.LOCAL.getType());
+        userAuthForLocal.setUserAuthCredential(passwordEncoder.encode(userUpdatePwdDto.getPassword()));
+        userAuthForLocal.setUpdateDate(new Date());
+        userAuthForLocal.setUpdateUserId(userAuthForLocal.getUserId());
+        userAuthRepository.saveAndFlush(userAuthForLocal);
+
+    }
+
+    @Override
+    public UserDetailsVo findUserDetails(Long userId) {
+        Objects.requireNonNull(userId, "用户id不能为空");
+        User user = userRepository.findByUserId(userId);
+        Objects.requireNonNull(user, "用户不存在");
+        List<UserAuth> userAuthList = userAuthRepository.findByUserId(userId);
+        if (ObjectUtils.isEmpty(userAuthList)) {
+            throw new BusinessException("用户授权信息不存在");
+        }
+
+        UserDetailsVo userDetailsVo = new UserDetailsVo();
+        BeanUtils.copyProperties(user, userDetailsVo);
+
+        List<UserAuthDetailsVo> userAuthDetailsVoList = new ArrayList<>();
+        for (UserAuth userAuth : userAuthList) {
+            UserAuthDetailsVo userAuthDetailsVo = new UserAuthDetailsVo();
+            userAuthDetailsVo.setUserAuthId(userAuth.getUserAuthId());
+            userAuthDetailsVo.setUserAuthType(userAuth.getUserAuthType());
+            userAuthDetailsVo.setUserAuthNickname(userAuth.getUserAuthNickname());
+            userAuthDetailsVo.setUserAuthIdentifier(userAuth.getUserAuthIdentifier());
+            userAuthDetailsVoList.add(userAuthDetailsVo);
+        }
+        userDetailsVo.setUserAuthDetailsVoList(userAuthDetailsVoList);
+
+        return userDetailsVo;
+    }
+
+    @Override
+    public PageVO<UserDetailsVo> findUserPage(UserQueryDto userQueryDto, PageDTO pageDTO) {
+        return userDsl.findUserPage(userQueryDto, pageDTO);
     }
 
     private void verifyUserInfo(String nickname) {

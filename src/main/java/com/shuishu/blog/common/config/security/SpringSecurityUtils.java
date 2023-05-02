@@ -1,7 +1,6 @@
 package com.shuishu.blog.common.config.security;
 
 
-import com.google.common.collect.Lists;
 import com.shuishu.blog.common.config.exception.BusinessException;
 import com.shuishu.blog.common.domain.user.entity.vo.UserInfoVo;
 import com.shuishu.blog.common.enums.UserEnum;
@@ -102,7 +101,9 @@ public class SpringSecurityUtils {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             Object principal = authentication.getPrincipal();
-            return (UserInfoVo) principal;
+            if (principal != null) {
+                return (UserInfoVo) principal;
+            }
         }
         throw new BusinessException("用户不存在");
     }

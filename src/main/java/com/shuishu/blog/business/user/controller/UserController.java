@@ -3,7 +3,13 @@ package com.shuishu.blog.business.user.controller;
 
 import com.shuishu.blog.business.user.service.UserService;
 import com.shuishu.blog.common.config.base.ApiResponse;
+import com.shuishu.blog.common.config.base.PageDTO;
+import com.shuishu.blog.common.config.base.PageVO;
 import com.shuishu.blog.common.domain.user.entity.dto.UserAddDto;
+import com.shuishu.blog.common.domain.user.entity.dto.UserQueryDto;
+import com.shuishu.blog.common.domain.user.entity.dto.UserUpdateDto;
+import com.shuishu.blog.common.domain.user.entity.dto.UserUpdatePwdDto;
+import com.shuishu.blog.common.domain.user.entity.vo.UserDetailsVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -34,25 +40,30 @@ public class UserController {
         return ApiResponse.success();
     }
 
-    @Operation(summary = "更新", description = "更新用户")
+    @Operation(summary = "更新用户信息", description = "更新用户信息")
     @PostMapping("update")
-    public ApiResponse<String> updateUser(UserAddDto userAddDTO) {
-        //userService.addUser(userAddDTO);
+    public ApiResponse<String> updateUser(UserUpdateDto userUpdateDto) {
+        userService.updateUser(userUpdateDto);
+        return ApiResponse.success();
+    }
+
+    @Operation(summary = "更新密码", description = "更新密码")
+    @PostMapping("pwd/update")
+    public ApiResponse<String> updateUserPassword(UserUpdatePwdDto userUpdatePwdDto) {
+        userService.updateUserPassword(userUpdatePwdDto);
         return ApiResponse.success();
     }
 
     @Operation(summary = "详情", description = "查询用户详情")
     @GetMapping("details")
-    public ApiResponse<String> findUserDetails(UserAddDto userAddDTO) {
-        //userService.addUser(userAddDTO);
-        return ApiResponse.success();
+    public ApiResponse<UserDetailsVo> findUserDetails(Long userId) {
+        return ApiResponse.of(userService.findUserDetails(userId));
     }
 
-    @Operation(summary = "page", description = "查询用户page")
+    @Operation(summary = "用户page", description = "查询用户page")
     @GetMapping("page")
-    public ApiResponse<String> findUserPage(UserAddDto userAddDTO) {
-        //userService.addUser(userAddDTO);
-        return ApiResponse.success();
+    public ApiResponse<PageVO<UserDetailsVo>> findUserPage(UserQueryDto userQueryDto, PageDTO pageDTO) {
+        return ApiResponse.of(userService.findUserPage(userQueryDto, pageDTO));
     }
 
 

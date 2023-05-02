@@ -161,7 +161,8 @@ public class InitService {
                     Permission permission = new Permission();
                     permission.setPermissionCode(entry.getKey());
                     permission.setPermissionUrl(entry.getValue());
-                    permission.setPermissionDescription("");
+                    permission.setPermissionName(entry.getKey());
+                    permission.setPermissionDescription(entry.getKey());
                     permission.setIsNeedAuthorization(true);
                     permission.setPermissionOperatePower(false);
                     permission.setCreateUserId(userId);

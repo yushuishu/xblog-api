@@ -10,6 +10,8 @@ import com.shuishu.blog.common.domain.user.entity.vo.UserInfoVo;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 /**
  * @author ：谁书-ss
  * @date ：2023-01-01 15:41
@@ -54,4 +56,5 @@ public class UserAuthDsl extends BaseDsl {
                 .where(qUserAuth.userAuthIdentifier.eq(userAuthIdentifier).and(qUserAuth.userAuthType.eq(userAuthType)))
                 .fetchOne();
     }
+
 }

@@ -15,7 +15,7 @@ public enum RedisKeyEnum {
      * Redis 常用缓存的 key
      */
     KEY_PERMISSION_URL_LIST("PERMISSION_URL_LIST", "权限URL集合"),
-    KEY_EMAIL_CODE("KEY_EMAIL_CODE", "邮箱验证码"),
+    KEY_EMAIL_CODE("KEY_EMAIL_CODE:", "邮箱验证码分组"),
 
     GROUP_AUTH_TOKEN("GROUP_AUTH_TOKEN:", "AuthToken分组"),
     GROUP_REMEMBER_ME_TOKEN("GROUP_REMEMBER_ME_TOKEN:", "RememberMeToken分组"),
