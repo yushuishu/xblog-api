@@ -23,6 +23,9 @@
 
 ## 预览
 
+<img width="1022" alt="shuishu-blog-backend-01" src="https://github.com/yushuishu/shuishu-blog-backend/assets/50919172/bdbe5fe7-e097-436e-a964-a9bc8e82e39a">
+
+
 ## 项目结构说明
 
 ```text
