@@ -1,47 +1,55 @@
-# 个人博客系统
+# shuishu-blog-backend
 
-## 项目进展
+<p>
+  <a href="https://www.oracle.com/java/technologies/javase/17u-relnotes.html"><img src="https://img.shields.io/badge/jdk-%3E=17.0.0-blue.svg" alt="jdk compatility"></a>
+  <a href="https://spring.io/projects/spring-boot"><img src="https://img.shields.io/badge/springboot-%3E=3.0.0-green.svg" alt="springboot compatility"></a>
+  <a href="http://querydsl.com/"><img src="https://img.shields.io/badge/querydsl-%3E=5.0-orange.svg" alt="querydsl compatility"></a>
+</p>
 
-开发中。。。
+## 介绍
 
+项目基于 [springboot@3.0.5](https://spring.io/projects/spring-boot)，[QueryDsl@5.0](http://querydsl.com/) 系列开发，开发环境使用[jdk@17.x](https://www.oracle.com/java/technologies/downloads/#java17)，[PostgreSQL-Server@14.5](https://www.postgresql.org/)。
 
-## 简介
+个人博客系统，后台服务。
 
-> 初心
+**其它源码**
 
-为什么要重复造轮子的 开发博客系统？
+后台服务server：https://github.com/yushuishu/shuishu-blog-backend
 
-虽然网上已经有很多成熟、好看、大气、美观、自定义主题样式等等的博客系统，并且还是开源的。这样看起来是没有必要自己再开发一套博客系统的，浪费时间精力不如去学习其他技术，但是很多人是没有真正自己独立开发过一套比较完整的系统。由于日常工作占据了大部分的时间，每天还要抽出一些时间去学习技术，提高自己的能力，相信大部分人是没有多少精力，自己再重复造轮子的。
+后台管理web：https://github.com/yushuishu/shuishu-blog-front-admin
 
-但是，重复造轮子，对于一些人来说，还真不一定能成功。要开发一套博客系统是需要我们熟悉前后端技术栈的（当下流行的、企业使用的技术），甚至原型也需要自己去了解一下，图片之类的如果在网上找不到免费使用权，自己也不满意的图片，可能还需要自己去PS（`辛亏大学时自学了一下`:stuck_out_tongue_winking_eye:）。
-
-开发一套博客系统，一方面是检验个人独立开发能力，提升自己水平，从中学习一些经验。另一方面作为一个IT从业者，程序开发者，当然要有一次属于自己开发的一套博客系统（`即使以后没有部署使用`）。
-
-
-> 源码
-
-后端：https://github.com/yushuishu/shuishu-blog-backend
-
-后台管理：https://github.com/yushuishu/shuishu-blog-front-admin
-
-用户页面：https://github.com/yushuishu/shuishu-blog-front-web
+门户网站portal：https://github.com/yushuishu/shuishu-blog-front-web
 
 
-> 开发环境
+## 预览
 
-- Jdk 17.x
-- SpringBoot 3.x
-- QueryDsl 5.0
-- PostgreSQL-Server 14.5
+## 项目结构说明
 
-## 快速开始
+```text
+project
+├─src
+│  └─main
+│      ├─java
+│      │  └─com
+│      │      └─shuishu
+│      │          └─blog
+│      │              ├─business                # 业务接口和服务
+│      │              └─common
+│      │                  ├─config              # 项目基本配置：全局异常、jdbc、redis、认证和授权、swagger
+│      │                  ├─constant            # 常量
+│      │                  ├─domain              # 实体PO
+│      │                  ├─enums               # 枚举
+│      │                  └─utils               # 工具类
+│      └─resources
+│          └─swagger                            # swagger的Markdown文档
+```
 
-### 一：准备
+## 接口文档
 
-#### 1.运行环境
+http://localhost:8080/doc.html
 
-支持 Windows、Linux、MacOS 系统（MacOS本人穷，自行测试)。同时需安装`Java`环境 版本 jdk > 17
+## 使用
 
 
-#### 2.配置说明
+## 引用
 
