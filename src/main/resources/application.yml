@@ -19,7 +19,7 @@ spring:
     active: @profiles.active@
 
 
-# knife4j的增强配置，不需要增强可以不配
+# knife4j的增强配置
 knife4j:
   enable: true
   setting:

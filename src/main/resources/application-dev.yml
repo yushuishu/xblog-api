@@ -5,7 +5,7 @@ shuishu:
   # TWO: 达到最大客户端登录人数，不允许登录
   login-policy: TWO
   token:
-    secret: spring_security_examples
+    secret: shuishu_blog_backend
     # 登录授权token名称，请求头名称
     auth-token: AuthToken
     # 记住我功能的token名称，请求头名称
