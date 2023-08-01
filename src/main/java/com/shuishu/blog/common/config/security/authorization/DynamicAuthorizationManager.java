@@ -23,12 +23,12 @@ import java.util.List;
 import java.util.function.Supplier;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-03-11 0:06
+ * @Author ：谁书-ss
+ * @Date ：2023-03-11 0:06
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：动态权限决策管理器
+ * @Description ：动态权限决策管理器
  * <p></p>
  */
 @Slf4j

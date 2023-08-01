@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author ：谁书-ss
- * @date ：2022-12-31 13:40
+ * @Author ：谁书-ss
+ * @Date ：2022-12-31 13:40
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：Spring Security 工具类
+ * @Description ：Spring Security 工具类
  */
 public class SpringSecurityUtils {
     public static final String LOGOUT_URL = "/api/shuishu/blog/auth/logout";

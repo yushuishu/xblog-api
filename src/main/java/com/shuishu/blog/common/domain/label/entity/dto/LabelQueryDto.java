@@ -21,18 +21,12 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class LabelDTO extends BaseDTO<Label> {
+public class LabelQueryDto extends BaseDTO<Label> {
 
-    @Schema(description = "标签id")
-    private Long labelId;
+    @Schema(description = "标签名称和描述")
+    private String keyword;
 
-    @Schema(description = "标签名称")
-    private String labelName;
-
-    @Schema(description = "标签描述，以|分隔")
-    private String labelDesc;
-
-    @Schema(description = "标签排序")
+    @Schema(description = "标签排序:小于多少")
     private Integer labelSort;
 
 }

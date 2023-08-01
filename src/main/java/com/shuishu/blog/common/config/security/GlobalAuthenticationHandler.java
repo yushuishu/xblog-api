@@ -21,12 +21,12 @@ import org.springframework.stereotype.Component;
 
 
 /**
- * @author ：谁书-ss
- * @date ：2022-12-29 23:01
+ * @Author ：谁书-ss
+ * @Date ：2022-12-29 23:01
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p>
- * @description ：Handler
+ * @Description ：Handler
  * 设置Content-Type为application/json;charset=UTF-8
  * 根据情况设置状态码
  * 将返回结果写入到response

@@ -14,12 +14,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-04-10 12:55
+ * @Author ：谁书-ss
+ * @Date ：2023-04-10 12:55
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：标签vo
+ * @Description ：标签vo
  * <p></p>
  */
 @Schema(description = "标签vo")
@@ -49,5 +49,11 @@ public class LabelVo extends BaseVO<Label> {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateDate;
+
+    @Schema(description = "创建人昵称")
+    private String createNickname;
+
+    @Schema(description = "更新人昵称")
+    private String updateNickname;
 
 }

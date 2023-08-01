@@ -13,12 +13,12 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-04-29 17:27
+ * @Author ：谁书-ss
+ * @Date ：2023-04-29 17:27
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：用户详情信息vo
+ * @Description ：用户详情信息vo
  * <p></p>
  */
 @Schema(description = "用户详情信息dto")

@@ -13,8 +13,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 /**
- * @author ：谁书-ss
- * @date ：2022-12-25 14:13
+ * @Author ：谁书-ss
+ * @Date ：2022-12-25 14:13
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>

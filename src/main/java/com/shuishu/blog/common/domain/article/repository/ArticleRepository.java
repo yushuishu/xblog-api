@@ -6,12 +6,12 @@ import com.shuishu.blog.common.domain.article.entity.po.Article;
 import org.springframework.stereotype.Repository;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-04-14 13:01
+ * @Author ：谁书-ss
+ * @Date ：2023-04-14 13:01
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：文章
+ * @Description ：文章
  * <p></p>
  */
 @Repository

@@ -6,12 +6,12 @@ import com.shuishu.blog.common.domain.user.entity.po.User;
 import org.springframework.stereotype.Repository;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-01-01 0:23
+ * @Author ：谁书-ss
+ * @Date ：2023-01-01 0:23
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：
+ * @Description ：
  */
 @Repository
 public interface UserRepository extends BaseRepository<User, Long> {

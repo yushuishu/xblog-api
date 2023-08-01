@@ -8,12 +8,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-03-30 12:46
+ * @Author ：谁书-ss
+ * @Date ：2023-03-30 12:46
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：行业dto
+ * @Description ：行业dto
  * <p></p>
  */
 @Setter

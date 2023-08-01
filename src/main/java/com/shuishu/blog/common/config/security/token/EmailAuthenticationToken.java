@@ -8,12 +8,12 @@ import java.io.Serial;
 import java.util.Collection;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-03-05 14:33
+ * @Author ：谁书-ss
+ * @Date ：2023-03-05 14:33
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：邮箱 token
+ * @Description ：邮箱 token
  * <p></p>
  */
 public class EmailAuthenticationToken extends UsernamePasswordAuthenticationToken {

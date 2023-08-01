@@ -8,12 +8,12 @@ import java.io.Serial;
 import java.util.Collection;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-03-05 17:42
+ * @Author ：谁书-ss
+ * @Date ：2023-03-05 17:42
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：本地登录 token
+ * @Description ：本地登录 token
  * <p></p>
  */
 public class LocalAuthenticationToken extends UsernamePasswordAuthenticationToken {

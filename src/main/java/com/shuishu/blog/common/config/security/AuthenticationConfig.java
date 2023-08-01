@@ -23,12 +23,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-03-08 23:33
+ * @Author ：谁书-ss
+ * @Date ：2023-03-08 23:33
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：SpringSecurity 登录相关配置
+ * @Description ：SpringSecurity 登录相关配置
  * <p></p>
  */
 @Slf4j

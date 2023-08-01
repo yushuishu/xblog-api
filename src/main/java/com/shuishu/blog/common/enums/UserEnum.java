@@ -7,12 +7,12 @@ import org.springframework.util.StringUtils;
 import java.util.Arrays;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-01-01 15:28
+ * @Author ：谁书-ss
+ * @Date ：2023-01-01 15:28
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：
+ * @Description ：
  */
 public interface UserEnum {
     enum AuthType {

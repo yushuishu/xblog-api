@@ -13,12 +13,12 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-01-01 15:41
+ * @Author ：谁书-ss
+ * @Date ：2023-01-01 15:41
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：
+ * @Description ：
  */
 @Component
 public class UserAuthDsl extends BaseDsl {

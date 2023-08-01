@@ -7,12 +7,12 @@ import com.shuishu.blog.common.domain.industry.entity.vo.IndustryVO;
 import org.springframework.data.domain.Page;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-04-03 22:34
+ * @Author ：谁书-ss
+ * @Date ：2023-04-03 22:34
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：行业
+ * @Description ：行业
  * <p></p>
  */
 public interface IndustryService {

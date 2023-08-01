@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author ：谁书-ss
- * @date ：2022-12-25 12:14
+ * @Author ：谁书-ss
+ * @Date ：2022-12-25 12:14
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>

@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-04-06 20:46
+ * @Author ：谁书-ss
+ * @Date ：2023-04-06 20:46
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：定时任务
+ * @Description ：定时任务
  * <p></p>
  */
 @Slf4j

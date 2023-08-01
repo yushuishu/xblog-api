@@ -11,12 +11,12 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-04-03 22:38
+ * @Author ：谁书-ss
+ * @Date ：2023-04-03 22:38
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：标签
+ * @Description ：标签
  * <p></p>
  */
 @Setter
@@ -33,6 +33,7 @@ public class Label extends BasePO {
     @Comment(value = "标签id")
     private Long labelId;
 
+    @Column(nullable = false, unique = true)
     @Comment(value = "标签名称")
     private String labelName;
 

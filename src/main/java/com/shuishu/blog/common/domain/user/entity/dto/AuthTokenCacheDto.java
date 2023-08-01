@@ -10,12 +10,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-03-12 16:48
+ * @Author ：谁书-ss
+ * @Date ：2023-03-12 16:48
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：缓存登录 Token
+ * @Description ：缓存登录 Token
  * <p></p>
  */
 @Setter

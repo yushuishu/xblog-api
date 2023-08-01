@@ -12,12 +12,12 @@ import lombok.ToString;
 import java.io.Serial;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-01-02 14:09
+ * @Author ：谁书-ss
+ * @Date ：2023-01-02 14:09
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：权限信息vo
+ * @Description ：权限信息vo
  */
 @Schema(description = "权限信息vo")
 @Setter

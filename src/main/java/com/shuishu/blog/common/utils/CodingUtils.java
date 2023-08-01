@@ -9,12 +9,12 @@ import java.io.IOException;
 import java.util.Base64;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-04-20 23:25
+ * @Author ：谁书-ss
+ * @Date ：2023-04-20 23:25
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：编码相关工具
+ * @Description ：编码相关工具
  * <p></p>
  */
 public class CodingUtils {

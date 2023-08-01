@@ -4,8 +4,8 @@ package com.shuishu.blog.common.config.id;
 import com.alibaba.fastjson2.JSONObject;
 
 /**
- * @author ：谁书-ss
- * @date ：2022-12-25 11:51
+ * @Author ：谁书-ss
+ * @Date ：2022-12-25 11:51
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>

@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-04-15 11:14
+ * @Author ：谁书-ss
+ * @Date ：2023-04-15 11:14
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：文章数据
+ * @Description ：文章数据
  * <p></p>
  */
 @Tag(name = "文章数据")

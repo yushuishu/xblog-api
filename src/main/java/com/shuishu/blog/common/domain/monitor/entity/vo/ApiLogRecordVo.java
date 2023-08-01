@@ -7,12 +7,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-05-02 17:27
+ * @Author ：谁书-ss
+ * @Date ：2023-05-02 17:27
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：系统api日志vo
+ * @Description ：系统api日志vo
  * <p></p>
  */
 @Schema(description = "系统api日志vo")

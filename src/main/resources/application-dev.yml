@@ -59,6 +59,14 @@ spring:
             non_contextual_creation: true
         temp:
           use_jdbc_metadata_defaults: true
+        # 解决 jpa in 语句QueryPlanCache导致的JVM内存溢出
+        query:
+          # 限制缓存大小
+          plan_cache_max_size: 64
+          # 限制元数据大小
+          plan_parameter_metadata_max_size: 32
+          # 增加 IN 子句查询命中率
+          in_clause_parameter_padding: true
     show-sql: true
   data:
     #  redis

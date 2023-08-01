@@ -16,12 +16,12 @@ import java.io.Serial;
 import java.util.Date;
 
 /**
- * @author ：谁书-ss
- * @date ：2022-12-29 22:38
+ * @Author ：谁书-ss
+ * @Date ：2022-12-29 22:38
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：用户基础信息表
+ * @Description ：用户基础信息表
  */
 @Setter
 @Getter

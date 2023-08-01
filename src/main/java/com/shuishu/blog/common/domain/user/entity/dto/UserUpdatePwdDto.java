@@ -8,12 +8,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-04-29 16:22
+ * @Author ：谁书-ss
+ * @Date ：2023-04-29 16:22
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：更新用户账号密码dto
+ * @Description ：更新用户账号密码dto
  * <p></p>
  */
 @Schema(description = "更新用户账号密码dto")

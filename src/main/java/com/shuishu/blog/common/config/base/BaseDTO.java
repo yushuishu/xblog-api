@@ -4,8 +4,8 @@ package com.shuishu.blog.common.config.base;
 import org.springframework.beans.BeanUtils;
 
 /**
- * @author ：谁书-ss
- * @date ：2022-12-24 18:28
+ * @Author ：谁书-ss
+ * @Date ：2022-12-24 18:28
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>

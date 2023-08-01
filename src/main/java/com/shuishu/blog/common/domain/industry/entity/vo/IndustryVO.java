@@ -11,12 +11,12 @@ import lombok.ToString;
 import java.util.Date;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-03-30 12:46
+ * @Author ：谁书-ss
+ * @Date ：2023-03-30 12:46
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：行业vo
+ * @Description ：行业vo
  * <p></p>
  */
 @Setter

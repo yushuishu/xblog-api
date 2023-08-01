@@ -12,12 +12,12 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-02-28 21:16
+ * @Author ：谁书-ss
+ * @Date ：2023-02-28 21:16
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：Response 工具类
+ * @Description ：Response 工具类
  */
 @Component
 public class ResponseUtils {

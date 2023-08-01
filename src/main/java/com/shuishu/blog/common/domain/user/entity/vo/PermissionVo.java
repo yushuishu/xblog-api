@@ -12,12 +12,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-04-15 9:21
+ * @Author ：谁书-ss
+ * @Date ：2023-04-15 9:21
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：权限信息vo
+ * @Description ：权限信息vo
  * <p></p>
  */
 @Schema(description = "权限信息vo")

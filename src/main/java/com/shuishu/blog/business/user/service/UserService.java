@@ -11,12 +11,12 @@ import com.shuishu.blog.common.domain.user.entity.vo.UserDetailsVo;
 import com.shuishu.blog.common.domain.user.entity.vo.UserInfoVo;
 
 /**
- * @author ：谁书-ss
- * @date ：2022-12-29 22:39
+ * @Author ：谁书-ss
+ * @Date ：2022-12-29 22:39
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：
+ * @Description ：
  */
 public interface UserService {
     /**

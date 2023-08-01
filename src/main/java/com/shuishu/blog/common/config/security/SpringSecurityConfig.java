@@ -17,12 +17,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 
 /**
- * @author ：谁书-ss
- * @date ：2022-12-29 21:59
+ * @Author ：谁书-ss
+ * @Date ：2022-12-29 21:59
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：SpringSecurity 配置
+ * @Description ：SpringSecurity 配置
  */
 @Configuration
 @EnableWebSecurity

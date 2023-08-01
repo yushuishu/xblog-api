@@ -11,12 +11,12 @@ import com.shuishu.blog.common.domain.user.entity.vo.RoleVo;
 import java.util.List;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-03-10 22:31
+ * @Author ：谁书-ss
+ * @Date ：2023-03-10 22:31
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：资源管理：角色、权限
+ * @Description ：资源管理：角色、权限
  * <p></p>
  */
 public interface ResourceService {

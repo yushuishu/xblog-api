@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * @author ：谁书-ss
- * @date ：2023-01-01 15:44
+ * @Author ：谁书-ss
+ * @Date ：2023-01-01 15:44
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：认证/授权
+ * @Description ：认证/授权
  */
 @Tag(name = "认证授权")
 @RestController

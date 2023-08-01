@@ -6,12 +6,12 @@ import com.shuishu.blog.common.enums.UserEnum;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * @author ：谁书-ss
- * @date ：2023/3/7 14:41
+ * @Author ：谁书-ss
+ * @Date ：2023/3/7 14:41
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：
+ * @Description ：
  */
 public interface AuthService {
     /**

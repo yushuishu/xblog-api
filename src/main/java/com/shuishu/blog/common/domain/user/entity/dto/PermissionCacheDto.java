@@ -8,12 +8,12 @@ import lombok.ToString;
 import java.util.List;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-03-10 23:22
+ * @Author ：谁书-ss
+ * @Date ：2023-03-10 23:22
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：缓存权限集合
+ * @Description ：缓存权限集合
  * <p></p>
  */
 @Setter

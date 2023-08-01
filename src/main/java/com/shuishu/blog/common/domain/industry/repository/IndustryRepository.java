@@ -6,12 +6,12 @@ import com.shuishu.blog.common.domain.industry.entity.po.Industry;
 import org.springframework.stereotype.Repository;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-03-30 12:50
+ * @Author ：谁书-ss
+ * @Date ：2023-03-30 12:50
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：行业
+ * @Description ：行业
  * <p></p>
  */
 @Repository

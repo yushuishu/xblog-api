@@ -31,12 +31,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-03-12 12:57
+ * @Author ：谁书-ss
+ * @Date ：2023-03-12 12:57
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：登录策略过滤器
+ * @Description ：登录策略过滤器
  * <p></p>
  * {@link LoginPolicyConfig}
  * {@link UserEnum.LoginPolicy}

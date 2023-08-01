@@ -6,12 +6,12 @@ import com.shuishu.blog.common.domain.monitor.entity.po.ApiLogRecord;
 import org.springframework.stereotype.Repository;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-05-02 17:26
+ * @Author ：谁书-ss
+ * @Date ：2023-05-02 17:26
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：系统api日志
+ * @Description ：系统api日志
  * <p></p>
  */
 @Repository

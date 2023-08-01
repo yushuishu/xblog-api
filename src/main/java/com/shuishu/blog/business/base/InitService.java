@@ -26,12 +26,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-03-30 8:26
+ * @Author ：谁书-ss
+ * @Date ：2023-03-30 8:26
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：初始化操作
+ * @Description ：初始化操作
  * <p></p>
  */
 @Slf4j

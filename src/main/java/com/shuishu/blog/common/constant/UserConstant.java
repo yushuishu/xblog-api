@@ -2,12 +2,12 @@ package com.shuishu.blog.common.constant;
 
 
 /**
- * @author ：谁书-ss
- * @date ：2023-03-31 12:38
+ * @Author ：谁书-ss
+ * @Date ：2023-03-31 12:38
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：用户相关常量
+ * @Description ：用户相关常量
  * <p></p>
  */
 public class UserConstant {

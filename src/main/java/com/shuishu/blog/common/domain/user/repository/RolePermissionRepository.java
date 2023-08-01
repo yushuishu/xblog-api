@@ -8,12 +8,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-01-01 0:22
+ * @Author ：谁书-ss
+ * @Date ：2023-01-01 0:22
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：
+ * @Description ：
  */
 @Repository
 public interface RolePermissionRepository extends BaseRepository<RolePermission, Long> {

@@ -16,12 +16,12 @@ import java.io.Serial;
 import java.util.*;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-01-01 15:03
+ * @Author ：谁书-ss
+ * @Date ：2023-01-01 15:03
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：用户登录信息
+ * @Description ：用户登录信息
  */
 @Schema(description = "用户登录信息vo")
 @Setter

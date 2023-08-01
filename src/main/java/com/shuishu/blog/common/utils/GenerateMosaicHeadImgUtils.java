@@ -12,12 +12,12 @@ import java.util.*;
 import java.util.List;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-03-31 12:47
+ * @Author ：谁书-ss
+ * @Date ：2023-03-31 12:47
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：类似于Github的随机形状、随机颜色 像素风格头像
+ * @Description ：类似于Github的随机形状、随机颜色 像素风格头像
  * <p></p>
  */
 public class GenerateMosaicHeadImgUtils {

@@ -2,12 +2,12 @@ package com.shuishu.blog.common.enums;
 
 
 /**
- * @author ：谁书-ss
- * @date ：2023-03-10 22:46
+ * @Author ：谁书-ss
+ * @Date ：2023-03-10 22:46
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：Redis 常用缓存的 key
+ * @Description ：Redis 常用缓存的 key
  * <p></p>
  */
 public enum RedisKeyEnum {

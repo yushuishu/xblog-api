@@ -13,12 +13,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.util.Date;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-04-14 12:53
+ * @Author ：谁书-ss
+ * @Date ：2023-04-14 12:53
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：文章分享
+ * @Description ：文章分享
  * <p></p>
  */
 @Setter

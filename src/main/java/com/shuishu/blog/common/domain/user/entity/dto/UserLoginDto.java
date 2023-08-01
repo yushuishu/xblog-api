@@ -7,8 +7,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @author wuZhenFeng
- * @date 2023/3/7 15:44
+ * @Author wuZhenFeng
+ * @Date 2023/3/7 15:44
  */
 @Schema(description = "登录dto")
 @Setter

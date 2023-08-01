@@ -11,12 +11,12 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-05-02 17:02
+ * @Author ：谁书-ss
+ * @Date ：2023-05-02 17:02
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：文章标签
+ * @Description ：文章标签
  * <p></p>
  */
 @Setter

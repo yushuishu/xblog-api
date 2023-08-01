@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-03-12 12:49
+ * @Author ：谁书-ss
+ * @Date ：2023-03-12 12:49
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：登录策略
+ * @Description ：登录策略
  * <p></p>
  */
 @Component

@@ -25,12 +25,12 @@ import java.io.IOException;
 
 
 /**
- * @author ：谁书-ss
- * @date ：2023-03-05 14:24
+ * @Author ：谁书-ss
+ * @Date ：2023-03-05 14:24
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：QQ邮箱登录过滤器
+ * @Description ：QQ邮箱登录过滤器
  * <p></p>
  */
 @Slf4j

@@ -11,12 +11,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * @author ：谁书-ss
- * @date ：2023-04-15 9:05
+ * @Author ：谁书-ss
+ * @Date ：2023-04-15 9:05
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
- * @description ：添加权限
+ * @Description ：添加权限
  * <p></p>
  */
 @Schema(description = "添加权限dto")

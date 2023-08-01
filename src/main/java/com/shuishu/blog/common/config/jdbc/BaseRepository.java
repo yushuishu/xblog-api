@@ -8,8 +8,8 @@ import org.springframework.data.repository.NoRepositoryBean;
 import java.io.Serializable;
 
 /**
- * @author ：谁书-ss
- * @date ：2022-12-25 14:16
+ * @Author ：谁书-ss
+ * @Date ：2022-12-25 14:16
  * @IDE ：IntelliJ IDEA
  * @Motto ：ABC(Always Be Coding)
  * <p></p>
