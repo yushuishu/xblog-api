@@ -21,5 +21,5 @@ import lombok.ToString;
 @Getter
 @ToString
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-public class ArticleVO extends BaseVO<Article> {
+public class ArticleVo extends BaseVO<Article> {
 }

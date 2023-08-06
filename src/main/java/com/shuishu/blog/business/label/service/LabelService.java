@@ -4,7 +4,6 @@ package com.shuishu.blog.business.label.service;
 import com.shuishu.blog.common.config.base.PageDTO;
 import com.shuishu.blog.common.config.base.PageVO;
 import com.shuishu.blog.common.domain.label.entity.dto.LabelAddDto;
-import com.shuishu.blog.common.domain.label.entity.dto.LabelDTO;
 import com.shuishu.blog.common.domain.label.entity.dto.LabelQueryDto;
 import com.shuishu.blog.common.domain.label.entity.dto.LabelUpdateDto;
 import com.shuishu.blog.common.domain.label.entity.vo.LabelVo;

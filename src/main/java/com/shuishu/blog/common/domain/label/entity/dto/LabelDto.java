@@ -21,7 +21,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class LabelDTO extends BaseDTO<Label> {
+public class LabelDto extends BaseDTO<Label> {
 
     @Schema(description = "标签id")
     private Long labelId;
