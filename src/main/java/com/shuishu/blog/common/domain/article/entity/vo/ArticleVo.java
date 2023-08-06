@@ -66,6 +66,9 @@ public class ArticleVo extends BaseVO<Article> {
     @Schema(description = "文章动态权重值（定时任务更新权重值）")
     private Integer articleVariableWeightValue;
 
+    @Schema(description = "是否发布true:发布 false:未发布")
+    private Boolean publish;
+
     @Schema(description = "创建时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

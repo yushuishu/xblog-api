@@ -102,7 +102,10 @@ public class SpringSecurityUtils {
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             Object principal = authentication.getPrincipal();
             if (principal != null) {
-                return (UserInfoVo) principal;
+                UserInfoVo userInfoVo = (UserInfoVo) principal;
+                if (userInfoVo.getUserId() == null) {
+                    throw new BusinessException("用户不存在");
+                }
             }
         }
         throw new BusinessException("用户不存在");

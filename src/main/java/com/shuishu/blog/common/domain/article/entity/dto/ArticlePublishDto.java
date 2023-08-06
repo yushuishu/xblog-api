@@ -20,4 +20,10 @@ import lombok.ToString;
 @Getter
 @ToString
 public class ArticlePublishDto {
+    @Schema(description = "文章id")
+    private Long articleId;
+
+    @Schema(description = "true:发布 false:取消发布")
+    private Boolean publish;
+
 }

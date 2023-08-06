@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * @Author ：谁书-ss
  * @Date ：2023-08-06 22:31
@@ -22,4 +24,25 @@ import lombok.ToString;
 @Getter
 @ToString
 public class ArticleUpdateDto extends BaseDTO<Article> {
+    @Schema(description = "文章id")
+    private Long articleId;
+
+    @Schema(description = "文章名称")
+    private String articleTitle;
+
+    @Schema(description = "文章Markdown")
+    private String articleMarkdown;
+
+    @Schema(description = "文章简要说明")
+    private String articleBriefDescription;
+
+    @Schema(description = "文章封面图")
+    private String articleCoverImg;
+
+    @Schema(description = "涉及行业或领域，以 | 分割")
+    private String industryName;
+
+    @Schema(description = "文章标签")
+    private List<String> labelNameList;
+
 }

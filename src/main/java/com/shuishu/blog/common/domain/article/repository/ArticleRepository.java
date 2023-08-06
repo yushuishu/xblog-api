@@ -16,4 +16,12 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ArticleRepository extends BaseRepository<Article, Long> {
+    /**
+     * 文章id 查询
+     *
+     * @param articleId 文章id
+     * @return 文章
+     */
+    Article findByArticleId(Long articleId);
+
 }

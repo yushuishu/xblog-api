@@ -20,4 +20,8 @@ import lombok.ToString;
 @Getter
 @ToString
 public class ArticleDeleteDto {
+
+    @Schema(description = "文章id")
+    private Long articleId;
+
 }

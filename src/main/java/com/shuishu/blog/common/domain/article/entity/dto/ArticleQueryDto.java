@@ -11,4 +11,6 @@ package com.shuishu.blog.common.domain.article.entity.dto;
  * <p></p>
  */
 public class ArticleQueryDto {
+
+
 }

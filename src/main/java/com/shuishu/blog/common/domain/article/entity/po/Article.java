@@ -67,4 +67,7 @@ public class Article extends BasePO {
     @Comment("文章动态权重值（定时任务更新权重值）")
     private Integer articleVariableWeightValue;
 
+    @Comment("文章发布 true:发布 false:取消发布")
+    private Boolean publish;
+
 }
