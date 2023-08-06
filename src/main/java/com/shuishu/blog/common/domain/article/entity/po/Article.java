@@ -55,14 +55,14 @@ public class Article extends BasePO {
     @Comment("文章赞点量")
     private Integer articleUpvote;
 
-    @Comment("文章分享量（公开的文章被分享次数）")
-    private Integer articleShareCount;
-
     @Comment("文章封面图")
     private String articleCoverImg;
 
     @Comment("阅读时长（分钟）")
     private Integer articleBrowseTime;
+
+    @Comment("涉及行业或领域，以 | 分割")
+    private String industryName;
 
     @Comment("文章动态权重值（定时任务更新权重值）")
     private Integer articleVariableWeightValue;

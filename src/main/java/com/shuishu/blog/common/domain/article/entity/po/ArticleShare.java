@@ -48,5 +48,6 @@ public class ArticleShare extends BasePO {
     @Comment(value = "文章分享有效期: 空就是永久")
     private Date articleShareExpirationDate;
 
-
+    @Comment(value = "是否过期，承接有过期时间的链接，业务上通过此属性判断")
+    private Boolean articleShareExpired;
 }
