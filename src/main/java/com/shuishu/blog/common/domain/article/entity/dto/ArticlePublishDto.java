@@ -24,6 +24,6 @@ public class ArticlePublishDto {
     private Long articleId;
 
     @Schema(description = "true:发布 false:取消发布")
-    private Boolean publish;
+    private Boolean articlePublish;
 
 }

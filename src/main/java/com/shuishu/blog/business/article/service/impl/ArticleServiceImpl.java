@@ -1,6 +1,7 @@
 package com.shuishu.blog.business.article.service.impl;
 
 
+import cn.hutool.core.date.DateUtil;
 import com.shuishu.blog.business.article.service.ArticleService;
 import com.shuishu.blog.common.config.base.PageDTO;
 import com.shuishu.blog.common.config.base.PageVO;
@@ -14,6 +15,8 @@ import com.shuishu.blog.common.domain.article.entity.dto.ArticleUpdateDto;
 import com.shuishu.blog.common.domain.article.entity.po.Article;
 import com.shuishu.blog.common.domain.article.entity.vo.ArticleVo;
 import com.shuishu.blog.common.domain.article.repository.ArticleRepository;
+import com.shuishu.blog.common.domain.refuse.entity.po.Refuse;
+import com.shuishu.blog.common.domain.refuse.repository.RefuseRepository;
 import com.shuishu.blog.common.domain.user.entity.vo.UserInfoVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -39,7 +43,7 @@ import java.util.Objects;
 public class ArticleServiceImpl implements ArticleService {
     private final ArticleRepository articleRepository;
     private final ArticleDsl articleDsl;
-
+    private final RefuseRepository refuseRepository;
 
 
     @Override
@@ -54,7 +58,7 @@ public class ArticleServiceImpl implements ArticleService {
             throw new BusinessException("文章内容不能超过1000万个字符");
         }
         if (articleAddDto.getArticleBriefDescription().length() < 30 || articleAddDto.getArticleBriefDescription().length() > 300) {
-            throw new BusinessException("文章简要说明要求大于30个字符，不超过300个字符");
+            throw new BusinessException("文章简要说明要求大于20个字符，不超过300个字符");
         }
 
         Article article = articleAddDto.toPo(Article.class);
@@ -69,24 +73,24 @@ public class ArticleServiceImpl implements ArticleService {
     public void publishArticle(ArticlePublishDto articlePublishDto) {
         Article article = articleRepository.findByArticleId(articlePublishDto.getArticleId());
         Objects.requireNonNull(article, "文章不存在");
-        if (Boolean.TRUE.equals(article.getPublish()) && Boolean.TRUE.equals(articlePublishDto.getPublish())) {
+        if (Boolean.TRUE.equals(article.getArticlePublish()) && Boolean.TRUE.equals(articlePublishDto.getArticlePublish())) {
             return;
         }
-        if (Boolean.FALSE.equals(article.getPublish()) && Boolean.FALSE.equals(articlePublishDto.getPublish())) {
+        if (Boolean.FALSE.equals(article.getArticlePublish()) && Boolean.FALSE.equals(articlePublishDto.getArticlePublish())) {
             return;
         }
-        article.setPublish(articlePublishDto.getPublish());
+        article.setArticlePublish(articlePublishDto.getArticlePublish());
         articleRepository.saveAndFlush(article);
     }
 
     @Override
     public PageVO<ArticleVo> findArticlePage(ArticleQueryDto articleQueryDto, PageDTO pageDTO) {
-        return null;
+        return articleDsl.findArticlePage(articleQueryDto, pageDTO);
     }
 
     @Override
     public ArticleVo findArticleDetails(Long articleId) {
-        return null;
+        return articleDsl.findArticleDetails(articleId);
     }
 
     @Override
@@ -96,7 +100,17 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void deleteArticle(Long articleId) {
-
+        Article article = articleRepository.findByArticleId(articleId);
+        Objects.requireNonNull(article, "文章不存在");
+        if (Boolean.TRUE.equals(article.getArticleDelete())) {
+            throw new BusinessException("文章已删除");
+        }
+        articleDsl.updateArticleDelete(articleId, true);
+        Refuse refuse = new Refuse();
+        refuse.setArticleId(articleId);
+        refuse.setExpireDate(DateUtil.offsetHour(new Date(), 24 * 15));
+        // 强制保留15天
+        refuseRepository.save(refuse);
     }
 
 

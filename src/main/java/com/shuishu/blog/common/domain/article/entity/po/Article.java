@@ -10,6 +10,8 @@ import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.Date;
+
 /**
  * @Author ：谁书-ss
  * @Date ：2023-04-10 13:09
@@ -34,7 +36,6 @@ public class Article extends BasePO {
     private Long articleId;
 
     @Comment("文章名称")
-    @Column(nullable = false, unique = true)
     private String articleTitle;
 
     @Comment("文章Markdown")
@@ -68,6 +69,9 @@ public class Article extends BasePO {
     private Integer articleVariableWeightValue;
 
     @Comment("文章发布 true:发布 false:取消发布")
-    private Boolean publish;
+    private Boolean articlePublish;
+
+    @Comment("到期删除时间")
+    private Boolean articleDelete;
 
 }
