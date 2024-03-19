@@ -5,10 +5,7 @@ import com.shuishu.blog.business.user.service.UserService;
 import com.shuishu.blog.common.config.base.ApiResponse;
 import com.shuishu.blog.common.config.base.PageDTO;
 import com.shuishu.blog.common.config.base.PageVO;
-import com.shuishu.blog.common.domain.user.entity.dto.UserAddDto;
-import com.shuishu.blog.common.domain.user.entity.dto.UserQueryDto;
-import com.shuishu.blog.common.domain.user.entity.dto.UserUpdateDto;
-import com.shuishu.blog.common.domain.user.entity.dto.UserUpdatePwdDto;
+import com.shuishu.blog.common.domain.user.entity.dto.*;
 import com.shuishu.blog.common.domain.user.entity.vo.UserDetailsVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,10 +44,17 @@ public class UserController {
         return ApiResponse.success();
     }
 
-    @Operation(summary = "更新密码", description = "更新密码")
+    @Operation(summary = "修改密码", description = "修改密码")
     @PostMapping("pwd/update")
     public ApiResponse<String> updateUserPassword(UserUpdatePwdDto userUpdatePwdDto) {
         userService.updateUserPassword(userUpdatePwdDto);
+        return ApiResponse.success();
+    }
+
+    @Operation(summary = "忘记密码", description = "忘记密码")
+    @PostMapping("forget_pwd/update")
+    public ApiResponse<String> updateForgetUserPassword(UserForgetUpdatePwdDto userForgetUpdatePwdDto) {
+        userService.updateForgetUserPassword(userForgetUpdatePwdDto);
         return ApiResponse.success();
     }
 

@@ -56,7 +56,7 @@ public class RoleDsl extends BaseDsl {
                                       @NotBlank(message = "角色code不能为空") String roleCode,
                                       @NotNull(message = "角色id不能为空") Long roleId) {
         return jpaQueryFactory.selectFrom(qRole)
-                .where(qRole.roleName.eq(roleName).or(qRole.roleCode.eq(roleCode)).or(qRole.roleId.ne(roleId)))
+                .where(qRole.roleName.eq(roleName).or(qRole.roleCode.eq(roleCode)).and(qRole.roleId.ne(roleId)))
                 .fetchFirst();
     }
 

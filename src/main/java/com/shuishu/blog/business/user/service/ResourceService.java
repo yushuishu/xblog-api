@@ -111,10 +111,4 @@ public interface ResourceService {
      */
     RoleVo findDefaultRole();
 
-    /**
-     * 更新默认角色
-     *
-     * @param roleId 最新 默认角色id
-     */
-    void updateDefaultRole(Long roleId);
 }

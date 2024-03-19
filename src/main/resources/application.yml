@@ -2,13 +2,15 @@ shuishu:
   project:
     name: '谁书Blog'
     version: v1.0
-    copyright-year: 2023
+    copyright-year: 2024
 server:
   tomcat:
     uri-encoding: utf-8
     threads:
-      max: 300  # tomcat最大线程数，默认为200
-      min-spare: 30  # tomcat启动初始化的线程数，默认25
+      # tomcat最大线程数，默认为200
+      max: 300
+      # tomcat启动初始化的线程数，默认25
+      min-spare: 30
   servlet:
     context-path: /api/shuishu/blog
 
@@ -35,21 +37,18 @@ springdoc:
   api-docs:
     path: /v3/api-docs
   group-configs:
-    - group: '个人中心'
-      paths-to-match: '/**'
-      packages-to-scan: com.shuishu.blog.business.person.controller
     - group: '数据面板'
       paths-to-match: '/**'
       packages-to-scan: com.shuishu.blog.business.data.controller
     - group: '文章管理'
       paths-to-match: '/**'
       packages-to-scan: com.shuishu.blog.business.article.controller,com.shuishu.blog.business.label.controller
+    - group: '工具箱'
+      paths-to-match: '/**'
+      packages-to-scan: com.shuishu.blog.business.toolbox.controller
     - group: '系统管理'
       paths-to-match: '/**'
       packages-to-scan: com.shuishu.blog.business.user.controller,com.shuishu.blog.business.industry.controller
-    - group: '第三方服务'
-      paths-to-match: '/**'
-      packages-to-scan: com.shuishu.blog.business.docking.controller
     - group: '系统监控'
       paths-to-match: '/**'
       packages-to-scan: com.shuishu.blog.business.monitor.controller

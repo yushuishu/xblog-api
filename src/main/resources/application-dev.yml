@@ -17,12 +17,21 @@ shuishu:
     # auth-token 距离过期时间 expire-time 还有多少秒，重新设置有效时间为 expire-time：5分钟 = 1 * 60 * 5
     surplus-refresh-time: 300
   init:
-      user:
-        nickname: Long
-        user-auth-identifier: admin
-        user-auth-credential: 123
-        industry: 互联网/软件开发/java开发
-        user-photo: https://github.com/yushuishu/images/blob/master/blog/666666.png?raw=true
+      account:
+        # 超级管理员账号
+        admin:
+          nickname: LongLongLong
+          user-auth-identifier: 12345
+          user-auth-credential: long12345
+          industry: 互联网/软件开发/java开发
+          user-photo: https://github.com/yushuishu/images/blob/master/blog/666666.png?raw=true
+        # 普通用户账号
+        user:
+          nickname: Java程序猿
+          user-auth-identifier: 123456
+          user-auth-credential: long123456
+          industry: 互联网/软件开发/java开发
+          user-photo: https://github.com/yushuishu/images/blob/master/blog/666666.png?raw=true
 
 
 server:
@@ -39,7 +48,7 @@ spring:
   datasource:
     url: jdbc:postgresql://127.0.0.1:5432/shuishu_blog?useUnicode=true&characterEncoding=utf8
     username: postgres
-    password: 123456
+    password: 1
     driver-class-name: org.postgresql.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
@@ -72,8 +81,8 @@ spring:
     #  redis
     redis:
       host: 127.0.0.1
-      password: 123456
-      port: 6379
+      password: Tuodi123
+      port: 7379
       # Redis数据库索引（默认为 0）
       database: 0
       connect-timeout: 3000

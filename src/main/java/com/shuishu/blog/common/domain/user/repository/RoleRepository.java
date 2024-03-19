@@ -30,6 +30,14 @@ public interface RoleRepository extends BaseRepository<Role, Long> {
     /**
      * 查询角色
      *
+     * @param roleId 角色id
+     * @return -
+     */
+    Role findByRoleId(Long roleId);
+
+    /**
+     * 查询角色
+     *
      * @param roleCode 角色code
      * @return 角色信息
      */

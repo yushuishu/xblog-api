@@ -1,6 +1,7 @@
 package com.shuishu.blog.business.user.service.impl;
 
 
+import com.google.common.collect.Lists;
 import com.shuishu.blog.common.config.base.PageDTO;
 import com.shuishu.blog.common.config.base.PageVO;
 import com.shuishu.blog.common.config.exception.BusinessException;
@@ -11,10 +12,7 @@ import com.shuishu.blog.common.domain.user.dsl.PermissionDsl;
 import com.shuishu.blog.common.domain.user.dsl.RoleDsl;
 import com.shuishu.blog.common.domain.user.dsl.UserAuthDsl;
 import com.shuishu.blog.common.domain.user.dsl.UserDsl;
-import com.shuishu.blog.common.domain.user.entity.dto.UserAddDto;
-import com.shuishu.blog.common.domain.user.entity.dto.UserQueryDto;
-import com.shuishu.blog.common.domain.user.entity.dto.UserUpdateDto;
-import com.shuishu.blog.common.domain.user.entity.dto.UserUpdatePwdDto;
+import com.shuishu.blog.common.domain.user.entity.dto.*;
 import com.shuishu.blog.common.domain.user.entity.po.Role;
 import com.shuishu.blog.common.domain.user.entity.po.User;
 import com.shuishu.blog.common.domain.user.entity.po.UserAuth;
@@ -30,6 +28,7 @@ import com.shuishu.blog.common.enums.UserEnum;
 import com.shuishu.blog.common.utils.CodingUtils;
 import com.shuishu.blog.common.utils.GenerateMosaicHeadImgUtils;
 import com.shuishu.blog.common.utils.RedisUtils;
+import com.shuishu.blog.common.utils.UserIdUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -44,7 +43,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @Author ：谁书-ss
@@ -69,7 +67,7 @@ public class UserServiceImpl implements UserService {
     private final PermissionDsl permissionDsl;
     private final IndustryRepository industryRepository;
     private final PasswordEncoder passwordEncoder;
-
+    private final UserIdUtils userIdUtils;
     private final RedisUtils redisUtils;
 
 
@@ -83,6 +81,10 @@ public class UserServiceImpl implements UserService {
                 throw new BusinessException("所选行业不正确");
             }
         }
+        // 头像
+        String photoBase64 = CodingUtils.convertByteToBase64(GenerateMosaicHeadImgUtils.getGenerateMosaicHeadImg());
+        // 密码
+        String newPasswordEncode = passwordEncoder.encode(userAddDTO.getUserAuthCredential());
 
         /*
          * 注册账号只能通过 邮箱、手机号注册
@@ -102,9 +104,6 @@ public class UserServiceImpl implements UserService {
                 throw new BusinessException("该邮箱号已注册");
             }
 
-            // 头像
-            String photoBase64 = CodingUtils.convertByteToBase64(GenerateMosaicHeadImgUtils.getGenerateMosaicHeadImg());
-
             // 用户信息
             User user = new User();
             user.setNickname(userAddDTO.getNickname());
@@ -115,14 +114,28 @@ public class UserServiceImpl implements UserService {
             user.setUserIsAccountNonLocked(true);
             user.setUserIsAccountNonLocked(true);
             User saveUser = userRepository.save(user);
-            // 账号
+            // 邮箱账号
             UserAuth userAuth = new UserAuth();
             userAuth.setUserId(saveUser.getUserId());
             userAuth.setUserAuthType(UserEnum.AuthType.EMAIL.getType());
             userAuth.setUserAuthIdentifier(userAddDTO.getUserAuthIdentifier());
+            userAuth.setUserAuthCredential(newPasswordEncode);
             userAuth.setUserAuthNickname(userAddDTO.getNickname());
             userAuth.setUserAuthPhoto(photoBase64);
-            userAuthRepository.saveAndFlush(userAuth);
+            // 系统账号
+            String systemUsername = userIdUtils.generateSystemUsername();
+            if (systemUsername == null) {
+                throw new BusinessException("注册失败，系统账号生成异常");
+            }
+            UserAuth systemUserAuth = new UserAuth();
+            systemUserAuth.setUserId(saveUser.getUserId());
+            systemUserAuth.setUserAuthType(UserEnum.AuthType.LOCAL.getType());
+            systemUserAuth.setUserAuthIdentifier(systemUsername);
+            systemUserAuth.setUserAuthCredential(newPasswordEncode);
+            systemUserAuth.setUserAuthNickname(userAddDTO.getNickname());
+            systemUserAuth.setUserAuthPhoto(photoBase64);
+            // 保存 邮箱账号和系统账号
+            userAuthRepository.saveAll(Lists.newArrayList(userAuth, systemUserAuth));
             // 角色（获取默认角色）
             Role defaultRole = roleRepository.findRoleByDefaultRole();
             if (defaultRole == null) {
@@ -176,10 +189,28 @@ public class UserServiceImpl implements UserService {
     public void updateUserPassword(UserUpdatePwdDto userUpdatePwdDto) {
         UserInfoVo userInfoVo = SpringSecurityUtils.getUserInfoVo();
         if (userUpdatePwdDto.getPassword().equals(userUpdatePwdDto.getAckPassword())) {
-            throw new BusinessException("确认密码不正确");
+            throw new BusinessException("新密码与确认密码不正确");
+        }
+        String newPasswordEncode = passwordEncoder.encode(userUpdatePwdDto.getPassword());
+        Date nowDate = new Date();
+        // 关联的账号所有密码都进行更改
+        List<UserAuth> userAuthList = userAuthRepository.findByUserId(userInfoVo.getUserId());
+        userAuthList.forEach(t -> {
+            t.setUserAuthCredential(newPasswordEncode);
+            t.setUpdateUserId(userInfoVo.getUserId());
+            t.setUpdateDate(nowDate);
+        });
+        userAuthRepository.saveAllAndFlush(userAuthList);
+    }
+
+    @Override
+    public void updateForgetUserPassword(UserForgetUpdatePwdDto userForgetUpdatePwdDto) {
+        UserInfoVo userInfoVo = SpringSecurityUtils.getUserInfoVo();
+        if (userForgetUpdatePwdDto.getPassword().equals(userForgetUpdatePwdDto.getAckPassword())) {
+            throw new BusinessException("新密码与确认密码不正确");
         }
         // 查找用户绑定的邮箱
-        UserAuth userAuth = userAuthRepository.findByUserAuthIdentifierAndAndUserAuthType(userUpdatePwdDto.getUserEmail(), UserEnum.AuthType.EMAIL.getType());
+        UserAuth userAuth = userAuthRepository.findByUserAuthIdentifierAndAndUserAuthType(userForgetUpdatePwdDto.getUserEmail(), UserEnum.AuthType.EMAIL.getType());
         Objects.requireNonNull(userAuth, "邮箱不存在");
         if (!userAuth.getUserId().equals(userInfoVo.getUserId())) {
             throw new BusinessException("当前登录用户和修改的用户账号不一致");
@@ -187,19 +218,23 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUserId(userAuth.getUserId());
         Objects.requireNonNull(user, "用户信息不存在");
         // 邮箱验证码
-        Object codeObj = redisUtils.strGet(RedisKeyEnum.KEY_EMAIL_CODE.getKey() + userUpdatePwdDto.getUserEmail());
+        Object codeObj = redisUtils.strGet(RedisKeyEnum.KEY_EMAIL_CODE.getKey() + userForgetUpdatePwdDto.getUserEmail());
         String emailCode = codeObj == null ? null : codeObj.toString();
-        if (!userUpdatePwdDto.getCaptcha().equals(emailCode)) {
+        if (!userForgetUpdatePwdDto.getCaptcha().equals(emailCode)) {
             throw new BusinessException("证码不正确");
         }
-        redisUtils.del(RedisKeyEnum.KEY_EMAIL_CODE.getKey() + userUpdatePwdDto.getUserEmail());
+        redisUtils.del(RedisKeyEnum.KEY_EMAIL_CODE.getKey() + userForgetUpdatePwdDto.getUserEmail());
 
-        UserAuth userAuthForLocal = userAuthRepository.findByUserIdAndUserAuthType(userAuth.getUserId(), UserEnum.AuthType.LOCAL.getType());
-        userAuthForLocal.setUserAuthCredential(passwordEncoder.encode(userUpdatePwdDto.getPassword()));
-        userAuthForLocal.setUpdateDate(new Date());
-        userAuthForLocal.setUpdateUserId(userAuthForLocal.getUserId());
-        userAuthRepository.saveAndFlush(userAuthForLocal);
-
+        String newPassword = passwordEncoder.encode(userForgetUpdatePwdDto.getPassword());
+        Date nowDate = new Date();
+        // 关联的账号所有密码都进行更改
+        List<UserAuth> userAuthList = userAuthRepository.findByUserId(userAuth.getUserId());
+        userAuthList.forEach(t -> {
+            t.setUpdateDate(nowDate);
+            t.setUserAuthCredential(newPassword);
+            t.setUpdateUserId(userInfoVo.getUserId());
+        });
+        userAuthRepository.saveAllAndFlush(userAuthList);
     }
 
     @Override

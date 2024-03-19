@@ -151,10 +151,16 @@ public class ResourceServiceImpl implements ResourceService {
                 throw new BusinessException("角色code已存在");
             }
         }
-        Role updateRole = roleUpdateDto.toPo(Role.class);
-        updateRole.setUpdateUserId(userInfoVo.getUserId());
-        updateRole.setUpdateDate(new Date());
-        roleRepository.saveAndFlush(updateRole);
+        Role role = roleRepository.findByRoleId(roleUpdateDto.getRoleId());
+        if (SpringSecurityUtils.DEFAULT_ROLE_SUPER_CODE.equals(role.getRoleCode()) ||
+                SpringSecurityUtils.DEFAULT_ROLE_GENERAL_CODE.equals(role.getRoleCode())) {
+            throw new BusinessException("系统默认角色不可修改");
+        }
+        role.setRoleName(roleUpdateDto.getRoleName());
+        role.setRoleCode(roleUpdateDto.getRoleCode());
+        role.setUpdateUserId(userInfoVo.getUserId());
+        role.setUpdateDate(new Date());
+        roleRepository.saveAndFlush(role);
     }
 
     @Override
@@ -169,6 +175,11 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public void deleteRole(Long roleId, Boolean ackDelete) {
+        Role role = roleRepository.findByRoleId(roleId);
+        if (SpringSecurityUtils.DEFAULT_ROLE_SUPER_CODE.equals(role.getRoleCode()) ||
+                SpringSecurityUtils.DEFAULT_ROLE_GENERAL_CODE.equals(role.getRoleCode())) {
+            throw new BusinessException("系统默认角色不可删除");
+        }
         long relUserCount = userRoleRepository.countByRoleId(roleId);
         if (Boolean.TRUE.equals(ackDelete)) {
             userRoleRepository.deleteByRoleId(roleId);
@@ -184,15 +195,6 @@ public class ResourceServiceImpl implements ResourceService {
     @Override
     public RoleVo findDefaultRole() {
         return roleDsl.findDefaultRole();
-    }
-
-    @Override
-    public void updateDefaultRole(Long roleId) {
-        Long defaultRoleId = roleDsl.findDefaultRoleId();
-        if (defaultRoleId != null) {
-            roleDsl.updateDefaultRole(defaultRoleId, false);
-        }
-        roleDsl.updateDefaultRole(roleId, true);
     }
 
 }
