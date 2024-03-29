@@ -1,4 +1,4 @@
-# shuishu-blog-backend
+# xblog-api
 
 <p>
   <a href="https://www.oracle.com/java/technologies/javase/17u-relnotes.html"><img src="https://img.shields.io/badge/jdk-%3E=17.0.0-blue.svg" alt="jdk compatility"></a>
@@ -14,11 +14,11 @@
 
 **其它源码**
 
-后台服务server：https://github.com/yushuishu/shuishu-blog-backend
+后台服务server：https://github.com/yushuishu/xblog-api
 
-后台管理web：https://github.com/yushuishu/shuishu-blog-front-admin
+后台管理web：https://github.com/yushuishu/xblog-web-admin
 
-门户网站portal：https://github.com/yushuishu/shuishu-blog-front-web
+门户网站portal：https://github.com/yushuishu/xblog-web-website
 
 
 ## 预览
