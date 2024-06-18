@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.5</version>
+        <version>3.2.4</version>
         <relativePath/>
     </parent>
 
@@ -20,11 +20,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <spring-boot.version>3.0.5</spring-boot.version>
+        <spring-boot.version>3.2.4</spring-boot.version>
+        <mybatis-plus.version>3.5.6</mybatis-plus.version>
         <postgresql.version>42.5.1</postgresql.version>
         <HikariCP.version>5.0.1</HikariCP.version>
-        <querydsl-sql-spring.version>5.0.0</querydsl-sql-spring.version>
-        <querydsl.version>5.0.0</querydsl.version>
         <hibernate-validator.version>8.0.0.Final</hibernate-validator.version>
         <jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
         <joda-time.version>2.12.2</joda-time.version>
@@ -33,7 +32,7 @@
         <google.guava.version>31.1-jre</google.guava.version>
         <captcha.version>1.3.0</captcha.version>
         <JustAuth.version>1.16.5</JustAuth.version>
-        <knife4j.version>4.1.0</knife4j.version>
+        <knife4j.version>4.5.0</knife4j.version>
     </properties>
 
 
@@ -85,6 +84,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+            <version>${mybatis-plus.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
@@ -92,38 +97,6 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-sql-spring</artifactId>
-            <version>${querydsl-sql-spring.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-core</artifactId>
-            <version>${querydsl.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-jpa</artifactId>
-            <classifier>jakarta</classifier>
-            <version>${querydsl.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.querydsl</groupId>
-            <artifactId>querydsl-apt</artifactId>
-            <classifier>jakarta</classifier>
-            <version>${querydsl.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <dependency>
@@ -201,41 +174,6 @@
 
     </dependencies>
 
-    <profiles>
-        <profile>
-            <!-- 开发环境 -->
-            <id>dev</id>
-            <properties>
-                <profiles.active>dev</profiles.active>
-            </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <!-- 测试环境 -->
-        <profile>
-            <id>test</id>
-            <properties>
-                <profiles.active>test</profiles.active>
-            </properties>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-        </profile>
-        <!-- 生产环境 -->
-        <profile>
-            <id>prod</id>
-            <properties>
-                <profiles.active>prod</profiles.active>
-            </properties>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-        </profile>
-    </profiles>
-
-
-
     <build>
         <!-- 打包jar名称 -->
         <finalName>shuishu-blog-backend</finalName>
@@ -243,58 +181,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.2.4</version>
             </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.3.0</version>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>process-classes</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>target/generated-sources/annotations</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
         </plugins>
-
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>application.yml</include>
-                    <include>application-${profiles.active}.yml</include>
-                    <include>*.xml</include>
-                    <include>templates/**/*.html</include>
-                    <include>banner.txt</include>
-                </includes>
-            </resource>
-            <!-- <resource> -->
-            <!--     <directory>src/main/resources</directory> -->
-            <!--     &lt;!&ndash; 先排除所有环境相关的配置文件 &ndash;&gt; -->
-            <!--     <excludes> -->
-            <!--         <exclude>application*.yml</exclude> -->
-            <!--     </excludes> -->
-            <!-- </resource> -->
-            <!-- <resource> -->
-            <!--     <directory>src/main/resources</directory> -->
-            <!--     <filtering>true</filtering> -->
-            <!--     <includes> -->
-            <!--         <include>application.yml</include> -->
-            <!--         <include>application-${project.active}.yml</include> -->
-            <!--     </includes> -->
-            <!-- </resource> -->
-        </resources>
     </build>
 
 </project>

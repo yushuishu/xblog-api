@@ -1,6 +1,10 @@
 package com.shuishu.blog.common.domain.refuse.entity.po;
 
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.shuishu.blog.common.config.base.BasePO;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,20 +28,18 @@ import java.util.Date;
 @Setter
 @Getter
 @ToString
-@Entity
-@EntityListeners(AuditingEntityListener.class)
-@Table(name = "ss_refuse")
+@TableName("ss_refuse")
 @Comment(value = "垃圾桶")
 public class Refuse extends BasePO {
-    @Id
-    @GeneratedValue(generator = "CustomIdGenerator")
-    @GenericGenerator(name = "CustomIdGenerator", strategy = "com.shuishu.blog.common.config.id.CustomIdGenerator")
+    @TableId(value = "refuse_id", type = IdType.ASSIGN_ID)
     @Comment(value = "垃圾桶id")
     private Long refuseId;
 
+    @TableField("article_id")
     @Comment("文章ID")
     private Long articleId;
 
+    @TableField("expire_date")
     @Comment("到期删除时间")
     private Date expireDate;
 

@@ -41,7 +41,7 @@ public class ArticleAddDto extends BaseDTO<Article> {
     private String articleBriefDescription;
 
     @Schema(description = "文章封面图")
-    private String articleCoverImg;
+    private String articleCoverImage;
 
     @NotBlank(message = "行业领域不能为空")
     @Schema(description = "涉及行业或领域，以 | 分割")

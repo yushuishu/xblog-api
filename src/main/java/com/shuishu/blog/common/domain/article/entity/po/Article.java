@@ -1,16 +1,17 @@
 package com.shuishu.blog.common.domain.article.entity.po;
 
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.shuishu.blog.common.config.base.BasePO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.Date;
 
 /**
  * @Author ：谁书-ss
@@ -24,54 +25,61 @@ import java.util.Date;
 @Setter
 @Getter
 @ToString
-@Entity
-@EntityListeners(AuditingEntityListener.class)
-@Table(name = "ss_article")
+@TableName("ss_article")
 @Comment(value = "文章表")
 public class Article extends BasePO {
-    @Id
-    @GeneratedValue(generator = "CustomIdGenerator")
-    @GenericGenerator(name = "CustomIdGenerator", strategy = "com.shuishu.blog.common.config.id.CustomIdGenerator")
+
+    @TableId(value = "article_id", type = IdType.ASSIGN_ID)
     @Comment(value = "文章id")
     private Long articleId;
 
+    @TableField("article_title")
     @Comment("文章名称")
     private String articleTitle;
 
+    @TableField("article_markdown")
     @Comment("文章Markdown")
+    @Column()
     private String articleMarkdown;
 
+    @TableField("article_html")
     @Comment("文章HTML")
     private String articleHtml;
 
-    @Comment("文章字数（减少查询）")
+    @TableField("article_word_count")
+    @Comment("文章字数")
     private Long articleWordCount;
 
+    @TableField("article_brief_description")
     @Comment("文章简要说明")
     private String articleBriefDescription;
 
+    @TableField("article_browse_count")
     @Comment("文章浏览量")
     private Integer articleBrowseCount;
 
+    @TableField("article_upvote")
     @Comment("文章赞点量")
     private Integer articleUpvote;
 
+    @TableField("article_cover_image")
     @Comment("文章封面图")
-    private String articleCoverImg;
+    private String articleCoverImage;
 
-    @Comment("阅读时长（分钟）")
-    private Integer articleBrowseTime;
+    @TableField("article_browse_time")
+    @Comment("阅读时长")
+    private String articleBrowseTime;
 
+    @TableField("industry_name")
     @Comment("涉及行业或领域，以 | 分割")
     private String industryName;
 
+    @TableField("article_variableWeightValue")
     @Comment("文章动态权重值（定时任务更新权重值）")
     private Integer articleVariableWeightValue;
 
-    @Comment("文章发布 true:发布 false:取消发布")
-    private Boolean articlePublish;
-
-    @Comment("到期删除时间")
-    private Boolean articleDelete;
+    @TableField("article_status")
+    @Comment("状态：0:待编辑 1:未发布 2:已发布 3:已删除")
+    private Integer articleStatus;
 
 }

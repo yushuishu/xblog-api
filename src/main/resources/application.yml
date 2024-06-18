@@ -18,8 +18,22 @@ spring:
   banner:
     location: classpath:banner.txt
   profiles:
-    active: @profiles.active@
+    active: dev
 
+mybatis-plus:
+  # 实体扫描路径
+  type-aliases-package: com.shuishu.blog.common.domain.*.entity.po
+  # xml扫描路径
+  mapper-locations: classpath:/mapper/*/*Mapper.xml
+  configuration:
+    jdbc-type-for-null: null
+    cache-enabled: true
+    # 开启自动驼峰命名规则映射
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    # 关闭 mybatis-plus的 banner
+    banner: false
 
 # knife4j的增强配置
 knife4j:

@@ -1,7 +1,6 @@
 package com.shuishu.blog.common.config.base;
 
 
-import jakarta.persistence.MappedSuperclass;
 
 
 import java.io.Serializable;
@@ -14,6 +13,5 @@ import java.io.Serializable;
  * <p></p>
  * @Description ：视图对象(View Object), 展示层
  */
-@MappedSuperclass
 public class BaseVO<T extends BasePO> implements Serializable {
 }

@@ -7,7 +7,7 @@ import com.shuishu.blog.common.config.base.PageDTO;
 import com.shuishu.blog.common.config.base.PageVO;
 import com.shuishu.blog.common.domain.article.entity.dto.ArticleAddDto;
 import com.shuishu.blog.common.domain.article.entity.dto.ArticleQueryDto;
-import com.shuishu.blog.common.domain.article.entity.dto.ArticlePublishDto;
+import com.shuishu.blog.common.domain.article.entity.dto.ArticleStatusDto;
 import com.shuishu.blog.common.domain.article.entity.dto.ArticleUpdateDto;
 import com.shuishu.blog.common.domain.article.entity.vo.ArticleVo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,8 +43,8 @@ public class ArticleController {
 
     @Operation(summary = "发布/取消", description = "发布/取消文章")
     @PostMapping("publish/un_publish")
-    public ApiResponse<String> publishArticle(ArticlePublishDto articlePublishDto) {
-        articleService.publishArticle(articlePublishDto);
+    public ApiResponse<String> publishArticle(ArticleStatusDto articleStatusDto) {
+        articleService.publishArticle(articleStatusDto);
         return ApiResponse.success();
     }
 

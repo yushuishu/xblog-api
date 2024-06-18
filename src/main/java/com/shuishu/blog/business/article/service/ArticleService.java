@@ -1,12 +1,14 @@
 package com.shuishu.blog.business.article.service;
 
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.shuishu.blog.common.config.base.PageDTO;
 import com.shuishu.blog.common.config.base.PageVO;
 import com.shuishu.blog.common.domain.article.entity.dto.ArticleAddDto;
-import com.shuishu.blog.common.domain.article.entity.dto.ArticlePublishDto;
+import com.shuishu.blog.common.domain.article.entity.dto.ArticleStatusDto;
 import com.shuishu.blog.common.domain.article.entity.dto.ArticleQueryDto;
 import com.shuishu.blog.common.domain.article.entity.dto.ArticleUpdateDto;
+import com.shuishu.blog.common.domain.article.entity.po.Article;
 import com.shuishu.blog.common.domain.article.entity.vo.ArticleVo;
 
 /**
@@ -18,7 +20,7 @@ import com.shuishu.blog.common.domain.article.entity.vo.ArticleVo;
  * @Description ：文章
  * <p></p>
  */
-public interface ArticleService {
+public interface ArticleService extends IService<Article> {
     /**
      * 添加文章
      *
@@ -29,9 +31,9 @@ public interface ArticleService {
     /**
      * 发布文章
      *
-     * @param articlePublishDto -
+     * @param articleStatusDto -
      */
-    void publishArticle(ArticlePublishDto articlePublishDto);
+    void publishArticle(ArticleStatusDto articleStatusDto);
 
 
     /**

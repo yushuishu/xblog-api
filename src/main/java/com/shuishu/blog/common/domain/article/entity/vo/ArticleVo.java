@@ -1,6 +1,7 @@
 package com.shuishu.blog.common.domain.article.entity.vo;
 
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.shuishu.blog.common.config.base.BaseVO;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Comment;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
@@ -55,10 +57,10 @@ public class ArticleVo extends BaseVO<Article> {
     private Integer articleUpvote;
 
     @Schema(description = "文章封面图")
-    private String articleCoverImg;
+    private String articleCoverImage;
 
     @Schema(description = "阅读时长（分钟）")
-    private Integer articleBrowseTime;
+    private String articleBrowseTime;
 
     @Schema(description = "涉及行业或领域，以 | 分割")
     private String industryName;
@@ -66,8 +68,8 @@ public class ArticleVo extends BaseVO<Article> {
     @Schema(description = "文章动态权重值（定时任务更新权重值）")
     private Integer articleVariableWeightValue;
 
-    @Schema(description = "是否发布true:发布 false:未发布")
-    private Boolean publish;
+    @Schema(description = "状态：0:待编辑 1:未发布 2:已发布 3:已删除")
+    private Integer articleStatus;
 
     @Schema(description = "创建时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

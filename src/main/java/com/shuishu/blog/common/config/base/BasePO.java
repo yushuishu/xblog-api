@@ -1,19 +1,16 @@
 package com.shuishu.blog.common.config.base;
 
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Comment;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -30,26 +27,26 @@ import java.util.Date;
 @Getter
 @ToString
 @Schema(description = "持久化对象BasePO")
-@MappedSuperclass
 public class BasePO implements Serializable {
-    @CreatedDate
-    @Schema(description = "创建时间", hidden = true)
+
+    @TableField(value = "create_date", fill = FieldFill.INSERT)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Comment("创建时间")
+    @Schema(description = "创建时间", hidden = true)
     private Date createDate;
 
-    @CreatedBy
-    @Schema(description = "创建人id", hidden = true)
+    @TableField("create_user_id")
     @Comment("创建人id")
+    @Schema(description = "创建人id", hidden = true)
     private Long createUserId;
 
-    @LastModifiedDate
-    @Schema(description = "修改时间", hidden = true)
+    @TableField(value = "update_date",fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Comment("修改时间")
+    @Comment("更新时间")
+    @Schema(description = "更新时间", hidden = true)
     private Date updateDate;
 
-    @LastModifiedBy
+    @TableField("update_user_id")
     @Schema(description = "修改人id", hidden = true)
     @Comment("修改人id")
     private Long updateUserId;

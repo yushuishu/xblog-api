@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shuishu.blog.common.domain.article.mapper.ArticleMapper">
+    <resultMap id="BaseResultMap" type="com.shuishu.blog.common.domain.article.entity.po.Article">
+        <id property="articleId" column="article_id" jdbcType="BIGINT"/>
+        <result property="articleTitle" column="article_title" jdbcType="VARCHAR"/>
+        <result property="articleMarkdown" column="article_markdown" jdbcType="VARCHAR"/>
+        <result property="articleHtml" column="article_html" jdbcType="VARCHAR"/>
+        <result property="articleWordCount" column="article_word_count" jdbcType="BIGINT"/>
+        <result property="articleBriefDescription" column="article_brief_description" jdbcType="VARCHAR"/>
+        <result property="articleBrowseCount" column="article_browse_count" jdbcType="INTEGER"/>
+        <result property="articleUpvote" column="article_upvote" jdbcType="INTEGER"/>
+        <result property="articleCoverImage" column="article_cover_image" jdbcType="VARCHAR"/>
+        <result property="articleBrowseTime" column="article_browse_time" jdbcType="VARCHAR"/>
+        <result property="industryName" column="industry_name" jdbcType="VARCHAR"/>
+        <result property="articleVariableWeightValue" column="article_variableWeightValue" jdbcType="INTEGER"/>
+        <result property="articleStatus" column="article_status" jdbcType="INTEGER"/>
+        <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+        <result property="createUserId" column="create_user_id" jdbcType="BIGINT"/>
+        <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+        <result property="updateUserId" column="update_user_id" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="BaseColumnList">
+        article_id,
+        article_title,
+        article_markdown,
+        article_html,
+        article_word_count,
+        article_brief_description,
+        article_browse_count,
+        article_upvote,
+        article_cover_image,
+        article_browse_time,
+        industry_name,
+        article_variableWeightValue,
+        article_status,
+        create_date,
+        create_user_id,
+        update_date,
+        update_user_id
+    </sql>
+
+    <resultMap id="ResultMapForArticleVo" type="com.shuishu.blog.common.domain.article.entity.vo.ArticleVo">
+        <id property="articleId" column="article_id" jdbcType="BIGINT"/>
+        <result property="articleTitle" column="article_title" jdbcType="VARCHAR"/>
+        <result property="articleMarkdown" column="article_markdown" jdbcType="VARCHAR"/>
+        <result property="articleHtml" column="article_html" jdbcType="VARCHAR"/>
+        <result property="articleWordCount" column="article_word_count" jdbcType="BIGINT"/>
+        <result property="articleBriefDescription" column="article_brief_description" jdbcType="VARCHAR"/>
+        <result property="articleBrowseCount" column="article_browse_count" jdbcType="INTEGER"/>
+        <result property="articleUpvote" column="article_upvote" jdbcType="INTEGER"/>
+        <result property="articleCoverImage" column="article_cover_image" jdbcType="VARCHAR"/>
+        <result property="articleBrowseTime" column="article_browse_time" jdbcType="VARCHAR"/>
+        <result property="industryName" column="industry_name" jdbcType="VARCHAR"/>
+        <result property="articleVariableWeightValue" column="article_variableWeightValue" jdbcType="INTEGER"/>
+        <result property="articleStatus" column="article_status" jdbcType="INTEGER"/>
+        <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+        <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+        <result property="createNickname" column="createNickname" jdbcType="VARCHAR"/>
+        <result property="updateNickname" column="updateNickname" jdbcType="VARCHAR"/>
+        <collection property="labelNameList" ofType="java.lang.String" javaType="java.util.List">
+            <result property="labelName" column="label_name"/>
+        </collection>
+    </resultMap>
+
+
+    <update id="updateStatusByArticleId">
+        UPDATE ss_article
+        SET article_status = #{articleStatus}
+        WHERE article_id = #{articleId};
+    </update>
+
+    <select id="findArticleDetails" resultMap="ResultMapForArticleVo">
+        SELECT ss_article.article_id,
+               ss_article.article_title,
+               ss_article.article_markdown,
+               ss_article.article_html,
+               ss_article.article_word_count,
+               ss_article.article_brief_description,
+               ss_article.article_browse_count,
+               ss_article.article_upvote,
+               ss_article.article_cover_image,
+               ss_article.article_browse_time,
+               ss_article.industry_name,
+               ss_article.article_variableWeightValue,
+               ss_article.article_status,
+               ss_article.create_date,
+               ss_article.update_date,
+               u1.nickname as createNickname,
+               u2.nickname as updateNickname,
+               ss_label.label_name
+        FROM ss_article
+                 left join ss_article_label on ss_article.article_id = ss_article_label.article_id
+                 left join ss_label on ss_article_label.label_id = ss_label.label_id
+                 left join ss_user u1 on ss_article.create_user_id = u1.user_id
+                 left join ss_user u2 on ss_article.update_user_id = u2.user_id
+        WHERE article_id = #{articleId}
+    </select>
+</mapper>

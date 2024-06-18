@@ -19,11 +19,11 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class ArticlePublishDto {
+public class ArticleStatusDto {
     @Schema(description = "文章id")
     private Long articleId;
 
-    @Schema(description = "true:发布 false:取消发布")
-    private Boolean articlePublish;
+    @Schema(description = "状态：0:待编辑 1:未发布 2:已发布 3:已删除")
+    private Integer articleStatus;
 
 }
