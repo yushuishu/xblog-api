@@ -10,10 +10,10 @@
     </parent>
 
     <groupId>com.shuishu.blog</groupId>
-    <artifactId>shuishu-blog-backend</artifactId>
+    <artifactId>xblog-api</artifactId>
     <version>1.0</version>
-    <name>shuishu-blog-backend</name>
-    <description>shuishu-blog-backend</description>
+    <name>xblog-api</name>
+    <description>xblog-api</description>
 
     <properties>
         <java.version>17</java.version>
