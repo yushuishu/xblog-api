@@ -26,10 +26,10 @@ import org.springframework.validation.beanvalidation.MethodValidationPostProcess
 @Slf4j
 @EnableAsync
 @SpringBootApplication
-public class ShuishuBlogBackendApplication {
+public class XblogApiApplication {
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext applicationContext = SpringApplication.run(ShuishuBlogBackendApplication.class, args);
+        ConfigurableApplicationContext applicationContext = SpringApplication.run(XblogApiApplication.class, args);
 
         // 当前项目环境
         ConfigurableEnvironment environment = applicationContext.getEnvironment();
