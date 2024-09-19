@@ -1,4 +1,155 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.shuishu.blog.common.domain.user.mapper.PermissionMapper">
+    <resultMap id="BaseResultMapOfPo" type="com.shuishu.blog.common.domain.user.entity.po.Permission">
+        <id property="permissionId" column="permission_id" jdbcType="INTEGER"/>
+        <result property="permissionName" column="permission_name" jdbcType="VARCHAR"/>
+        <result property="permissionCode" column="permission_code" jdbcType="VARCHAR"/>
+        <result property="permissionUrl" column="permission_url" jdbcType="VARCHAR"/>
+        <result property="permissionDescription" column="permission_description" jdbcType="VARCHAR"/>
+        <result property="isNeedAuthorization" column="is_need_authorization" jdbcType="BOOLEAN"/>
+        <result property="permissionOperatePower" column="permission_operate_power" jdbcType="BOOLEAN"/>
+        <result property="permissionParentId" column="permission_parent_id" jdbcType="INTEGER"/>
+        <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+        <result property="createUserId" column="create_user_id" jdbcType="INTEGER"/>
+        <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+        <result property="updateUserId" column="update_user_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMapOfPermissionCacheDto" type="com.shuishu.blog.common.domain.user.entity.dto.PermissionCacheDto">
+        <result property="permissionName" column="permission_name" jdbcType="VARCHAR"/>
+        <result property="permissionCode" column="permission_code" jdbcType="VARCHAR"/>
+        <result property="permissionUrl" column="permission_url" jdbcType="VARCHAR"/>
+        <result property="isNeedAuthorization" column="is_need_authorization" jdbcType="BOOLEAN"/>
+        <collection property="roleCacheDtoList" ofType="com.shuishu.blog.common.domain.user.entity.dto.RoleCacheDto">
+            <result property="roleName" column="role_name" javaType="java.lang.String"></result>
+            <result property="roleCode" column="role_code" javaType="java.lang.String"></result>
+            <result property="roleDescription" column="role_description" javaType="java.lang.String"></result>
+        </collection>
+    </resultMap>
+
+    <!-- ResultMap for PermissionVo -->
+    <resultMap id="BaseResultMapOfPermissionVo" type="com.shuishu.blog.common.domain.user.entity.vo.PermissionVo">
+        <id property="permissionId" column="permission_id"/>
+        <result property="permissionName" column="permission_name"/>
+        <result property="permissionCode" column="permission_code"/>
+        <result property="permissionUrl" column="permission_url" jdbcType="VARCHAR"/>
+        <result property="permissionDescription" column="permission_description"/>
+        <result property="isNeedAuthorization" column="is_need_authorization"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="permissionParentId" column="permission_parent_id" jdbcType="INTEGER"/>
+        <result property="parentPermissionDescription" column="parent_permission_description"/>
+        <result property="createNickname" column="create_nickname"/>
+        <result property="updateNickname" column="update_nickname"/>
+    </resultMap>
+
+    <select id="findCachePermissionList" resultMap="BaseResultMapOfPermissionCacheDto">
+        select ss_permission.permission_name,
+               ss_permission.permission_code,
+               ss_permission.permission_url,
+               ss_permission.is_need_authorization,
+               ss_role.role_name,
+               ss_role.role_code,
+               ss_role.role_description
+        from ss_permission
+                 inner join ss_role_permission on ss_permission.permission_id = role_permission.permission_id
+                 inner join ss_role on ss_role_permission.role_id = ss_role.role_id
+    </select>
+
+    <select id="findByNameOrCodeOrUrlAndNeId" resultMap="BaseResultMapOfPo">
+        select * from ss_permission
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="OR">
+                <if test="permissionName != null and permissionName != ''">
+                    permission_name = #{permissionName}
+                </if>
+                <if test="permissionCode != null and permissionCode != ''">
+                    OR permission_code = #{permissionCode}
+                </if>
+            </trim>
+            <if test="permissionId != null">
+                AND permission_id != #{permissionId}
+            </if>
+        </where>
+        OFFSET 0 LIMIT 1
+    </select>
+
+    <select id="findPermissionDetails" resultMap="BaseResultMapOfPermissionVo" parameterType="java.lang.Long">
+        SELECT
+        p.permission_id,
+        p.permission_name,
+        p.permission_code,
+        p.permission_url,
+        p.permission_description,
+        p.is_need_authorization,
+        p.create_date,
+        p.update_date,
+        p.permission_parent_id,
+        pp.permission_description AS parent_permission_description,
+        cu.nickname AS create_nickname,
+        uu.nickname AS update_nickname
+        FROM ss_permission p
+        LEFT JOIN ss_permission pp ON p.permission_parent_id = pp.permission_id
+        LEFT JOIN ss_user cu ON p.create_user_id = cu.user_id
+        LEFT JOIN ss_user uu ON p.update_user_id = uu.user_id
+        <where>
+            <if test="permissionId != null">
+                p.permission_id = #{permissionId}
+            </if>
+        </where>
+    </select>
+
+    <select id="findPermissionPage" resultMap="BaseResultMapOfPermissionVo">
+        SELECT
+        p.permission_id,
+        p.permission_name,
+        p.permission_code,
+        p.permission_description,
+        p.is_need_authorization,
+        p.create_date,
+        p.update_date,
+        pp.permission_description AS parent_permission_description,
+        cu.nickname AS create_nickname,
+        uu.nickname AS update_nickname
+        FROM ss_permission p
+        LEFT JOIN ss_permission pp ON p.permission_parent_id = pp.permission_id
+        LEFT JOIN ss_user cu ON p.create_user_id = cu.user_id
+        LEFT JOIN ss_user uu ON p.update_user_id = uu.user_id
+        <where>
+            <if test="permissionQueryDto.permissionCode != null and permissionQueryDto.permissionCode != ''">
+                AND p.permission_code LIKE CONCAT('%', #{permissionQueryDto.permissionCode}, '%')
+            </if>
+            <if test="permissionQueryDto.permissionUrl != null and permissionQueryDto.permissionUrl != ''">
+                AND p.permission_url LIKE CONCAT('%', #{permissionQueryDto.permissionUrl}, '%')
+            </if>
+            <if test="permissionQueryDto.permissionDescription != null and permissionQueryDto.permissionDescription != ''">
+                AND p.permission_description LIKE CONCAT('%', #{permissionQueryDto.permissionDescription}, '%')
+            </if>
+            <if test="permissionQueryDto.isNeedAuthorization != null">
+                AND p.is_need_authorization = #{permissionQueryDto.isNeedAuthorization}
+            </if>
+        </where>
+        ORDER BY p.update_date DESC
+        OFFSET #{offset} LIMIT #{pageSize}
+    </select>
+
+    <select id="findPermissionPageTotal" resultType="long">
+        SELECT COUNT(p.permission_id)
+        FROM ss_permission p
+        <where>
+            <if test="permissionQueryDto.permissionCode != null and permissionQueryDto.permissionCode != ''">
+                AND p.permission_code LIKE CONCAT('%', #{permissionQueryDto.permissionCode}, '%')
+            </if>
+            <if test="permissionQueryDto.permissionUrl != null and permissionQueryDto.permissionUrl != ''">
+                AND p.permission_url LIKE CONCAT('%', #{permissionQueryDto.permissionUrl}, '%')
+            </if>
+            <if test="permissionQueryDto.permissionDescription != null and permissionQueryDto.permissionDescription != ''">
+                AND p.permission_description LIKE CONCAT('%', #{permissionQueryDto.permissionDescription}, '%')
+            </if>
+            <if test="permissionQueryDto.isNeedAuthorization != null">
+                AND p.is_need_authorization = #{permissionQueryDto.isNeedAuthorization}
+            </if>
+        </where>
+    </select>
 </mapper>

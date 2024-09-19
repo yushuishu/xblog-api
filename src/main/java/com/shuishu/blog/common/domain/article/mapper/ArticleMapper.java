@@ -1,12 +1,5 @@
 package com.shuishu.blog.common.domain.article.mapper;
 
-
-/**
- * @author wuZhenFeng
- * @date 2024/4/11 14:08
- */
-
-
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.shuishu.blog.common.domain.article.entity.po.Article;
 import com.shuishu.blog.common.domain.article.entity.vo.ArticleVo;

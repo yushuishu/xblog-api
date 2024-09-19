@@ -2,7 +2,6 @@ package com.shuishu.blog.common.config.base;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.querydsl.core.QueryResults;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
@@ -145,19 +144,6 @@ public class PageVO<T> implements Serializable {
         }
         log.info(">>>>>>>>>>>>>>>>>>" + this.totalPages);
         this.totalElements = totalElements;
-    }
-
-    //转换dsl的查询结果
-    public PageVO<T> tranferDsl(PageVO page, QueryResults<T> results) {
-        page.setOffset(results.getOffset());
-        page.setDataList(results.getResults());
-        page.setTotalElements(results.getTotal());
-        //总页数
-        long pageSize = page.getPageSize();
-        long totalElements = page.getTotalElements();
-        long totalPage = (totalElements % pageSize == 0) ? (totalElements / pageSize) : (totalElements / pageSize + 1);
-        page.setTotalPages(totalPage);
-        return page;
     }
 
     @Override

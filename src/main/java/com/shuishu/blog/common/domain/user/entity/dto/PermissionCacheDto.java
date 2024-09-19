@@ -20,6 +20,8 @@ import java.util.List;
 @Getter
 @ToString
 public class PermissionCacheDto {
+    private String permissionName;
+
     private String permissionCode;
 
     private String permissionUrl;

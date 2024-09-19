@@ -1,15 +1,13 @@
 package com.shuishu.blog.common.domain.user.mapper;
 
-
-/**
- * @author wuZhenFeng
- * @date 2024/4/11 14:13
- */
-
-
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.shuishu.blog.common.domain.user.entity.dto.RoleQueryDto;
 import com.shuishu.blog.common.domain.user.entity.po.Role;
+import com.shuishu.blog.common.domain.user.entity.vo.RoleVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @Author ：谁书-ss
@@ -22,4 +20,12 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface RoleMapper extends BaseMapper<Role> {
+    RoleVo findRoleDetails(@Param("roleId") Long roleId);
+
+    List<RoleVo> findRolePage(@Param("roleQueryDto") RoleQueryDto roleQueryDto, @Param("offset") long offset, @Param("pageSize") long pageSize);
+
+    long findRolePageTotal(@Param("roleQueryDto") RoleQueryDto roleQueryDto, @Param("offset") long offset, @Param("pageSize") long pageSize);
+
+    RoleVo findDefaultRole();
+
 }

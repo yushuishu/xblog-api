@@ -18,10 +18,11 @@ import lombok.ToString;
 @Getter
 @ToString
 public class RoleCacheDto {
-    private String permissionCode;
 
-    private String permissionUrl;
+    private String roleName;
 
-    private Boolean isNeedAuthorization;
+    private String roleCode;
+
+    private String roleDescription;
 
 }

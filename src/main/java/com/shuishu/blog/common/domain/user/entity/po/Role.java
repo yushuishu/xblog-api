@@ -52,7 +52,7 @@ public class Role extends BasePO {
     private String roleDescription;
 
     @TableField("role_operate_power")
-    @Comment("操作编辑删除权限：true可以；false不可以")
+    @Comment("操作权限：true可以；false不可以")
     private Boolean roleOperatePower;
 
     @TableField("default_role")

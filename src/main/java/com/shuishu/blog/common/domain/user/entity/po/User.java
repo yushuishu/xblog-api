@@ -79,7 +79,7 @@ public class User extends BasePO {
     private Date userLastLoginDate;
 
     @TableField("user_max_login_client_number")
-    @Comment("同时登录客户端的人数:最小1最大50（默认1）")
+    @Comment("同时登录客户端的人数:最小1最大5（默认1）")
     @Column(nullable = false)
     private Integer userMaxLoginClientNumber;
 

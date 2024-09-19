@@ -1,4 +1,105 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.shuishu.blog.common.domain.user.mapper.RoleMapper">
+
+    <resultMap id="BaseResultMap" type="com.shuishu.blog.common.domain.user.entity.po.Role">
+        <id property="roleId" column="role_id" jdbcType="INTEGER"/>
+        <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
+        <result property="roleCode" column="role_code" jdbcType="VARCHAR"/>
+        <result property="roleDescription" column="role_description" jdbcType="VARCHAR"/>
+        <result property="roleOperatePower" column="role_operate_power" jdbcType="BOOLEAN"/>
+        <result property="defaultRole" column="default_role" jdbcType="BOOLEAN"/>
+        <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+        <result property="createUserId" column="create_user_id" jdbcType="INTEGER"/>
+        <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+        <result property="updateUserId" column="update_user_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMapOfRoleVo" type="com.shuishu.blog.common.domain.user.entity.vo.RoleVo">
+        <id property="roleId" column="role_id"/>
+        <result property="roleName" column="role_name"/>
+        <result property="roleCode" column="role_code"/>
+        <result property="roleDescription" column="role_description"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="createNickname" column="create_nickname"/>
+        <result property="updateNickname" column="update_nickname"/>
+    </resultMap>
+
+    <select id="findRoleDetails" resultMap="BaseResultMapOfRoleVo" parameterType="java.lang.Long">
+        SELECT
+            r.role_id,
+            r.role_name,
+            r.role_code,
+            r.role_description,
+            r.create_date,
+            r.update_date,
+            cu.nickname AS create_nickname,
+            uu.nickname AS update_nickname
+        FROM ss_role r
+                 LEFT JOIN ss_user cu ON r.create_user_id = cu.user_id
+                 LEFT JOIN ss_user uu ON r.update_user_id = uu.user_id
+        WHERE r.role_id = #{roleId}
+    </select>
+
+    <select id="findRolePage" resultMap="BaseResultMapOfRoleVo">
+        SELECT
+        r.role_id,
+        r.role_name,
+        r.role_code,
+        r.role_description,
+        r.create_date,
+        r.update_date,
+        cu.nickname AS create_nickname,
+        uu.nickname AS update_nickname
+        FROM ss_role r
+        LEFT JOIN ss_user cu ON r.create_user_id = cu.user_id
+        LEFT JOIN ss_user uu ON r.update_user_id = uu.user_id
+        <where>
+            <if test="roleQueryDto.roleOperatePower != null">
+                AND r.role_operate_power = #{roleOperatePower}
+            </if>
+            <if test="roleQueryDto.keyword != null and roleQueryDto.keyword != ''">
+                AND (r.role_name LIKE CONCAT('%', #{roleQueryDto.keyword}, '%')
+                OR r.role_code LIKE CONCAT('%', #{roleQueryDto.keyword}, '%')
+                OR r.role_description LIKE CONCAT('%', #{roleQueryDto.keyword}, '%'))
+            </if>
+        </where>
+        ORDER BY r.update_date DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="findRolePageTotal" resultType="long">
+        SELECT COUNT(r.role_id)
+        FROM ss_role r
+        <where>
+            <if test="roleQueryDto.roleOperatePower != null">
+                AND r.role_operate_power = #{roleQueryDto.roleOperatePower}
+            </if>
+            <if test="roleQueryDto.keyword != null and roleQueryDto.keyword != ''">
+                AND (r.role_name LIKE CONCAT('%', #{roleQueryDto.keyword}, '%')
+                OR r.role_code LIKE CONCAT('%', #{roleQueryDto.keyword}, '%')
+                OR r.role_description LIKE CONCAT('%', #{roleQueryDto.keyword}, '%'))
+            </if>
+        </where>
+    </select>
+
+    <select id="findDefaultRole" resultMap="BaseResultMapOfRoleVo">
+        SELECT
+            r.role_id,
+            r.role_name,
+            r.role_code,
+            r.role_description,
+            r.create_date,
+            r.update_date,
+            cu.nickname AS create_nickname,
+            uu.nickname AS update_nickname
+        FROM ss_role r
+                 LEFT JOIN ss_user cu ON r.create_user_id = cu.user_id
+                 LEFT JOIN ss_user uu ON r.update_user_id = uu.user_id
+        WHERE r.default_role = TRUE
+        OFFSET 0 LIMIT 1
+    </select>
+
+
 </mapper>

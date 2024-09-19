@@ -38,7 +38,7 @@ public class Permission extends BasePO {
     private Long permissionId;
 
     @TableField("permission_name")
-    @Comment("权限描述")
+    @Comment("权限名称")
     @Column(nullable = false)
     private String permissionName;
 
@@ -63,7 +63,7 @@ public class Permission extends BasePO {
     private Boolean isNeedAuthorization;
 
     @TableField("permission_operate_power")
-    @Comment("操作编辑删除权限：true可以；false不可以")
+    @Comment("操作权限：true允许；false不允许")
     private Boolean permissionOperatePower;
 
     @TableField("permission_parent_id")

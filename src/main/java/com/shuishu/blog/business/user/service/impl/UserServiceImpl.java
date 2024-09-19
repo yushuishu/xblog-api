@@ -8,9 +8,6 @@ import com.shuishu.blog.common.config.exception.BusinessException;
 import com.shuishu.blog.common.config.security.SpringSecurityUtils;
 import com.shuishu.blog.common.domain.industry.entity.po.Industry;
 import com.shuishu.blog.common.domain.industry.repository.IndustryRepository;
-import com.shuishu.blog.common.domain.user.dsl.PermissionDsl;
-import com.shuishu.blog.common.domain.user.dsl.RoleDsl;
-import com.shuishu.blog.common.domain.user.dsl.UserAuthDsl;
 import com.shuishu.blog.common.domain.user.dsl.UserDsl;
 import com.shuishu.blog.common.domain.user.entity.dto.*;
 import com.shuishu.blog.common.domain.user.entity.po.Role;
@@ -18,6 +15,7 @@ import com.shuishu.blog.common.domain.user.entity.po.User;
 import com.shuishu.blog.common.domain.user.entity.po.UserAuth;
 import com.shuishu.blog.common.domain.user.entity.po.UserRole;
 import com.shuishu.blog.common.domain.user.entity.vo.*;
+import com.shuishu.blog.common.domain.user.mapper.*;
 import com.shuishu.blog.common.domain.user.repository.RoleRepository;
 import com.shuishu.blog.common.domain.user.repository.UserAuthRepository;
 import com.shuishu.blog.common.domain.user.repository.UserRepository;
@@ -60,12 +58,16 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserDsl userDsl;
     private final UserAuthRepository userAuthRepository;
-    private final UserAuthDsl userAuthDsl;
     private final UserRoleRepository userRoleRepository;
     private final RoleRepository roleRepository;
-    private final RoleDsl roleDsl;
-    private final PermissionDsl permissionDsl;
     private final IndustryRepository industryRepository;
+
+    private final UserMapper userMapper;
+    private final UserAuthMapper userAuthMapper;
+    private final UserRoleMapper userRoleMapper;
+    private final RoleMapper roleMapper;
+    private final PermissionMapper permissionMapper;
+
     private final PasswordEncoder passwordEncoder;
     private final UserIdUtils userIdUtils;
     private final RedisUtils redisUtils;
