@@ -1,12 +1,15 @@
 package com.shuishu.blog.business.user.service.impl;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.google.common.collect.Lists;
 import com.shuishu.blog.common.config.base.PageDTO;
 import com.shuishu.blog.common.config.base.PageVO;
 import com.shuishu.blog.common.config.exception.BusinessException;
 import com.shuishu.blog.common.config.security.SpringSecurityUtils;
 import com.shuishu.blog.common.domain.industry.entity.po.Industry;
+import com.shuishu.blog.common.domain.industry.mapper.IndustryMapper;
 import com.shuishu.blog.common.domain.industry.repository.IndustryRepository;
 import com.shuishu.blog.common.domain.user.dsl.UserDsl;
 import com.shuishu.blog.common.domain.user.entity.dto.*;
@@ -16,6 +19,7 @@ import com.shuishu.blog.common.domain.user.entity.po.UserAuth;
 import com.shuishu.blog.common.domain.user.entity.po.UserRole;
 import com.shuishu.blog.common.domain.user.entity.vo.*;
 import com.shuishu.blog.common.domain.user.mapper.*;
+import com.shuishu.blog.common.domain.user.mapper.service.UserMapperService;
 import com.shuishu.blog.common.domain.user.repository.RoleRepository;
 import com.shuishu.blog.common.domain.user.repository.UserAuthRepository;
 import com.shuishu.blog.common.domain.user.repository.UserRepository;
@@ -62,11 +66,13 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final IndustryRepository industryRepository;
 
+    private final UserMapperService userMapperService;
     private final UserMapper userMapper;
     private final UserAuthMapper userAuthMapper;
     private final UserRoleMapper userRoleMapper;
     private final RoleMapper roleMapper;
     private final PermissionMapper permissionMapper;
+    private final IndustryMapper industryMapper;
 
     private final PasswordEncoder passwordEncoder;
     private final UserIdUtils userIdUtils;
@@ -78,7 +84,7 @@ public class UserServiceImpl implements UserService {
         verifyUserInfo(userAddDTO.getNickname());
         // 行业
         if (userAddDTO.getIndustryId() != null) {
-            Industry industry = industryRepository.findIndustryByIndustryId(userAddDTO.getIndustryId());
+            Industry industry = industryMapper.selectById(userAddDTO.getIndustryId());
             if (industry == null) {
                 throw new BusinessException("所选行业不正确");
             }
@@ -101,7 +107,9 @@ public class UserServiceImpl implements UserService {
                 throw new BusinessException("邮箱验证码错误");
             }
             // 验证邮箱是否已经注册
-            UserAuth tempUserAuth = userAuthRepository.findByUserAuthIdentifierAndAndUserAuthType(userAddDTO.getUserAuthIdentifier(), UserEnum.AuthType.EMAIL.getType());
+            LambdaQueryWrapper<UserAuth> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(UserAuth::getUserAuthType, UserEnum.AuthType.EMAIL.getType()).eq(UserAuth::getUserAuthIdentifier, userAddDTO.getUserAuthIdentifier());
+            UserAuth tempUserAuth = userAuthMapper.selectOne(queryWrapper);
             if (tempUserAuth != null) {
                 throw new BusinessException("该邮箱号已注册");
             }
@@ -115,10 +123,13 @@ public class UserServiceImpl implements UserService {
             user.setIndustryId(userAddDTO.getIndustryId());
             user.setUserIsAccountNonLocked(true);
             user.setUserIsAccountNonLocked(true);
-            User saveUser = userRepository.save(user);
+            int insertRow = userMapper.insert(user);
+            if (insertRow <= 0) {
+                throw new BusinessException("保存用户信息失败");
+            }
             // 邮箱账号
             UserAuth userAuth = new UserAuth();
-            userAuth.setUserId(saveUser.getUserId());
+            userAuth.setUserId(user.getUserId());
             userAuth.setUserAuthType(UserEnum.AuthType.EMAIL.getType());
             userAuth.setUserAuthIdentifier(userAddDTO.getUserAuthIdentifier());
             userAuth.setUserAuthCredential(newPasswordEncode);
@@ -127,27 +138,28 @@ public class UserServiceImpl implements UserService {
             // 系统账号
             String systemUsername = userIdUtils.generateSystemUsername();
             if (systemUsername == null) {
-                throw new BusinessException("注册失败，系统账号生成异常");
+                log.error("注册失败，系统账号生成异常");
+                throw new BusinessException("注册失败，请再次尝试注册，或联系管理员");
             }
             UserAuth systemUserAuth = new UserAuth();
-            systemUserAuth.setUserId(saveUser.getUserId());
+            systemUserAuth.setUserId(user.getUserId());
             systemUserAuth.setUserAuthType(UserEnum.AuthType.LOCAL.getType());
             systemUserAuth.setUserAuthIdentifier(systemUsername);
             systemUserAuth.setUserAuthCredential(newPasswordEncode);
             systemUserAuth.setUserAuthNickname(userAddDTO.getNickname());
             systemUserAuth.setUserAuthPhoto(photoBase64);
             // 保存 邮箱账号和系统账号
-            userAuthRepository.saveAll(Lists.newArrayList(userAuth, systemUserAuth));
+            userAuthMapper.insertBatch(Lists.newArrayList(userAuth, systemUserAuth));
             // 角色（获取默认角色）
-            Role defaultRole = roleRepository.findRoleByDefaultRole();
+            RoleVo defaultRole = roleMapper.findDefaultRole();
             if (defaultRole == null) {
                 log.info("系统默认角色为空");
                 throw new BusinessException("注册失败，请联系管理员");
             }
             UserRole userRole = new UserRole();
-            userRole.setUserId(saveUser.getUserId());
+            userRole.setUserId(user.getUserId());
             userRole.setRoleId(defaultRole.getRoleId());
-            userRoleRepository.save(userRole);
+            userRoleMapper.insert(userRole);
         }else if (UserEnum.AuthType.PHONE.getType().equals(userAddDTO.getUserAuthType())) {
             throw new BusinessException("手机号注册功能，正在开发中");
         }
@@ -156,11 +168,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(UserUpdateDto userUpdateDto) {
         verifyUserInfo(userUpdateDto.getNickname());
-        User user = userRepository.findByUserId(userUpdateDto.getUserId());
+        User user = userMapper.selectById(userUpdateDto.getUserId());
         Objects.requireNonNull(user, "用户不存在");
         // 行业
         if (userUpdateDto.getIndustryId() != null) {
-            Industry industry = industryRepository.findIndustryByIndustryId(userUpdateDto.getIndustryId());
+            Industry industry = industryMapper.selectById(userUpdateDto.getIndustryId());
             if (industry == null) {
                 throw new BusinessException("所选行业不正确");
             }
@@ -183,7 +195,7 @@ public class UserServiceImpl implements UserService {
         user.setIndustryId(userUpdateDto.getIndustryId());
         user.setUpdateDate(new Date());
         user.setUpdateUserId(SpringSecurityUtils.getUserInfoVo().getUserId());
-        userRepository.saveAndFlush(user);
+        userMapper.updateById(user);
 
     }
 
@@ -196,13 +208,15 @@ public class UserServiceImpl implements UserService {
         String newPasswordEncode = passwordEncoder.encode(userUpdatePwdDto.getPassword());
         Date nowDate = new Date();
         // 关联的账号所有密码都进行更改
-        List<UserAuth> userAuthList = userAuthRepository.findByUserId(userInfoVo.getUserId());
+        LambdaQueryWrapper<UserAuth> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserAuth::getUserId, userInfoVo.getUserId());
+        List<UserAuth> userAuthList = userAuthMapper.selectList(queryWrapper);
         userAuthList.forEach(t -> {
             t.setUserAuthCredential(newPasswordEncode);
             t.setUpdateUserId(userInfoVo.getUserId());
             t.setUpdateDate(nowDate);
         });
-        userAuthRepository.saveAllAndFlush(userAuthList);
+        userAuthMapper.updateBatch(userAuthList);
     }
 
     @Override
@@ -230,7 +244,9 @@ public class UserServiceImpl implements UserService {
         String newPassword = passwordEncoder.encode(userForgetUpdatePwdDto.getPassword());
         Date nowDate = new Date();
         // 关联的账号所有密码都进行更改
-        List<UserAuth> userAuthList = userAuthRepository.findByUserId(userAuth.getUserId());
+        LambdaQueryWrapper<UserAuth> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserAuth::getUserId, userAuth.getUserId());
+        List<UserAuth> userAuthList = userAuthMapper.selectList(queryWrapper);
         userAuthList.forEach(t -> {
             t.setUpdateDate(nowDate);
             t.setUserAuthCredential(newPassword);

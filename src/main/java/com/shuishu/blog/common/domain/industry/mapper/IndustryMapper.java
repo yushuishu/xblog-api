@@ -1,13 +1,7 @@
 package com.shuishu.blog.common.domain.industry.mapper;
 
 
-/**
- * @author wuZhenFeng
- * @date 2024/4/11 14:10
- */
-
-
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.shuishu.blog.common.config.mybatis.mapper.RootMapper;
 import com.shuishu.blog.common.domain.industry.entity.po.Industry;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -21,5 +15,5 @@ import org.apache.ibatis.annotations.Mapper;
  * <p></p>
  */
 @Mapper
-public interface IndustryMapper extends BaseMapper<Industry> {
+public interface IndustryMapper extends RootMapper<Industry> {
 }

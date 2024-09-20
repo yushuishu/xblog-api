@@ -19,4 +19,7 @@
         <result property="updateUserId" column="update_user_id" jdbcType="INTEGER"/>
     </resultMap>
 
+    <select id="findByIdAndNamePage" resultMap="BaseResultMap">
+
+    </select>
 </mapper>

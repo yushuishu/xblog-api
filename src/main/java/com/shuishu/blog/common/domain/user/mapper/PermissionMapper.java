@@ -1,20 +1,11 @@
 package com.shuishu.blog.common.domain.user.mapper;
 
 
-/**
- * @author wuZhenFeng
- * @date 2024/4/11 14:13
- */
-
-
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.shuishu.blog.common.config.base.PageVO;
+import com.shuishu.blog.common.config.mybatis.mapper.RootMapper;
 import com.shuishu.blog.common.domain.user.entity.dto.PermissionCacheDto;
 import com.shuishu.blog.common.domain.user.entity.dto.PermissionQueryDto;
 import com.shuishu.blog.common.domain.user.entity.po.Permission;
 import com.shuishu.blog.common.domain.user.entity.vo.PermissionVo;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -30,7 +21,7 @@ import java.util.List;
  * <p></p>
  */
 @Mapper
-public interface PermissionMapper extends BaseMapper<Permission> {
+public interface PermissionMapper extends RootMapper<Permission> {
     List<PermissionCacheDto> findCachePermissionList();
 
 
