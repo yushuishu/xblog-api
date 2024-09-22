@@ -1,7 +1,7 @@
 package com.shuishu.blog.common.domain.user.mapper;
 
 
-import com.shuishu.blog.common.config.mybatis.mapper.RootMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.shuishu.blog.common.domain.user.entity.po.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -15,6 +15,6 @@ import org.apache.ibatis.annotations.Mapper;
  * <p></p>
  */
 @Mapper
-public interface UserMapper extends RootMapper<User> {
+public interface UserMapper extends BaseMapper<User> {
     User findByIdAndNamePage(Long id, String name);
 }

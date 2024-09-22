@@ -1,7 +1,7 @@
 package com.shuishu.blog.common.domain.industry.mapper;
 
 
-import com.shuishu.blog.common.config.mybatis.mapper.RootMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.shuishu.blog.common.domain.industry.entity.po.Industry;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -15,5 +15,5 @@ import org.apache.ibatis.annotations.Mapper;
  * <p></p>
  */
 @Mapper
-public interface IndustryMapper extends RootMapper<Industry> {
+public interface IndustryMapper extends BaseMapper<Industry> {
 }

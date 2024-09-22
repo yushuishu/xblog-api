@@ -1,8 +1,9 @@
 package com.shuishu.blog.common.domain.user.mapper.service;
 
 
-import com.shuishu.blog.common.config.mybatis.mapper.BaseMapperService;
+import com.shuishu.blog.common.config.mybatis.BaseMapperService;
 import com.shuishu.blog.common.domain.user.entity.po.User;
+import com.shuishu.blog.common.domain.user.mapper.UserMapper;
 
 /**
  * @author ：谁书-ss
@@ -19,6 +20,6 @@ import com.shuishu.blog.common.domain.user.entity.po.User;
  * @description ：
  * <p></p>
  */
-public interface UserMapperService extends BaseMapperService<User> {
+public interface UserMapperService extends BaseMapperService<UserMapper, User> {
 
 }

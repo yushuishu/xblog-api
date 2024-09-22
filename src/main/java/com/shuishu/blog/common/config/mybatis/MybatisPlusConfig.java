@@ -37,9 +37,4 @@ public class MybatisPlusConfig {
         return interceptor;
     }
 
-    @Bean
-    public CustomizedSqlInjector customizedSqlInjector() {
-        return new CustomizedSqlInjector();
-    }
-
 }

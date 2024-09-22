@@ -1,7 +1,7 @@
 package com.shuishu.blog.common.domain.user.mapper;
 
 
-import com.shuishu.blog.common.config.mybatis.mapper.RootMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.shuishu.blog.common.domain.user.entity.dto.RoleQueryDto;
 import com.shuishu.blog.common.domain.user.entity.po.Role;
 import com.shuishu.blog.common.domain.user.entity.vo.RoleVo;
@@ -20,7 +20,7 @@ import java.util.List;
  * <p></p>
  */
 @Mapper
-public interface RoleMapper extends RootMapper<Role> {
+public interface RoleMapper extends BaseMapper<Role> {
     RoleVo findRoleDetails(@Param("roleId") Long roleId);
 
     List<RoleVo> findRolePage(@Param("roleQueryDto") RoleQueryDto roleQueryDto, @Param("offset") long offset, @Param("pageSize") long pageSize);

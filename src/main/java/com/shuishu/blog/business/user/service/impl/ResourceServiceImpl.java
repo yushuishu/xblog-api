@@ -15,7 +15,7 @@ import com.shuishu.blog.common.domain.user.entity.po.UserRole;
 import com.shuishu.blog.common.domain.user.entity.vo.PermissionVo;
 import com.shuishu.blog.common.domain.user.entity.vo.RoleVo;
 import com.shuishu.blog.common.domain.user.entity.vo.UserInfoVo;
-import com.shuishu.blog.common.domain.user.mapper.*;
+import com.shuishu.blog.common.domain.user.mapper.service.*;
 import com.shuishu.blog.common.enums.RedisKeyEnum;
 import com.shuishu.blog.common.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
@@ -40,11 +40,11 @@ import java.util.List;
 @Transactional(rollbackFor = RuntimeException.class)
 @RequiredArgsConstructor
 public class ResourceServiceImpl implements ResourceService {
-    private final RoleMapper roleMapper;
-    private final PermissionMapper permissionMapper;
-    private final RolePermissionMapper rolePermissionMapper;
-    private final UserMapper userMapper;
-    private final UserRoleMapper userRoleMapper;
+    private final RoleMapperService roleMapperService;
+    private final PermissionMapperService permissionMapperService;
+    private final RolePermissionMapperService rolePermissionMapperService;
+    private final UserMapperService userMapperService;
+    private final UserRoleMapperService userRoleMapperService;
 
     private final RedisUtils redisUtils;
 
@@ -53,7 +53,7 @@ public class ResourceServiceImpl implements ResourceService {
     public List<PermissionCacheDto> findCachePermissionList() {
         Object object = redisUtils.strGet(RedisKeyEnum.KEY_PERMISSION_URL_LIST.getKey());
         if (object == null) {
-            List<PermissionCacheDto> permissionCacheDtoList = permissionMapper.findCachePermissionList();
+            List<PermissionCacheDto> permissionCacheDtoList = permissionMapperService.getMapper().findCachePermissionList();
             redisUtils.strSet(RedisKeyEnum.KEY_PERMISSION_URL_LIST.getKey(), permissionCacheDtoList);
             return permissionCacheDtoList;
         }
@@ -77,20 +77,20 @@ public class ResourceServiceImpl implements ResourceService {
                 .eq(Permission::getPermissionUrl, permissionAddDto.getPermissionUrl()
                 )
         );
-        List<Permission> tempPermissionList = permissionMapper.selectList(queryWrapper);
+        List<Permission> tempPermissionList = permissionMapperService.getMapper().selectList(queryWrapper);
         if (tempPermissionList != null && !tempPermissionList.isEmpty()) {
             throw new BusinessException("权限名、权限code或url已存在");
         }
         Permission newPermission = permissionAddDto.toPo(Permission.class);
         newPermission.setCreateUserId(userInfoVo.getUserId());
         newPermission.setUpdateUserId(userInfoVo.getUserId());
-        permissionMapper.insert(newPermission);
+        permissionMapperService.save(newPermission);
     }
 
     @Override
     public void updatePermission(PermissionUpdateDto permissionUpdateDto) {
         UserInfoVo userInfoVo = SpringSecurityUtils.getUserInfoVo();
-        Permission tempPermission = permissionMapper.findByNameOrCodeOrUrlAndNeId(permissionUpdateDto.getPermissionName(), permissionUpdateDto.getPermissionCode(), permissionUpdateDto.getPermissionUrl(), permissionUpdateDto.getPermissionId());
+        Permission tempPermission = permissionMapperService.getMapper().findByNameOrCodeOrUrlAndNeId(permissionUpdateDto.getPermissionName(), permissionUpdateDto.getPermissionCode(), permissionUpdateDto.getPermissionUrl(), permissionUpdateDto.getPermissionId());
         if (tempPermission != null) {
             if (tempPermission.getPermissionName().equals(permissionUpdateDto.getPermissionName())) {
                 throw new BusinessException("权限名称已存在");
@@ -105,20 +105,20 @@ public class ResourceServiceImpl implements ResourceService {
         Permission updatePermission = permissionUpdateDto.toPo(Permission.class);
         updatePermission.setUpdateUserId(userInfoVo.getUserId());
         updatePermission.setUpdateDate(new Date());
-        permissionMapper.updateById(updatePermission);
+        permissionMapperService.updateById(updatePermission);
     }
 
     @Override
     public PermissionVo findPermissionDetails(Long permissionId) {
-        return permissionMapper.findPermissionDetails(permissionId);
+        return permissionMapperService.getMapper().findPermissionDetails(permissionId);
     }
 
     @Override
     public PageVO<PermissionVo> findPermissionPage(PermissionQueryDto permissionQueryDto, PageDTO pageDTO) {
         PageVO<PermissionVo> pageVO = pageDTO.toPageVO(PermissionVo.class);
-        List<PermissionVo> permissionVoList = permissionMapper.findPermissionPage(permissionQueryDto, pageVO.getOffset(), pageDTO.getPageSize());
+        List<PermissionVo> permissionVoList = permissionMapperService.getMapper().findPermissionPage(permissionQueryDto, pageVO.getOffset(), pageDTO.getPageSize());
         pageVO.setDataList(permissionVoList);
-        long total = permissionMapper.findPermissionPageTotal(permissionQueryDto);
+        long total = permissionMapperService.getMapper().findPermissionPageTotal(permissionQueryDto);
         pageVO.setTotalElements(total);
         return pageVO;
     }
@@ -128,11 +128,11 @@ public class ResourceServiceImpl implements ResourceService {
         // 查询此权限关联了的角色
         LambdaQueryWrapper<RolePermission> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(RolePermission::getPermissionId, permissionId);
-        List<RolePermission> rolePermissionList = rolePermissionMapper.selectList(queryWrapper);
+        List<RolePermission> rolePermissionList = rolePermissionMapperService.getMapper().selectList(queryWrapper);
         if (!ObjectUtils.isEmpty(rolePermissionList)) {
             throw new BusinessException("当前权限有角色关联，请先解除角色关联");
         }
-        permissionMapper.deleteById(permissionId);
+        rolePermissionMapperService.removeById(permissionId);
     }
 
     @Override
@@ -140,14 +140,14 @@ public class ResourceServiceImpl implements ResourceService {
         UserInfoVo userInfoVo = SpringSecurityUtils.getUserInfoVo();
         LambdaQueryWrapper<Role> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.and(w -> w.eq(Role::getRoleName, roleAddDto.getRoleName()).eq(Role::getRoleCode, roleAddDto.getRoleCode()));
-        List<Role> roles = roleMapper.selectList(queryWrapper);
+        List<Role> roles = roleMapperService.getMapper().selectList(queryWrapper);
         if (roles != null && !roles.isEmpty()) {
             throw new BusinessException("角色名或code已存在");
         }
         Role newRole = roleAddDto.toPo(Role.class);
         newRole.setCreateUserId(userInfoVo.getUserId());
         newRole.setUpdateUserId(userInfoVo.getUserId());
-        roleMapper.insert(newRole);
+        roleMapperService.save(newRole);
     }
 
     @Override
@@ -156,7 +156,7 @@ public class ResourceServiceImpl implements ResourceService {
         LambdaQueryWrapper<Role> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.and(w -> w.eq(Role::getRoleName, roleUpdateDto.getRoleName()).eq(Role::getRoleCode, roleUpdateDto.getRoleCode()))
                 .or(w -> w.ne(Role::getRoleId, roleUpdateDto.getRoleId()));
-        List<Role> roles = roleMapper.selectList(queryWrapper);
+        List<Role> roles = roleMapperService.getMapper().selectList(queryWrapper);
         if (roles != null && !roles.isEmpty()) {
             for (Role tempRole : roles) {
                 if (tempRole.getRoleName().equals(roleUpdateDto.getRoleName())) {
@@ -168,7 +168,7 @@ public class ResourceServiceImpl implements ResourceService {
             }
         }
 
-        Role role = roleMapper.selectById(roleUpdateDto.getRoleId());
+        Role role = roleMapperService.getMapper().selectById(roleUpdateDto.getRoleId());
         if (SpringSecurityUtils.DEFAULT_ROLE_SUPER_CODE.equals(role.getRoleCode()) ||
                 SpringSecurityUtils.DEFAULT_ROLE_GENERAL_CODE.equals(role.getRoleCode())) {
             throw new BusinessException("系统默认角色不可修改");
@@ -177,7 +177,7 @@ public class ResourceServiceImpl implements ResourceService {
         role.setRoleCode(roleUpdateDto.getRoleCode());
         role.setUpdateUserId(userInfoVo.getUserId());
         role.setUpdateDate(new Date());
-        roleMapper.updateById(role);
+        roleMapperService.updateById(role);
     }
 
     @Override
@@ -185,22 +185,22 @@ public class ResourceServiceImpl implements ResourceService {
         if (roleId == null) {
             return null;
         }
-        return roleMapper.findRoleDetails(roleId);
+        return roleMapperService.getMapper().findRoleDetails(roleId);
     }
 
     @Override
     public PageVO<RoleVo> findRolePage(RoleQueryDto roleQueryDto, PageDTO pageDTO) {
         PageVO<RoleVo> pageVO = pageDTO.toPageVO(RoleVo.class);
-        List<RoleVo> roleVoList = roleMapper.findRolePage(roleQueryDto, pageVO.getOffset(), pageVO.getPageSize());
+        List<RoleVo> roleVoList = roleMapperService.getMapper().findRolePage(roleQueryDto, pageVO.getOffset(), pageVO.getPageSize());
         pageVO.setDataList(roleVoList);
-        long total = roleMapper.findRolePageTotal(roleQueryDto, pageVO.getOffset(), pageVO.getPageSize());
+        long total = roleMapperService.getMapper().findRolePageTotal(roleQueryDto, pageVO.getOffset(), pageVO.getPageSize());
         pageVO.setTotalElements(total);
         return pageVO;
     }
 
     @Override
     public void deleteRole(Long roleId, Boolean ackDelete) {
-        Role role = roleMapper.selectById(roleId);
+        Role role = roleMapperService.getMapper().selectById(roleId);
         if (SpringSecurityUtils.DEFAULT_ROLE_SUPER_CODE.equals(role.getRoleCode()) ||
                 SpringSecurityUtils.DEFAULT_ROLE_GENERAL_CODE.equals(role.getRoleCode())) {
             throw new BusinessException("系统默认角色不可删除");
@@ -209,22 +209,22 @@ public class ResourceServiceImpl implements ResourceService {
         LambdaQueryWrapper<UserRole> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(UserRole::getRoleId, roleId);
         if (Boolean.TRUE.equals(ackDelete)) {
-            userRoleMapper.delete(queryWrapper);
+            userRoleMapperService.remove(queryWrapper);
         }else {
-            long relUserCount = userRoleMapper.selectCount(queryWrapper);
+            long relUserCount = userRoleMapperService.getMapper().selectCount(queryWrapper);
             if (relUserCount > 0) {
                 throw new BusinessException("当前角色已被【"+ relUserCount +"】位用户关联使用，请再次确认是否删除此角色，并解除用户所属角色");
             }
         }
         LambdaQueryWrapper<RolePermission> queryWrapper2 = new LambdaQueryWrapper<>();
         queryWrapper2.eq(RolePermission::getRoleId, roleId);
-        rolePermissionMapper.delete(queryWrapper2);
-        roleMapper.deleteById(roleId);
+        rolePermissionMapperService.remove(queryWrapper2);
+        roleMapperService.removeById(roleId);
     }
 
     @Override
     public RoleVo findDefaultRole() {
-        return roleMapper.findDefaultRole();
+        return roleMapperService.getMapper().findDefaultRole();
     }
 
 }

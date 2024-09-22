@@ -2,7 +2,6 @@ package com.shuishu.blog.business.user.service.impl;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.google.common.collect.Lists;
 import com.shuishu.blog.common.config.base.PageDTO;
 import com.shuishu.blog.common.config.base.PageVO;
@@ -10,16 +9,16 @@ import com.shuishu.blog.common.config.exception.BusinessException;
 import com.shuishu.blog.common.config.security.SpringSecurityUtils;
 import com.shuishu.blog.common.domain.industry.entity.po.Industry;
 import com.shuishu.blog.common.domain.industry.mapper.IndustryMapper;
+import com.shuishu.blog.common.domain.industry.mapper.service.IndustryMapperService;
 import com.shuishu.blog.common.domain.industry.repository.IndustryRepository;
 import com.shuishu.blog.common.domain.user.dsl.UserDsl;
 import com.shuishu.blog.common.domain.user.entity.dto.*;
-import com.shuishu.blog.common.domain.user.entity.po.Role;
 import com.shuishu.blog.common.domain.user.entity.po.User;
 import com.shuishu.blog.common.domain.user.entity.po.UserAuth;
 import com.shuishu.blog.common.domain.user.entity.po.UserRole;
 import com.shuishu.blog.common.domain.user.entity.vo.*;
 import com.shuishu.blog.common.domain.user.mapper.*;
-import com.shuishu.blog.common.domain.user.mapper.service.UserMapperService;
+import com.shuishu.blog.common.domain.user.mapper.service.*;
 import com.shuishu.blog.common.domain.user.repository.RoleRepository;
 import com.shuishu.blog.common.domain.user.repository.UserAuthRepository;
 import com.shuishu.blog.common.domain.user.repository.UserRepository;
@@ -67,12 +66,11 @@ public class UserServiceImpl implements UserService {
     private final IndustryRepository industryRepository;
 
     private final UserMapperService userMapperService;
-    private final UserMapper userMapper;
-    private final UserAuthMapper userAuthMapper;
-    private final UserRoleMapper userRoleMapper;
-    private final RoleMapper roleMapper;
-    private final PermissionMapper permissionMapper;
-    private final IndustryMapper industryMapper;
+    private final UserAuthMapperService userAuthMapperService;
+    private final UserRoleMapperService userRoleMapperService;
+    private final RoleMapperService roleMapperService;
+    private final PermissionMapperService permissionMapperService;
+    private final IndustryMapperService industryMapperService;
 
     private final PasswordEncoder passwordEncoder;
     private final UserIdUtils userIdUtils;
@@ -84,7 +82,7 @@ public class UserServiceImpl implements UserService {
         verifyUserInfo(userAddDTO.getNickname());
         // 行业
         if (userAddDTO.getIndustryId() != null) {
-            Industry industry = industryMapper.selectById(userAddDTO.getIndustryId());
+            Industry industry = industryMapperService.getMapper().selectById(userAddDTO.getIndustryId());
             if (industry == null) {
                 throw new BusinessException("所选行业不正确");
             }
@@ -109,7 +107,7 @@ public class UserServiceImpl implements UserService {
             // 验证邮箱是否已经注册
             LambdaQueryWrapper<UserAuth> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(UserAuth::getUserAuthType, UserEnum.AuthType.EMAIL.getType()).eq(UserAuth::getUserAuthIdentifier, userAddDTO.getUserAuthIdentifier());
-            UserAuth tempUserAuth = userAuthMapper.selectOne(queryWrapper);
+            UserAuth tempUserAuth = userAuthMapperService.getMapper().selectOne(queryWrapper);
             if (tempUserAuth != null) {
                 throw new BusinessException("该邮箱号已注册");
             }
@@ -123,8 +121,8 @@ public class UserServiceImpl implements UserService {
             user.setIndustryId(userAddDTO.getIndustryId());
             user.setUserIsAccountNonLocked(true);
             user.setUserIsAccountNonLocked(true);
-            int insertRow = userMapper.insert(user);
-            if (insertRow <= 0) {
+            boolean saveUserFlag = userMapperService.save(user);
+            if (!saveUserFlag) {
                 throw new BusinessException("保存用户信息失败");
             }
             // 邮箱账号
@@ -149,9 +147,9 @@ public class UserServiceImpl implements UserService {
             systemUserAuth.setUserAuthNickname(userAddDTO.getNickname());
             systemUserAuth.setUserAuthPhoto(photoBase64);
             // 保存 邮箱账号和系统账号
-            userAuthMapper.insertBatch(Lists.newArrayList(userAuth, systemUserAuth));
+            userAuthMapperService.saveBatch(Lists.newArrayList(userAuth, systemUserAuth));
             // 角色（获取默认角色）
-            RoleVo defaultRole = roleMapper.findDefaultRole();
+            RoleVo defaultRole = roleMapperService.getMapper().findDefaultRole();
             if (defaultRole == null) {
                 log.info("系统默认角色为空");
                 throw new BusinessException("注册失败，请联系管理员");
@@ -159,7 +157,7 @@ public class UserServiceImpl implements UserService {
             UserRole userRole = new UserRole();
             userRole.setUserId(user.getUserId());
             userRole.setRoleId(defaultRole.getRoleId());
-            userRoleMapper.insert(userRole);
+            userRoleMapperService.save(userRole);
         }else if (UserEnum.AuthType.PHONE.getType().equals(userAddDTO.getUserAuthType())) {
             throw new BusinessException("手机号注册功能，正在开发中");
         }
@@ -168,11 +166,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(UserUpdateDto userUpdateDto) {
         verifyUserInfo(userUpdateDto.getNickname());
-        User user = userMapper.selectById(userUpdateDto.getUserId());
+        User user = userMapperService.getById(userUpdateDto.getUserId());
         Objects.requireNonNull(user, "用户不存在");
         // 行业
         if (userUpdateDto.getIndustryId() != null) {
-            Industry industry = industryMapper.selectById(userUpdateDto.getIndustryId());
+            Industry industry = industryMapperService.getById(userUpdateDto.getIndustryId());
             if (industry == null) {
                 throw new BusinessException("所选行业不正确");
             }
@@ -195,7 +193,7 @@ public class UserServiceImpl implements UserService {
         user.setIndustryId(userUpdateDto.getIndustryId());
         user.setUpdateDate(new Date());
         user.setUpdateUserId(SpringSecurityUtils.getUserInfoVo().getUserId());
-        userMapper.updateById(user);
+        userMapperService.updateById(user);
 
     }
 
@@ -210,13 +208,13 @@ public class UserServiceImpl implements UserService {
         // 关联的账号所有密码都进行更改
         LambdaQueryWrapper<UserAuth> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(UserAuth::getUserId, userInfoVo.getUserId());
-        List<UserAuth> userAuthList = userAuthMapper.selectList(queryWrapper);
+        List<UserAuth> userAuthList = userAuthMapperService.getMapper().selectList(queryWrapper);
         userAuthList.forEach(t -> {
             t.setUserAuthCredential(newPasswordEncode);
             t.setUpdateUserId(userInfoVo.getUserId());
             t.setUpdateDate(nowDate);
         });
-        userAuthMapper.updateBatch(userAuthList);
+        userAuthMapperService.updateBatchById(userAuthList);
     }
 
     @Override

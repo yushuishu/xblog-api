@@ -1,7 +1,7 @@
 package com.shuishu.blog.common.domain.user.mapper;
 
 
-import com.shuishu.blog.common.config.mybatis.mapper.RootMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.shuishu.blog.common.domain.user.entity.dto.PermissionCacheDto;
 import com.shuishu.blog.common.domain.user.entity.dto.PermissionQueryDto;
 import com.shuishu.blog.common.domain.user.entity.po.Permission;
@@ -21,7 +21,7 @@ import java.util.List;
  * <p></p>
  */
 @Mapper
-public interface PermissionMapper extends RootMapper<Permission> {
+public interface PermissionMapper extends BaseMapper<Permission> {
     List<PermissionCacheDto> findCachePermissionList();
 
 

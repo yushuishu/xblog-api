@@ -1,12 +1,6 @@
 package com.shuishu.blog.common.domain.user.mapper;
 
 
-/**
- * @author wuZhenFeng
- * @date 2024/4/11 14:14
- */
-
-
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.shuishu.blog.common.domain.user.entity.po.RolePermission;
 import org.apache.ibatis.annotations.Mapper;

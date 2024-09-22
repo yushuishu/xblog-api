@@ -1,14 +1,10 @@
 package com.shuishu.blog.common.domain.user.mapper.service.impl;
 
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.shuishu.blog.common.config.mybatis.mapper.MapperServiceProxy;
-import com.shuishu.blog.common.config.mybatis.mapper.impl.BaseMapperServiceImpl;
+import com.shuishu.blog.common.config.mybatis.BaseMapperServiceImpl;
 import com.shuishu.blog.common.domain.user.entity.po.User;
 import com.shuishu.blog.common.domain.user.mapper.UserMapper;
 import com.shuishu.blog.common.domain.user.mapper.service.UserMapperService;
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 /**
@@ -28,8 +24,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserMapperServiceImpl extends BaseMapperServiceImpl<UserMapper, User> implements UserMapperService {
-    @Resource
-    private UserMapper userMapper;
 
 
 }

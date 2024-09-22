@@ -1,7 +1,7 @@
 package com.shuishu.blog.common.domain.user.mapper;
 
 
-import com.shuishu.blog.common.config.mybatis.mapper.RootMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.shuishu.blog.common.domain.user.entity.po.UserRole;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -15,5 +15,5 @@ import org.apache.ibatis.annotations.Mapper;
  * <p></p>
  */
 @Mapper
-public interface UserRoleMapper extends RootMapper<UserRole> {
+public interface UserRoleMapper extends BaseMapper<UserRole> {
 }
